@@ -872,7 +872,7 @@ footer {
 // =======================================
 
 // -- Google Calendar (Apps Script API) --
-const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxcla2uWaJBhJvehBqlKCjKFRRFYDKPU_gr9rwCsG5PtQ-cQcPz9iYlJ2hxJuYW43fT/exec';
+const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxXHdn2KVAIggBF07LfMirIgq1nKqG1fSH2KbQb_5Q58rZNeh_EkgAzRW_opPlH1RmO/exec';
 
 // Cache: evita consultar la misma fecha dos veces
 const _cache = {};
@@ -1174,22 +1174,56 @@ function buildSummary(n,a,t,e) {
   document.getElementById('special-note-box').style.display = isSpecial?'block':'none';
 }
 
-function confirm_booking() {
-  const n=document.getElementById('f-nombre').value.trim();
-  const a=document.getElementById('f-apellido').value.trim();
+async function confirm_booking() {
+  const btnNext = document.getElementById('btn-next');
+  btnNext.textContent = 'Guardando...';
+  btnNext.disabled = true;
+
+  const n = document.getElementById('f-nombre').value.trim();
+  const a = document.getElementById('f-apellido').value.trim();
+  const t = document.getElementById('f-tel').value.trim();
+  const e = document.getElementById('f-email').value.trim();
+
+  const dateISO = fechaStr(selDate);
   const dateStr = selDate.toLocaleDateString('es-VE',{weekday:'long',day:'numeric',month:'long'});
   const timeStr = minToStr(selSlot);
-  const srvName = selService.name+(selPedi?' + Pedicure Semipermanente':'');
+  const srvName = selService.name + (selPedi?' + Pedicure Semipermanente':'');
+  const totalDur = selService.minutes + (selPedi ? 60 : 0);
+  // Bloque minimo 2h para bloquear el horario siguiente automaticamente
+  const bloqueCal = Math.max(totalDur, 120);
 
+  // Crear evento en Google Calendar via Apps Script
+  try {
+    await jsonpFetch(
+      APPS_SCRIPT_URL +
+      '?action=reservar' +
+      '&date='     + encodeURIComponent(dateISO) +
+      '&tiempo='   + selSlot +
+      '&duracion=' + bloqueCal +
+      '&nombre='   + encodeURIComponent(n) +
+      '&apellido=' + encodeURIComponent(a) +
+      '&servicio=' + encodeURIComponent(srvName) +
+      '&telefono=' + encodeURIComponent(t) +
+      '&correo='   + encodeURIComponent(e)
+    );
+  } catch(err) {
+    console.warn('No se pudo crear el evento en calendario:', err);
+    // Continuamos igual — el WA sirve de respaldo
+  }
+
+  // Abrir WhatsApp con mensaje pre-cargado
   const msg = encodeURIComponent(
-    `Hola Luizandra! 💅 Soy ${n} ${a}. Acabo de reservar una cita para el *${dateStr}* a las *${timeStr}*.\n\nServicio: *${srvName}*\n\nQuisiera consultarte el precio con mi diseño 🌸`
+    'Hola Luizandra! Soy ' + n + ' ' + a + '. Acabo de reservar una cita para el *' + dateStr + '* a las *' + timeStr + '*.\n\nServicio: *' + srvName + '*\n\nQuisiera consultarte el precio con mi diseno!'
   );
-  document.getElementById('confirm-wa').href=`https://wa.me/${NEGOCIO.wa}?text=${msg}`;
-  document.getElementById('success-msg').textContent=
-    `Tu cita para el ${dateStr} a las ${timeStr} ha sido registrada, ${n}. Confirma tu cupo por WhatsApp y te esperamos! 💜`;
+  document.getElementById('confirm-wa').href = 'https://wa.me/' + NEGOCIO.wa + '?text=' + msg;
+  document.getElementById('success-msg').textContent =
+    'Tu cita para el ' + dateStr + ' a las ' + timeStr + ' fue registrada, ' + n + '. Confirma tu cupo por WhatsApp y te esperamos! ';
 
-  document.getElementById('form-view').style.display='none';
-  document.getElementById('success-view').style.display='';
+  btnNext.textContent = 'OK Confirmar reserva';
+  btnNext.disabled = false;
+
+  document.getElementById('form-view').style.display = 'none';
+  document.getElementById('success-view').style.display = '';
 }
 
 // =======================================
