@@ -723,11 +723,11 @@ footer {
       <div class="step-pane active" id="pane1">
         <div class="pane-title">¿Qué servicio deseas?</div>
         <div class="srv-list" id="srv-list-main">
-          <label class="srv-opt" onclick="selectService(this,'Manicura Simple','$10','Solo limpieza',0)">
+          <label class="srv-opt" onclick="selectService(this,'Manicura Simple','$10','~60 min',60)">
             <input type="radio" name="srv_main" value="Manicura Simple"/>
             <div class="srv-opt-info">
               <div class="srv-opt-name">💅 Manicura Simple</div>
-              <div class="srv-opt-meta">Solo limpieza</div>
+              <div class="srv-opt-meta">~60 min</div>
             </div>
             <div class="srv-opt-price">$10</div>
           </label>
@@ -872,7 +872,7 @@ footer {
 // =======================================
 
 // -- Google Calendar (Apps Script API) --
-const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxXHdn2KVAIggBF07LfMirIgq1nKqG1fSH2KbQb_5Q58rZNeh_EkgAzRW_opPlH1RmO/exec';
+const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbz9p4aoysebel0Vg6ESnlrifDbEhpKBT8N3XsuDp5I9yy9WSyMSt1VIyrSausR1gdns/exec';
 
 // Cache: evita consultar la misma fecha dos veces
 const _cache = {};
@@ -897,15 +897,19 @@ function jsonpFetch(url) {
   });
 }
 
-// Consulta el Apps Script y devuelve franjas ocupadas [{inicio, fin}] en minutos
-async function obtenerOcupados(fechaStr) {
+// Consulta disponibilidad del dia completo en Google Calendar
+async function obtenerDisponibilidad(fechaStr) {
   if(_cache[fechaStr] !== undefined) return _cache[fechaStr];
   try {
     var data = await jsonpFetch(APPS_SCRIPT_URL + '?date=' + fechaStr);
-    _cache[fechaStr] = Array.isArray(data.ocupados) ? data.ocupados : [];
+    _cache[fechaStr] = {
+      ocupados:   Array.isArray(data.ocupados) ? data.ocupados : [],
+      diaCopleto: data.diaCopleto || false,
+      citasHoy:   data.citasHoy  || 0
+    };
   } catch(err) {
     console.warn('Sin acceso al calendario, mostrando todos los horarios.', err);
-    _cache[fechaStr] = [];
+    _cache[fechaStr] = { ocupados: [], diaCopleto: false, citasHoy: 0 };
   }
   return _cache[fechaStr];
 }
@@ -1101,44 +1105,48 @@ async function renderSlots() {
     return;
   }
 
-  // 1. Mostrar spinner mientras consultamos Google Calendar
   container.innerHTML='<div class="slot-loading">Consultando disponibilidad...</div>';
 
-  const totalDur = (selService ? selService.minutes : 90) + (selPedi ? 60 : 0);
-  const fecha    = fechaStr(selDate);
+  const totalDur  = (selService ? selService.minutes : 60) + (selPedi ? 60 : 0);
+  // Usar bloque minimo 2h para MOSTRAR y para VERIFICAR solapamiento
+  const bloqueCal = Math.max(totalDur, 120);
+  const fecha     = fechaStr(selDate);
 
-  // 2. Traer franjas ocupadas desde el Apps Script
-  const ocupados = await obtenerOcupados(fecha);
+  const dispon  = await obtenerDisponibilidad(fecha);
+  const ocupados = dispon.ocupados;
 
-  // 3. Calcular estado de cada slot base
-  const slots = BASE_SLOTS.map(start => {
-    const end = start + totalDur;
-    let libre = true;
-    if(end > FIN)                               libre = false;  // pasa de las 6pm
-    else if(start < PAUSA_F && end > PAUSA_I)   libre = false;  // cruza la pausa
-    else if(slotChoca(start, end, ocupados))     libre = false;  // ocupado en GCal
-    return { start, libre };
-  });
-
-  // 4. Si TODO está ocupado, mostrar mensaje
-  if(!slots.some(s => s.libre)) {
-    container.innerHTML='<p class="no-date-msg">😔 No hay horarios disponibles para este día. Elige otra fecha.</p>';
+  // Si el dia ya tiene 3 citas, mostrar mensaje de dia completo
+  if(dispon.diaCopleto) {
+    container.innerHTML='<p class="no-date-msg">Este dia esta completo (3/3 citas). Por favor elige otra fecha.</p>';
     return;
   }
 
-  // 5. Renderizar botones
+  const slots = BASE_SLOTS.map(start => {
+    const end = start + bloqueCal;  // usar bloque minimo 2h
+    let libre = true;
+    if(end > FIN)                              libre = false;  // termina despues de las 6pm
+    else if(start < PAUSA_F && end > PAUSA_I)  libre = false;  // cruza la pausa 11am-1pm
+    else if(slotChoca(start, end, ocupados))    libre = false;  // ocupado en Google Calendar
+    return { start, libre };
+  });
+
+  if(!slots.some(s => s.libre)) {
+    container.innerHTML='<p class="no-date-msg">No hay horarios disponibles para este dia. Elige otra fecha.</p>';
+    return;
+  }
+
   container.innerHTML='<div class="slots-grid"></div>';
   const sg = container.querySelector('.slots-grid');
 
   slots.forEach(({start, libre}) => {
-    // Excluir slots que exceden 6pm o cruzan la pausa (no mostramos ni en gris)
-    const end = start + totalDur;
+    const end = start + bloqueCal;
+    // No mostrar slots que exceden las 6pm o cruzan la pausa
     const excluido = end > FIN || (start < PAUSA_F && end > PAUSA_I);
-    if(excluido) return;  // directamente no se muestra
+    if(excluido) return;
 
     const btn = document.createElement('button');
     btn.className = 'slot-btn' + (start===8*60 ? ' special-slot' : '') + (!libre ? ' busy' : '');
-    btn.textContent = minToStr(start) + (start===8*60 ? ' ⭐' : '');
+    btn.textContent = minToStr(start) + (start===8*60 ? ' (especial)' : '');
 
     if(libre) {
       if(selSlot===start) btn.classList.add('selected');
@@ -1208,8 +1216,10 @@ async function confirm_booking() {
     );
   } catch(err) {
     console.warn('No se pudo crear el evento en calendario:', err);
-    // Continuamos igual — el WA sirve de respaldo
   }
+
+  // Invalidar cache de esa fecha para que la proxima consulta sea fresca
+  delete _cache[dateISO];
 
   // Abrir WhatsApp con mensaje pre-cargado
   const msg = encodeURIComponent(
