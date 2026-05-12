@@ -1,0 +1,1204 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Lulu & Nails · Renace Tu Look</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400;1,600&family=Great+Vibes&family=Nunito:wght@300;400;600&display=swap" rel="stylesheet"/>
+<style>
+/* ═══════════════════════════════════════
+   VARIABLES DE MARCA — Lulu & Nails
+   ═══════════════════════════════════════ */
+:root {
+  --lav:   #C9A8E0;   /* lavanda principal */
+  --lavd:  #8B4FBE;   /* morado oscuro */
+  --lavl:  #EDE0F8;   /* lavanda claro */
+  --bg:    #FAF5FF;   /* fondo general */
+  --crm:   #FFF8FC;   /* crema */
+  --dk:    #2D1547;   /* texto oscuro */
+  --mid:   #6B3A9C;   /* morado medio */
+  --wh:    #FFFFFF;
+  --grad:  linear-gradient(135deg,#C9A8E0,#8B4FBE);
+  --shadow: 0 8px 40px rgba(139,79,190,.18);
+  --r: 18px;
+  --ff-display: 'Great Vibes', cursive;
+  --ff-serif:   'Cormorant Garamond', serif;
+  --ff-body:    'Nunito', sans-serif;
+}
+
+/* ─── RESET ─── */
+*, *::before, *::after { box-sizing:border-box; margin:0; padding:0; }
+html { scroll-behavior:smooth; }
+body { font-family:var(--ff-body); background:var(--bg); color:var(--dk); overflow-x:hidden; }
+a { text-decoration:none; color:inherit; }
+button { cursor:pointer; font-family:var(--ff-body); border:none; }
+
+/* ─── SCROLL REVEAL ─── */
+.reveal { opacity:0; transform:translateY(30px); transition:.7s ease; }
+.reveal.visible { opacity:1; transform:none; }
+
+/* ══════════════════════════════════
+   HERO
+══════════════════════════════════ */
+#hero {
+  min-height:100vh;
+  background: linear-gradient(160deg,#EDE0F8 0%,#F8EEFF 40%,#FFF4FC 100%);
+  display:flex; flex-direction:column; align-items:center; justify-content:center;
+  text-align:center; padding:60px 20px;
+  position:relative; overflow:hidden;
+}
+#hero::before {
+  content:''; position:absolute; inset:0;
+  background: radial-gradient(ellipse 70% 50% at 80% 20%,rgba(201,168,224,.35) 0%,transparent 70%),
+              radial-gradient(ellipse 50% 60% at 10% 80%,rgba(139,79,190,.12) 0%,transparent 65%);
+  pointer-events:none;
+}
+.hero-orb {
+  position:absolute; border-radius:50%;
+  background: var(--grad); opacity:.08; filter:blur(60px);
+}
+.hero-orb.o1 { width:500px; height:500px; top:-100px; right:-150px; }
+.hero-orb.o2 { width:350px; height:350px; bottom:-80px; left:-100px; }
+
+.hero-badge {
+  display:inline-block; background:rgba(201,168,224,.35); backdrop-filter:blur(10px);
+  border:1px solid rgba(201,168,224,.6); border-radius:50px; padding:6px 20px;
+  font-family:var(--ff-serif); font-size:.85rem; letter-spacing:.12em; color:var(--mid);
+  margin-bottom:28px; animation: fadeDown .8s ease forwards;
+}
+.hero-logo {
+  font-family:var(--ff-display); font-size:clamp(3.5rem,10vw,7rem);
+  color:var(--dk); line-height:1.1; margin-bottom:8px;
+  animation: fadeUp .9s .1s ease both;
+}
+.hero-sub {
+  font-family:var(--ff-serif); font-size:clamp(.9rem,2.5vw,1.15rem);
+  letter-spacing:.35em; text-transform:uppercase; color:var(--mid);
+  margin-bottom:12px; animation: fadeUp .9s .2s ease both;
+}
+.hero-owner {
+  font-family:var(--ff-serif); font-size:1rem; color:#9B72CB; font-style:italic;
+  margin-bottom:36px; animation: fadeUp .9s .3s ease both;
+}
+.hero-btns {
+  display:flex; gap:14px; flex-wrap:wrap; justify-content:center;
+  animation: fadeUp .9s .4s ease both; margin-bottom:48px;
+}
+.btn-primary {
+  background:var(--grad); color:#fff; padding:14px 34px; border-radius:50px;
+  font-weight:600; font-size:.95rem; letter-spacing:.04em;
+  box-shadow:0 6px 28px rgba(139,79,190,.35);
+  transition:transform .2s, box-shadow .2s;
+}
+.btn-primary:hover { transform:translateY(-2px); box-shadow:0 10px 36px rgba(139,79,190,.45); }
+.btn-outline {
+  background:transparent; color:var(--mid); padding:13px 34px; border-radius:50px;
+  font-weight:600; font-size:.95rem; letter-spacing:.04em;
+  border:2px solid var(--lav); transition:all .2s;
+}
+.btn-outline:hover { background:var(--lavl); }
+
+.hero-social {
+  display:flex; gap:18px; justify-content:center; align-items:center;
+  animation: fadeUp .9s .5s ease both;
+}
+.soc-link {
+  width:44px; height:44px; border-radius:50%;
+  background:rgba(201,168,224,.25); border:1px solid rgba(201,168,224,.5);
+  display:flex; align-items:center; justify-content:center;
+  transition:all .25s; color:var(--mid);
+}
+.soc-link:hover { background:var(--grad); color:#fff; border-color:transparent;
+  box-shadow:0 4px 18px rgba(139,79,190,.4); }
+.soc-link svg { width:18px; height:18px; fill:currentColor; }
+
+.hero-info {
+  margin-top:36px; display:flex; gap:28px; flex-wrap:wrap; justify-content:center;
+  animation: fadeUp .9s .6s ease both;
+}
+.info-chip {
+  display:flex; align-items:center; gap:8px;
+  background:rgba(255,255,255,.75); backdrop-filter:blur(8px);
+  border:1px solid rgba(201,168,224,.4); border-radius:50px;
+  padding:8px 18px; font-size:.82rem; color:var(--mid); font-weight:600;
+}
+.info-chip span { font-size:.95rem; }
+
+/* ══════════════════════════════════
+   SECCIÓN SERVICIOS
+══════════════════════════════════ */
+#servicios { padding:100px 20px; background:var(--wh); }
+.sec-label {
+  text-align:center; font-family:var(--ff-serif); font-size:.8rem;
+  letter-spacing:.3em; text-transform:uppercase; color:var(--lav); margin-bottom:12px;
+}
+.sec-title {
+  text-align:center; font-family:var(--ff-serif); font-size:clamp(2rem,5vw,3rem);
+  font-weight:300; color:var(--dk); margin-bottom:12px; line-height:1.2;
+}
+.sec-title em { font-style:italic; color:var(--mid); }
+.sec-line {
+  width:60px; height:2px; background:var(--grad); margin:0 auto 16px; border-radius:2px;
+}
+.sec-desc { text-align:center; color:#7A6B8A; max-width:520px; margin:0 auto 56px; line-height:1.7; }
+
+.services-grid {
+  display:grid; grid-template-columns:repeat(auto-fill,minmax(280px,1fr));
+  gap:24px; max-width:1100px; margin:0 auto;
+}
+.srv-card {
+  background:var(--bg); border-radius:var(--r);
+  border:1px solid rgba(201,168,224,.3);
+  padding:32px 28px; position:relative; overflow:hidden;
+  transition:transform .3s, box-shadow .3s;
+}
+.srv-card::before {
+  content:''; position:absolute; top:0; left:0; right:0; height:3px;
+  background:var(--grad);
+}
+.srv-card:hover { transform:translateY(-5px); box-shadow:var(--shadow); }
+.srv-icon { font-size:2rem; margin-bottom:16px; display:block; }
+.srv-name {
+  font-family:var(--ff-serif); font-size:1.25rem; font-weight:600;
+  color:var(--dk); margin-bottom:6px;
+}
+.srv-dur { font-size:.78rem; color:var(--lav); letter-spacing:.1em; text-transform:uppercase; margin-bottom:12px; }
+.srv-desc { font-size:.87rem; color:#7A6B8A; line-height:1.6; margin-bottom:20px; }
+.srv-price {
+  font-family:var(--ff-serif); font-size:1.6rem; font-weight:600; color:var(--mid);
+  display:flex; align-items:baseline; gap:4px;
+}
+.srv-price small { font-size:.75rem; font-weight:400; color:#9B85B0; }
+.srv-badge {
+  position:absolute; top:18px; right:18px;
+  background:var(--grad); color:#fff; font-size:.65rem; letter-spacing:.08em;
+  text-transform:uppercase; padding:4px 12px; border-radius:50px; font-weight:700;
+}
+
+.price-note {
+  text-align:center; margin-top:48px; max-width:560px; margin-left:auto; margin-right:auto;
+  background:var(--lavl); border-radius:var(--r); padding:22px 32px;
+  border:1px solid rgba(201,168,224,.4);
+  font-family:var(--ff-serif); font-size:.95rem; color:var(--mid); line-height:1.7;
+}
+.price-note strong { color:var(--mid); font-weight:600; }
+
+/* ══════════════════════════════════
+   HORARIOS
+══════════════════════════════════ */
+#horarios {
+  padding:80px 20px;
+  background:linear-gradient(135deg,#EDE0F8 0%,#F8EEFF 100%);
+}
+.schedule-grid {
+  display:grid; grid-template-columns:repeat(auto-fill,minmax(200px,1fr));
+  gap:16px; max-width:900px; margin:0 auto;
+}
+.sch-card {
+  background:rgba(255,255,255,.75); backdrop-filter:blur(10px);
+  border-radius:14px; border:1px solid rgba(255,255,255,.8);
+  padding:22px 20px; text-align:center;
+}
+.sch-time { font-family:var(--ff-serif); font-size:1.4rem; color:var(--mid); font-weight:600; }
+.sch-label { font-size:.78rem; color:#9B85B0; margin-top:4px; line-height:1.4; }
+.sch-tag {
+  display:inline-block; margin-top:10px; background:var(--lavl);
+  border-radius:50px; padding:3px 12px; font-size:.72rem; color:var(--mid); font-weight:600;
+}
+.sch-tag.pause { background:#FFE8F0; color:#C04080; }
+.sch-tag.special { background:#E8F0FF; color:#4060C0; }
+.sch-tag.closed { background:#F0E8FF; color:#7040B0; }
+
+/* ══════════════════════════════════
+   RESERVAS CTA
+══════════════════════════════════ */
+#reservar-cta {
+  padding:80px 20px; background:var(--wh); text-align:center;
+}
+
+/* ══════════════════════════════════
+   MODAL DE RESERVA
+══════════════════════════════════ */
+.overlay {
+  position:fixed; inset:0; background:rgba(29,10,52,.6);
+  backdrop-filter:blur(6px); z-index:1000;
+  display:none; align-items:center; justify-content:center; padding:16px;
+}
+.overlay.open { display:flex; animation:fadeIn .3s ease; }
+.modal {
+  background:var(--wh); border-radius:24px; width:100%; max-width:580px;
+  max-height:90vh; overflow-y:auto; box-shadow:0 24px 80px rgba(29,10,52,.3);
+  padding:0;
+}
+
+/* stepper */
+.modal-header {
+  background: linear-gradient(135deg,#EDE0F8,#F5EAFF);
+  border-radius:24px 24px 0 0; padding:28px 32px 20px; position:sticky; top:0; z-index:2;
+}
+.modal-header h2 {
+  font-family:var(--ff-serif); font-size:1.5rem; color:var(--dk); margin-bottom:20px;
+}
+.stepper { display:flex; align-items:center; gap:0; }
+.step-item {
+  display:flex; align-items:center; flex:1;
+}
+.step-circle {
+  width:32px; height:32px; border-radius:50%; border:2px solid var(--lavl);
+  display:flex; align-items:center; justify-content:center;
+  font-size:.78rem; font-weight:700; color:var(--lav);
+  background:var(--wh); transition:all .3s; flex-shrink:0;
+}
+.step-circle.active { background:var(--grad); border-color:transparent; color:#fff;
+  box-shadow:0 4px 14px rgba(139,79,190,.4); }
+.step-circle.done { background:var(--mid); border-color:var(--mid); color:#fff; }
+.step-line { flex:1; height:2px; background:var(--lavl); margin:0 6px; }
+.step-line.done { background:var(--mid); }
+
+.modal-body { padding:28px 32px; }
+.modal-footer {
+  padding:20px 32px 28px;
+  display:flex; gap:12px; justify-content:flex-end;
+  border-top:1px solid var(--lavl);
+}
+
+/* pasos */
+.step-pane { display:none; }
+.step-pane.active { display:block; animation:fadeIn .35s ease; }
+
+.pane-title {
+  font-family:var(--ff-serif); font-size:1.1rem; color:var(--mid);
+  margin-bottom:20px; padding-bottom:10px; border-bottom:1px solid var(--lavl);
+}
+
+/* servicios en modal */
+.srv-list { display:flex; flex-direction:column; gap:10px; }
+.srv-opt {
+  display:flex; align-items:center; gap:14px; padding:14px 18px;
+  border:2px solid var(--lavl); border-radius:12px; cursor:pointer;
+  transition:all .2s; background:var(--bg);
+}
+.srv-opt:hover { border-color:var(--lav); background:var(--lavl); }
+.srv-opt.selected { border-color:var(--mid); background:#F0E8FF; }
+.srv-opt input { accent-color:var(--mid); width:16px; height:16px; flex-shrink:0; }
+.srv-opt-info { flex:1; }
+.srv-opt-name { font-weight:600; font-size:.9rem; color:var(--dk); }
+.srv-opt-meta { font-size:.78rem; color:#9B85B0; margin-top:2px; }
+.srv-opt-price { font-family:var(--ff-serif); font-weight:600; color:var(--mid); font-size:1rem; }
+
+.pedi-section { margin-top:22px; padding-top:18px; border-top:1px dashed var(--lavl); }
+.pedi-section h4 { font-size:.85rem; color:var(--mid); letter-spacing:.08em; text-transform:uppercase; margin-bottom:12px; }
+
+/* calendario */
+.cal-wrap { display:grid; grid-template-columns:1fr 1fr; gap:20px; }
+@media(max-width:520px){ .cal-wrap { grid-template-columns:1fr; } }
+.calendar { background:var(--bg); border-radius:14px; border:1px solid var(--lavl); overflow:hidden; }
+.cal-nav {
+  display:flex; align-items:center; justify-content:space-between;
+  background: linear-gradient(135deg,#EDE0F8,#F5EAFF);
+  padding:12px 16px;
+}
+.cal-nav button {
+  background:rgba(255,255,255,.6); border:1px solid rgba(201,168,224,.4); border-radius:8px;
+  width:30px; height:30px; font-size:1rem; color:var(--mid);
+  display:flex; align-items:center; justify-content:center;
+}
+.cal-nav button:hover { background:var(--mid); color:#fff; }
+.cal-month { font-family:var(--ff-serif); font-size:1rem; color:var(--dk); font-weight:600; }
+.cal-grid { display:grid; grid-template-columns:repeat(7,1fr); }
+.cal-dow { text-align:center; font-size:.68rem; letter-spacing:.06em; text-transform:uppercase;
+  color:var(--lav); padding:10px 0 6px; font-weight:700; }
+.cal-day {
+  aspect-ratio:1; display:flex; align-items:center; justify-content:center;
+  font-size:.82rem; cursor:pointer; border-radius:8px; margin:2px; transition:all .2s;
+}
+.cal-day:hover:not(.disabled) { background:var(--lavl); color:var(--mid); }
+.cal-day.selected { background:var(--grad); color:#fff; box-shadow:0 4px 12px rgba(139,79,190,.4); }
+.cal-day.disabled { color:var(--lavl); cursor:default; pointer-events:none; }
+.cal-day.today { font-weight:700; border:1px solid var(--lav); }
+.cal-day.empty { pointer-events:none; }
+
+.slots-wrap { }
+.slots-wrap h4 { font-size:.85rem; color:var(--mid); letter-spacing:.08em; text-transform:uppercase; margin-bottom:12px; }
+.slots-grid { display:grid; grid-template-columns:1fr 1fr; gap:8px; }
+.slot-btn {
+  padding:10px; border-radius:10px; border:2px solid var(--lavl);
+  background:var(--bg); font-size:.83rem; color:var(--dk); transition:all .2s;
+  font-family:var(--ff-body); font-weight:600; text-align:center;
+}
+.slot-btn:hover { border-color:var(--lav); background:var(--lavl); }
+.slot-btn.selected { background:var(--mid); color:#fff; border-color:var(--mid); }
+.slot-btn.special-slot { border-color:#A0B4E8; color:#4060C0; }
+.slot-btn.special-slot:hover { background:#E8EEFF; }
+.slot-btn.special-slot.selected { background:#4060C0; color:#fff; border-color:#4060C0; }
+/* Horario ocupado — en gris, no clickeable */
+.slot-btn.busy {
+  background:#F3F0F6; border-color:#E0D6EE; color:#BBA8D4;
+  cursor:not-allowed; pointer-events:none; position:relative; overflow:hidden;
+}
+.slot-btn.busy::after {
+  content:'Ocupado'; position:absolute; inset:0;
+  display:flex; align-items:center; justify-content:center;
+  background:rgba(237,224,248,.85); font-size:.7rem; letter-spacing:.06em;
+  text-transform:uppercase; color:#9B72CB; font-weight:700;
+}
+/* Cargando disponibilidad */
+.slot-loading {
+  display:flex; align-items:center; justify-content:center; gap:8px;
+  color:var(--mid); font-size:.88rem; padding:24px 0;
+}
+.slot-loading::before {
+  content:''; width:18px; height:18px; border-radius:50%;
+  border:2px solid var(--lavl); border-top-color:var(--mid);
+  animation:spin .7s linear infinite; flex-shrink:0;
+}
+@keyframes spin { to { transform:rotate(360deg); } }
+.no-date-msg { color:#9B85B0; font-size:.88rem; text-align:center; padding:20px 0; }
+
+/* formulario */
+.form-group { margin-bottom:18px; }
+.form-group label { display:block; font-size:.83rem; font-weight:600; color:var(--mid);
+  margin-bottom:6px; letter-spacing:.04em; }
+.form-group input {
+  width:100%; padding:12px 16px; border:2px solid var(--lavl); border-radius:10px;
+  font-family:var(--ff-body); font-size:.92rem; color:var(--dk); background:var(--bg);
+  transition:border-color .2s; outline:none;
+}
+.form-group input:focus { border-color:var(--lav); background:var(--wh); }
+.form-row { display:grid; grid-template-columns:1fr 1fr; gap:14px; }
+@media(max-width:420px){ .form-row { grid-template-columns:1fr; } }
+
+/* resumen */
+.summary-card {
+  background:linear-gradient(135deg,#EDE0F8,#F8EEFF);
+  border-radius:16px; border:1px solid rgba(201,168,224,.4); padding:24px;
+  margin-bottom:20px;
+}
+.sum-row { display:flex; justify-content:space-between; align-items:baseline;
+  padding:8px 0; border-bottom:1px solid rgba(201,168,224,.3); }
+.sum-row:last-child { border:none; }
+.sum-label { font-size:.85rem; color:#7A6B8A; }
+.sum-value { font-weight:600; color:var(--dk); font-size:.9rem; text-align:right; }
+.sum-total { margin-top:4px; }
+.sum-total .sum-label { font-weight:700; color:var(--dk); font-size:.95rem; }
+.sum-total .sum-value { font-family:var(--ff-serif); font-size:1.4rem; color:var(--mid); }
+
+.wa-btn {
+  display:flex; align-items:center; justify-content:center; gap:10px;
+  background:#25D366; color:#fff; border-radius:50px; padding:14px 28px;
+  font-weight:700; font-size:.95rem; width:100%; margin-top:14px;
+  box-shadow:0 6px 22px rgba(37,211,102,.35); transition:all .2s;
+}
+.wa-btn:hover { transform:translateY(-2px); box-shadow:0 10px 30px rgba(37,211,102,.45); }
+.wa-btn svg { width:22px; height:22px; fill:currentColor; }
+
+.special-note {
+  background:#E8EEFF; border:1px solid #A0B4E8; border-radius:10px;
+  padding:12px 16px; font-size:.82rem; color:#4060C0; line-height:1.5; margin-top:12px;
+}
+
+/* éxito */
+.success-view { text-align:center; padding:40px 20px; }
+.success-icon { font-size:4rem; margin-bottom:20px; }
+.success-title { font-family:var(--ff-display); font-size:2.5rem; color:var(--mid); margin-bottom:12px; }
+.success-msg { font-family:var(--ff-serif); font-size:1rem; color:#7A6B8A; line-height:1.7; max-width:380px; margin:0 auto 28px; }
+
+/* btn secundario */
+.btn-sec {
+  background:var(--lavl); color:var(--mid); padding:12px 24px; border-radius:50px;
+  font-weight:600; font-size:.88rem; border:2px solid rgba(201,168,224,.4); transition:all .2s;
+}
+.btn-sec:hover { background:var(--lav); }
+
+/* close btn */
+.btn-close {
+  position:absolute; top:20px; right:20px; width:36px; height:36px; border-radius:50%;
+  background:rgba(255,255,255,.7); border:1px solid var(--lavl); color:var(--mid);
+  font-size:1.2rem; display:flex; align-items:center; justify-content:center;
+  transition:all .2s; z-index:10;
+}
+.btn-close:hover { background:var(--mid); color:#fff; }
+.modal-header { position:relative; }
+
+/* ══════════════════════════════════
+   FOOTER
+══════════════════════════════════ */
+footer {
+  background:var(--dk); color:rgba(255,255,255,.7);
+  padding:60px 20px 30px; text-align:center;
+}
+.footer-logo { font-family:var(--ff-display); font-size:2.8rem; color:var(--lavl); margin-bottom:6px; }
+.footer-slogan { font-family:var(--ff-serif); letter-spacing:.25em; font-size:.8rem;
+  text-transform:uppercase; color:var(--lav); margin-bottom:30px; }
+.footer-links { display:flex; justify-content:center; gap:24px; flex-wrap:wrap; margin-bottom:24px; }
+.footer-link { font-size:.85rem; transition:color .2s; }
+.footer-link:hover { color:var(--lavl); }
+.footer-copy { font-size:.75rem; opacity:.5; border-top:1px solid rgba(255,255,255,.08); padding-top:24px; margin-top:8px; }
+
+/* ── FLOAT WA ── */
+.float-wa {
+  position:fixed; bottom:28px; right:28px; z-index:500;
+  width:58px; height:58px; border-radius:50%; background:#25D366;
+  display:flex; align-items:center; justify-content:center;
+  box-shadow:0 6px 24px rgba(37,211,102,.45);
+  transition:transform .25s; animation:pulse-wa 2.5s infinite;
+}
+.float-wa:hover { transform:scale(1.12); }
+.float-wa svg { width:28px; height:28px; fill:#fff; }
+
+/* ─── ANIMATIONS ─── */
+@keyframes fadeUp   { from{opacity:0;transform:translateY(24px)} to{opacity:1;transform:none} }
+@keyframes fadeDown { from{opacity:0;transform:translateY(-16px)} to{opacity:1;transform:none} }
+@keyframes fadeIn   { from{opacity:0} to{opacity:1} }
+@keyframes pulse-wa {
+  0%,100%{box-shadow:0 6px 24px rgba(37,211,102,.45)}
+  50%{box-shadow:0 6px 36px rgba(37,211,102,.7),0 0 0 8px rgba(37,211,102,.12)}
+}
+
+/* ─── RESPONSIVE ─── */
+@media(max-width:600px){
+  .modal-body,.modal-footer,.modal-header{ padding-left:20px; padding-right:20px; }
+}
+</style>
+</head>
+<body>
+
+<!-- ═══════ HERO ═══════ -->
+<section id="hero">
+  <div class="hero-orb o1"></div>
+  <div class="hero-orb o2"></div>
+
+  <div class="hero-badge">✦ Estudio de Uñas Profesional ✦</div>
+
+  <h1 class="hero-logo">Lulu &amp; Nails</h1>
+  <p class="hero-sub">· Renace Tu Look ·</p>
+  <p class="hero-owner">por Luizandra Zerpa</p>
+
+  <div class="hero-btns">
+    <button class="btn-primary" onclick="openModal()">💅 Reservar cita</button>
+    <a href="#servicios" class="btn-outline">Ver servicios</a>
+  </div>
+
+  <div class="hero-social">
+    <!-- Instagram -->
+    <a href="https://www.instagram.com/luluandnails.ve" target="_blank" class="soc-link" aria-label="Instagram">
+      <svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+    </a>
+    <!-- TikTok -->
+    <a href="https://www.tiktok.com/@_lulunails" target="_blank" class="soc-link" aria-label="TikTok">
+      <svg viewBox="0 0 24 24"><path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-2.88 2.5 2.89 2.89 0 01-2.89-2.89 2.89 2.89 0 012.89-2.89c.28 0 .54.04.79.1V9.01a6.27 6.27 0 00-.79-.05 6.34 6.34 0 00-6.34 6.34 6.34 6.34 0 006.34 6.34 6.34 6.34 0 006.33-6.34V8.69a8.25 8.25 0 004.83 1.56V6.78a4.85 4.85 0 01-1.06-.09z"/></svg>
+    </a>
+    <!-- WhatsApp -->
+    <a href="https://wa.me/584143441103" target="_blank" class="soc-link" aria-label="WhatsApp">
+      <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+    </a>
+  </div>
+
+  <div class="hero-info">
+    <div class="info-chip"><span>📍</span> Venezuela</div>
+    <div class="info-chip"><span>📞</span> +58 414-3441103</div>
+    <div class="info-chip"><span>🕘</span> Lun–Sáb 9am–6pm</div>
+  </div>
+</section>
+
+<!-- ═══════ SERVICIOS ═══════ -->
+<section id="servicios">
+  <p class="sec-label reveal">Nuestros servicios</p>
+  <h2 class="sec-title reveal">Lo que hacemos <em>por ti</em></h2>
+  <div class="sec-line reveal"></div>
+  <p class="sec-desc reveal">Cada servicio es un ritual de cuidado. Precios base en dólares — el monto final en bolívares se confirma el día de tu cita.</p>
+
+  <div class="services-grid">
+
+    <div class="srv-card reveal">
+      <span class="srv-icon">💅</span>
+      <div class="srv-name">Manicura Simple</div>
+      <div class="srv-dur">⏱ Solo limpieza</div>
+      <div class="srv-desc">Limpieza y cuidado básico de cutículas y uñas naturales.</div>
+      <div class="srv-price">$10 <small>desde</small></div>
+    </div>
+
+    <div class="srv-card reveal">
+      <span class="srv-icon">✨</span>
+      <div class="srv-name">Manicura Tradicional</div>
+      <div class="srv-dur">⏱ 90 min</div>
+      <div class="srv-desc">Limpieza completa, forma, cutículas y esmalte tradicional de larga duración.</div>
+      <div class="srv-price">$14 <small>desde</small></div>
+    </div>
+
+    <div class="srv-card reveal">
+      <span class="srv-icon">💜</span>
+      <div class="srv-name">Manicura Semipermanente</div>
+      <div class="srv-dur">⏱ 90 min</div>
+      <div class="srv-desc">Esmalte gel de larga duración que no se astilla. Brillo perfecto por semanas.</div>
+      <div class="srv-price">$15 <small>desde</small></div>
+    </div>
+
+    <div class="srv-card reveal">
+      <span class="srv-icon">🔮</span>
+      <div class="srv-name">Nivelación</div>
+      <div class="srv-dur">⏱ 120 min</div>
+      <div class="srv-desc">Rebalanceo profesional del crecimiento para mantener tus extensiones perfectas.</div>
+      <div class="srv-price">$18 <small>desde</small></div>
+    </div>
+
+    <div class="srv-card reveal">
+      <span class="srv-icon">💎</span>
+      <div class="srv-name">Capping de Polygel</div>
+      <div class="srv-dur">⏱ 120 min</div>
+      <div class="srv-desc">Refuerzo de uñas naturales con polygel para mayor dureza y protección.</div>
+      <div class="srv-price">$20 <small>desde</small></div>
+    </div>
+
+    <div class="srv-card reveal">
+      <span class="srv-icon">🫧</span>
+      <div class="srv-name">Sistema Jelly</div>
+      <div class="srv-dur">⏱ 120 min</div>
+      <div class="srv-desc">Extensión con efecto transparente y textura suave. Naturalidad con elegancia.</div>
+      <div class="srv-price">$18 <small>desde</small></div>
+    </div>
+
+    <div class="srv-card reveal">
+      <span class="srv-icon">👑</span>
+      <div class="srv-name">Sistema Esculpido en Polygel</div>
+      <div class="srv-dur">⏱ 160 min</div>
+      <div class="srv-desc">El servicio más completo. Extensiones esculpidas a mano con polygel premium.</div>
+      <div class="srv-price">$22 <small>desde</small></div>
+      <div class="srv-badge">Premium</div>
+    </div>
+
+    <div class="srv-card reveal">
+      <span class="srv-icon">🦶</span>
+      <div class="srv-name">Pedicure Semipermanente</div>
+      <div class="srv-dur">⏱ 60 min</div>
+      <div class="srv-desc">Cuidado completo del pie con esmalte semipermanente de larga duración.</div>
+      <div class="srv-price">$15 <small>desde</small></div>
+    </div>
+
+    <div class="srv-card reveal">
+      <span class="srv-icon">🔄</span>
+      <div class="srv-name">Retiro de Semipermanente</div>
+      <div class="srv-dur">⏱ Incluido en nueva cita</div>
+      <div class="srv-desc">Retiro seguro de semipermanente colocado en otro lugar.</div>
+      <div class="srv-price">$3 <small>desde</small></div>
+    </div>
+
+    <div class="srv-card reveal">
+      <span class="srv-icon">🧹</span>
+      <div class="srv-name">Retiro de Polygel / Jelly</div>
+      <div class="srv-dur">⏱ Consultar</div>
+      <div class="srv-desc">Retiro profesional y seguro de polygel o sistema jelly.</div>
+      <div class="srv-price">$6 <small>desde</small></div>
+    </div>
+
+    <div class="srv-card reveal">
+      <span class="srv-icon">🛠️</span>
+      <div class="srv-name">Restauraciones</div>
+      <div class="srv-dur">⏱ Según caso</div>
+      <div class="srv-desc">Reparación de uñas rotas o dañadas. Precio según el caso.</div>
+      <div class="srv-price">$1 <small>desde</small></div>
+    </div>
+
+  </div>
+
+  <div class="price-note reveal">
+    💱 <strong>El monto en bolívares</strong> se consulta al momento del pago según la tasa del día.<br/>
+    Los diseños y decoraciones especiales se cotizan aparte según el detalle del trabajo. 🎨
+  </div>
+</section>
+
+<!-- ═══════ HORARIOS ═══════ -->
+<section id="horarios">
+  <p class="sec-label reveal">Disponibilidad</p>
+  <h2 class="sec-title reveal">Nuestros <em>horarios</em></h2>
+  <div class="sec-line reveal"></div>
+
+  <div class="schedule-grid reveal">
+    <div class="sch-card">
+      <div class="sch-time">9:00 AM</div>
+      <div class="sch-label">Inicio de atención regular</div>
+      <div class="sch-tag">Lunes a Sábado</div>
+    </div>
+    <div class="sch-card">
+      <div class="sch-time">8:00 AM</div>
+      <div class="sch-label">Horario especial disponible</div>
+      <div class="sch-tag special">Con aprobación previa</div>
+    </div>
+    <div class="sch-card">
+      <div class="sch-time">11am – 1pm</div>
+      <div class="sch-label">Pausa de trabajo</div>
+      <div class="sch-tag pause">No disponible</div>
+    </div>
+    <div class="sch-card">
+      <div class="sch-time">6:00 PM</div>
+      <div class="sch-label">Cierre de atención</div>
+      <div class="sch-tag">Última cita</div>
+    </div>
+    <div class="sch-card">
+      <div class="sch-time">Domingos</div>
+      <div class="sch-label">Sin atención este día</div>
+      <div class="sch-tag closed">Cerrado</div>
+    </div>
+    <div class="sch-card">
+      <div class="sch-time">Máx. 3</div>
+      <div class="sch-label">Clientas por día para garantizar calidad</div>
+      <div class="sch-tag">Cupos limitados</div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════ RESERVAR CTA ═══════ -->
+<section id="reservar-cta">
+  <p class="sec-label reveal">¿Lista para tu cita?</p>
+  <h2 class="sec-title reveal">Agenda <em>ahora mismo</em></h2>
+  <div class="sec-line reveal"></div>
+  <p class="sec-desc reveal">Reserva tu espacio en minutos. Recibirás confirmación por WhatsApp y recordatorios antes de tu cita.</p>
+  <button class="btn-primary reveal" onclick="openModal()" style="font-size:1.05rem;padding:16px 42px;">💅 Reservar mi cita</button>
+</section>
+
+<!-- ═══════ FOOTER ═══════ -->
+<footer>
+  <div class="footer-logo">Lulu &amp; Nails</div>
+  <div class="footer-slogan">· Renace Tu Look ·</div>
+  <div class="footer-links">
+    <a href="https://www.instagram.com/luluandnails.ve" target="_blank" class="footer-link">📸 Instagram</a>
+    <a href="https://www.tiktok.com/@_lulunails" target="_blank" class="footer-link">🎵 TikTok</a>
+    <a href="https://wa.me/584143441103" target="_blank" class="footer-link">💬 WhatsApp</a>
+    <a href="tel:+584143441103" class="footer-link">📞 +58 414-3441103</a>
+  </div>
+  <div class="footer-copy">© 2025 Lulu &amp; Nails · Luizandra Zerpa · Venezuela</div>
+</footer>
+
+<!-- ═══════ FLOAT WA ═══════ -->
+<a href="https://wa.me/584143441103" target="_blank" class="float-wa" aria-label="Contactar por WhatsApp">
+  <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+</a>
+
+<!-- ═══════ MODAL DE RESERVA ═══════ -->
+<div class="overlay" id="overlay" onclick="handleOverlayClick(event)">
+<div class="modal" id="modal">
+
+  <!-- ÉXITO -->
+  <div id="success-view" style="display:none;">
+    <div class="success-view">
+      <div class="success-icon">💜</div>
+      <div class="success-title">¡Reservado!</div>
+      <p class="success-msg" id="success-msg">Tu cita ha sido registrada. Recibirás una confirmación y recordatorios antes de tu visita.</p>
+      <a id="confirm-wa" href="#" target="_blank" class="wa-btn">
+        <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+        Confirmar por WhatsApp
+      </a>
+      <button class="btn-sec" style="margin-top:12px;" onclick="closeModal()">Cerrar</button>
+    </div>
+  </div>
+
+  <!-- FORM VIEW -->
+  <div id="form-view">
+    <div class="modal-header">
+      <button class="btn-close" onclick="closeModal()">✕</button>
+      <h2>Reservar cita 💅</h2>
+      <div class="stepper" id="stepper">
+        <div class="step-item">
+          <div class="step-circle active" id="sc1">1</div>
+          <div class="step-line" id="sl1"></div>
+        </div>
+        <div class="step-item">
+          <div class="step-circle" id="sc2">2</div>
+          <div class="step-line" id="sl2"></div>
+        </div>
+        <div class="step-item">
+          <div class="step-circle" id="sc3">3</div>
+          <div class="step-line" id="sl3"></div>
+        </div>
+        <div class="step-item" style="flex:0">
+          <div class="step-circle" id="sc4">4</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal-body">
+
+      <!-- PASO 1: SERVICIO -->
+      <div class="step-pane active" id="pane1">
+        <div class="pane-title">¿Qué servicio deseas?</div>
+        <div class="srv-list" id="srv-list-main">
+          <label class="srv-opt" onclick="selectService(this,'Manicura Simple','$10','Solo limpieza',0)">
+            <input type="radio" name="srv_main" value="Manicura Simple"/>
+            <div class="srv-opt-info">
+              <div class="srv-opt-name">💅 Manicura Simple</div>
+              <div class="srv-opt-meta">Solo limpieza</div>
+            </div>
+            <div class="srv-opt-price">$10</div>
+          </label>
+          <label class="srv-opt" onclick="selectService(this,'Manicura Tradicional','$14','90 min',90)">
+            <input type="radio" name="srv_main" value="Manicura Tradicional"/>
+            <div class="srv-opt-info">
+              <div class="srv-opt-name">✨ Manicura Tradicional</div>
+              <div class="srv-opt-meta">90 min</div>
+            </div>
+            <div class="srv-opt-price">$14</div>
+          </label>
+          <label class="srv-opt" onclick="selectService(this,'Manicura Semipermanente','$15','90 min',90)">
+            <input type="radio" name="srv_main" value="Manicura Semipermanente"/>
+            <div class="srv-opt-info">
+              <div class="srv-opt-name">💜 Manicura Semipermanente</div>
+              <div class="srv-opt-meta">90 min</div>
+            </div>
+            <div class="srv-opt-price">$15</div>
+          </label>
+          <label class="srv-opt" onclick="selectService(this,'Nivelación','$18','120 min',120)">
+            <input type="radio" name="srv_main" value="Nivelación"/>
+            <div class="srv-opt-info">
+              <div class="srv-opt-name">🔮 Nivelación</div>
+              <div class="srv-opt-meta">120 min</div>
+            </div>
+            <div class="srv-opt-price">$18</div>
+          </label>
+          <label class="srv-opt" onclick="selectService(this,'Capping de Polygel','$20','120 min',120)">
+            <input type="radio" name="srv_main" value="Capping de Polygel"/>
+            <div class="srv-opt-info">
+              <div class="srv-opt-name">💎 Capping de Polygel</div>
+              <div class="srv-opt-meta">120 min</div>
+            </div>
+            <div class="srv-opt-price">$20</div>
+          </label>
+          <label class="srv-opt" onclick="selectService(this,'Sistema Jelly','$18','120 min',120)">
+            <input type="radio" name="srv_main" value="Sistema Jelly"/>
+            <div class="srv-opt-info">
+              <div class="srv-opt-name">🫧 Sistema Jelly</div>
+              <div class="srv-opt-meta">120 min</div>
+            </div>
+            <div class="srv-opt-price">$18</div>
+          </label>
+          <label class="srv-opt" onclick="selectService(this,'Sistema Esculpido en Polygel','$22','160 min',160)">
+            <input type="radio" name="srv_main" value="Sistema Esculpido en Polygel"/>
+            <div class="srv-opt-info">
+              <div class="srv-opt-name">👑 Sistema Esculpido en Polygel</div>
+              <div class="srv-opt-meta">160 min · Premium</div>
+            </div>
+            <div class="srv-opt-price">$22</div>
+          </label>
+        </div>
+
+        <!-- Pedicure opcional -->
+        <div class="pedi-section">
+          <h4>¿Agregar Pedicure? (opcional)</h4>
+          <label class="srv-opt" id="pedi-opt" onclick="togglePedi(this)">
+            <input type="checkbox" id="pedi-check" value="Pedicure Semipermanente"/>
+            <div class="srv-opt-info">
+              <div class="srv-opt-name">🦶 Pedicure Semipermanente</div>
+              <div class="srv-opt-meta">+ 60 min adicionales</div>
+            </div>
+            <div class="srv-opt-price">+$15</div>
+          </label>
+        </div>
+      </div>
+
+      <!-- PASO 2: FECHA Y HORA -->
+      <div class="step-pane" id="pane2">
+        <div class="pane-title">Elige tu fecha y hora</div>
+        <div class="cal-wrap">
+          <div>
+            <div class="calendar">
+              <div class="cal-nav">
+                <button onclick="prevMonth()">‹</button>
+                <span class="cal-month" id="cal-month-label">Mayo 2025</span>
+                <button onclick="nextMonth()">›</button>
+              </div>
+              <div class="cal-grid" id="cal-grid"></div>
+            </div>
+          </div>
+          <div class="slots-wrap">
+            <h4>Horarios disponibles</h4>
+            <div id="slots-container"><p class="no-date-msg">Selecciona una fecha primero</p></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- PASO 3: DATOS PERSONALES -->
+      <div class="step-pane" id="pane3">
+        <div class="pane-title">Tus datos de contacto</div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Nombre *</label>
+            <input type="text" id="f-nombre" placeholder="Tu nombre"/>
+          </div>
+          <div class="form-group">
+            <label>Apellido *</label>
+            <input type="text" id="f-apellido" placeholder="Tu apellido"/>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>WhatsApp / Teléfono *</label>
+          <input type="tel" id="f-tel" placeholder="+58 4XX XXXXXXX"/>
+        </div>
+        <div class="form-group">
+          <label>Correo electrónico *</label>
+          <input type="email" id="f-email" placeholder="tu@correo.com"/>
+        </div>
+        <p style="font-size:.78rem;color:#9B85B0;margin-top:8px;line-height:1.5;">
+          📩 Recibirás recordatorios por correo: 1 día antes, 4 horas antes y 1 hora antes de tu cita.
+        </p>
+      </div>
+
+      <!-- PASO 4: RESUMEN -->
+      <div class="step-pane" id="pane4">
+        <div class="pane-title">Resumen de tu cita</div>
+        <div class="summary-card" id="summary-card">
+          <!-- se llena con JS -->
+        </div>
+        <div id="special-note-box" style="display:none;" class="special-note">
+          🕗 Solicitaste el horario especial de 8:00 AM. Lulú te confirmará disponibilidad por WhatsApp antes de la cita.
+        </div>
+        <p style="font-size:.82rem;color:#9B85B0;line-height:1.55;margin-top:12px;">
+          💬 El precio final en bolívares y el detalle del diseño se confirman por WhatsApp al momento de la cita.
+        </p>
+      </div>
+    </div>
+
+    <div class="modal-footer">
+      <button class="btn-sec" id="btn-back" onclick="goBack()" style="display:none;">← Atrás</button>
+      <button class="btn-primary" id="btn-next" onclick="goNext()">Continuar →</button>
+    </div>
+  </div>
+
+</div><!-- /modal -->
+</div><!-- /overlay -->
+
+<script>
+// =======================================
+// CONFIGURACIÓN
+// =======================================
+
+// -- Google Calendar (Apps Script API) --
+const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxcla2uWaJBhJvehBqlKCjKFRRFYDKPU_gr9rwCsG5PtQ-cQcPz9iYlJ2hxJuYW43fT/exec';
+
+// Cache: evita consultar la misma fecha dos veces
+const _cache = {};
+
+// JSONP: carga la respuesta como <script> para evitar bloqueos CORS
+function jsonpFetch(url) {
+  return new Promise(function(resolve, reject) {
+    var cbName = 'gcal_' + Date.now();
+    var script = document.createElement('script');
+    var timer  = setTimeout(function() { cleanup(); reject(new Error('Timeout')); }, 9000);
+
+    function cleanup() {
+      clearTimeout(timer);
+      delete window[cbName];
+      if(script.parentNode) script.parentNode.removeChild(script);
+    }
+
+    window[cbName] = function(data) { cleanup(); resolve(data); };
+    script.onerror = function() { cleanup(); reject(new Error('Error de red')); };
+    script.src = url + '&callback=' + cbName;
+    document.head.appendChild(script);
+  });
+}
+
+// Consulta el Apps Script y devuelve franjas ocupadas [{inicio, fin}] en minutos
+async function obtenerOcupados(fechaStr) {
+  if(_cache[fechaStr] !== undefined) return _cache[fechaStr];
+  try {
+    var data = await jsonpFetch(APPS_SCRIPT_URL + '?date=' + fechaStr);
+    _cache[fechaStr] = Array.isArray(data.ocupados) ? data.ocupados : [];
+  } catch(err) {
+    console.warn('Sin acceso al calendario, mostrando todos los horarios.', err);
+    _cache[fechaStr] = [];
+  }
+  return _cache[fechaStr];
+}
+
+// Verifica si un slot (start->end en minutos) choca con algún evento ocupado
+function slotChoca(start, end, ocupados) {
+  return ocupados.some(o => start < o.fin && end > o.inicio);
+}
+
+const NEGOCIO = {
+  nombre:    'Lulu & Nails',
+  duena:     'Luizandra Zerpa',
+  wa:        '584143441103',
+  instagram: 'luluandnails.ve',
+  tiktok:    '_lulunails'
+};
+
+// Horarios base (minutos desde medianoche)
+const INICIO    = 8*60;   // 8am (especial)
+const INICIO_N  = 9*60;   // 9am normal
+const FIN       = 18*60;  // 6pm
+const PAUSA_I   = 11*60;  // 11am
+const PAUSA_F   = 13*60;  // 1pm
+
+const BASE_SLOTS = [8*60, 9*60, 10*60, 13*60, 14*60, 15*60, 16*60, 17*60];
+
+// =======================================
+// ESTADO
+// =======================================
+let step      = 1;
+let selService = null;  // {name, price, dur, minutes}
+let selPedi    = false;
+let selDate    = null;  // Date obj
+let selSlot    = null;  // minutes
+let calYear, calMonth;
+
+function now() { const d=new Date(); return d; }
+
+// =======================================
+// MODAL
+// =======================================
+function openModal() {
+  document.getElementById('overlay').classList.add('open');
+  document.getElementById('form-view').style.display='';
+  document.getElementById('success-view').style.display='none';
+  const d = now();
+  calYear=d.getFullYear(); calMonth=d.getMonth();
+  renderCal();
+  document.body.style.overflow='hidden';
+}
+function closeModal() {
+  document.getElementById('overlay').classList.remove('open');
+  document.body.style.overflow='';
+  resetModal();
+}
+function handleOverlayClick(e) {
+  if(e.target===document.getElementById('overlay')) closeModal();
+}
+function resetModal() {
+  step=1;
+  selService=null; selPedi=false; selDate=null; selSlot=null;
+  document.querySelectorAll('.srv-opt').forEach(e=>e.classList.remove('selected'));
+  document.querySelectorAll('input[name=srv_main]').forEach(e=>e.checked=false);
+  document.getElementById('pedi-check').checked=false;
+  ['f-nombre','f-apellido','f-tel','f-email'].forEach(id=>document.getElementById(id).value='');
+  goToStep(1);
+}
+
+// =======================================
+// PASO A PASO
+// =======================================
+function goToStep(n) {
+  for(let i=1;i<=4;i++) {
+    document.getElementById('pane'+i).classList.toggle('active',i===n);
+    const sc=document.getElementById('sc'+i);
+    if(i<n){ sc.classList.add('done'); sc.classList.remove('active'); sc.textContent='OK'; }
+    else if(i===n){ sc.classList.add('active'); sc.classList.remove('done'); sc.textContent=i; }
+    else { sc.classList.remove('active','done'); sc.textContent=i; }
+    if(i<4) document.getElementById('sl'+i).classList.toggle('done',i<n);
+  }
+  document.getElementById('btn-back').style.display = n>1?'':'none';
+  document.getElementById('btn-next').textContent = n===4?'OK Confirmar reserva':'Continuar ->';
+  step=n;
+}
+function goBack() { if(step>1) goToStep(step-1); }
+function goNext() {
+  if(step===1) {
+    if(!selService){ alert('Por favor selecciona un servicio.'); return; }
+    goToStep(2);
+  } else if(step===2) {
+    if(!selDate){ alert('Por favor selecciona una fecha.'); return; }
+    if(selSlot===null){ alert('Por favor selecciona un horario.'); return; }
+    goToStep(3);
+  } else if(step===3) {
+    const n=document.getElementById('f-nombre').value.trim();
+    const a=document.getElementById('f-apellido').value.trim();
+    const t=document.getElementById('f-tel').value.trim();
+    const e=document.getElementById('f-email').value.trim();
+    if(!n||!a||!t||!e){ alert('Por favor completa todos los campos.'); return; }
+    if(!e.includes('@')){ alert('Por favor ingresa un correo válido.'); return; }
+    buildSummary(n,a,t,e);
+    goToStep(4);
+  } else if(step===4) {
+    confirm_booking();
+  }
+}
+
+// =======================================
+// SERVICIO
+// =======================================
+function selectService(el, name, price, dur, minutes) {
+  document.querySelectorAll('#srv-list-main .srv-opt').forEach(e=>e.classList.remove('selected'));
+  el.classList.add('selected');
+  selService = {name, price, dur, minutes};
+  if(selDate) renderSlots();
+}
+function togglePedi(el) {
+  selPedi = !selPedi;
+  el.classList.toggle('selected', selPedi);
+  if(selDate) renderSlots();
+}
+
+// =======================================
+// CALENDARIO
+// =======================================
+function renderCal() {
+  const label = new Date(calYear,calMonth,1)
+    .toLocaleDateString('es-VE',{month:'long',year:'numeric'});
+  document.getElementById('cal-month-label').textContent =
+    label.charAt(0).toUpperCase()+label.slice(1);
+
+  const grid = document.getElementById('cal-grid');
+  grid.innerHTML='';
+  ['Lu','Ma','Mi','Ju','Vi','Sá','Do'].forEach(d=>{
+    const el=document.createElement('div');
+    el.className='cal-dow'; el.textContent=d; grid.appendChild(el);
+  });
+
+  const firstDay = new Date(calYear,calMonth,1).getDay();
+  const offset = firstDay===0?6:firstDay-1;
+  const daysInMonth = new Date(calYear,calMonth+1,0).getDate();
+  const today = now();
+  today.setHours(0,0,0,0);
+
+  for(let i=0;i<offset;i++){
+    const el=document.createElement('div'); el.className='cal-day empty'; grid.appendChild(el);
+  }
+  for(let d=1;d<=daysInMonth;d++){
+    const date = new Date(calYear,calMonth,d);
+    const el=document.createElement('div'); el.className='cal-day';
+    el.textContent=d;
+    const isSun = date.getDay()===0;
+    const isPast = date<today;
+    const isToday = date.getTime()===today.getTime();
+    if(isSun||isPast){ el.classList.add('disabled'); }
+    else {
+      if(isToday) el.classList.add('today');
+      el.addEventListener('click',()=>selectDay(date,el));
+      if(selDate && date.getTime()===selDate.getTime()) el.classList.add('selected');
+    }
+    grid.appendChild(el);
+  }
+}
+function prevMonth() {
+  calMonth--; if(calMonth<0){calMonth=11;calYear--;}
+  renderCal();
+}
+function nextMonth() {
+  calMonth++; if(calMonth>11){calMonth=0;calYear++;}
+  renderCal();
+}
+function selectDay(date, el) {
+  selDate=date; selSlot=null;
+  document.querySelectorAll('.cal-day').forEach(e=>e.classList.remove('selected'));
+  el.classList.add('selected');
+  renderSlots();   // llamada asíncrona - no bloquea la UI
+}
+function minToStr(m) {
+  const h=Math.floor(m/60), min=m%60;
+  return (h%12||12)+':'+(min<10?'0'+min:min)+' '+(h<12?'AM':'PM');
+}
+function fechaStr(date) {
+  // Formato "YYYY-MM-DD" sin depender del idioma del sistema
+  return date.getFullYear()+'-'+
+    String(date.getMonth()+1).padStart(2,'0')+'-'+
+    String(date.getDate()).padStart(2,'0');
+}
+
+async function renderSlots() {
+  const container = document.getElementById('slots-container');
+  if(!selDate) {
+    container.innerHTML='<p class="no-date-msg">Selecciona una fecha primero</p>';
+    return;
+  }
+
+  // 1. Mostrar spinner mientras consultamos Google Calendar
+  container.innerHTML='<div class="slot-loading">Consultando disponibilidad...</div>';
+
+  const totalDur = (selService ? selService.minutes : 90) + (selPedi ? 60 : 0);
+  const fecha    = fechaStr(selDate);
+
+  // 2. Traer franjas ocupadas desde el Apps Script
+  const ocupados = await obtenerOcupados(fecha);
+
+  // 3. Calcular estado de cada slot base
+  const slots = BASE_SLOTS.map(start => {
+    const end = start + totalDur;
+    let libre = true;
+    if(end > FIN)                               libre = false;  // pasa de las 6pm
+    else if(start < PAUSA_F && end > PAUSA_I)   libre = false;  // cruza la pausa
+    else if(slotChoca(start, end, ocupados))     libre = false;  // ocupado en GCal
+    return { start, libre };
+  });
+
+  // 4. Si TODO está ocupado, mostrar mensaje
+  if(!slots.some(s => s.libre)) {
+    container.innerHTML='<p class="no-date-msg">😔 No hay horarios disponibles para este día. Elige otra fecha.</p>';
+    return;
+  }
+
+  // 5. Renderizar botones
+  container.innerHTML='<div class="slots-grid"></div>';
+  const sg = container.querySelector('.slots-grid');
+
+  slots.forEach(({start, libre}) => {
+    // Excluir slots que exceden 6pm o cruzan la pausa (no mostramos ni en gris)
+    const end = start + totalDur;
+    const excluido = end > FIN || (start < PAUSA_F && end > PAUSA_I);
+    if(excluido) return;  // directamente no se muestra
+
+    const btn = document.createElement('button');
+    btn.className = 'slot-btn' + (start===8*60 ? ' special-slot' : '') + (!libre ? ' busy' : '');
+    btn.textContent = minToStr(start) + (start===8*60 ? ' ⭐' : '');
+
+    if(libre) {
+      if(selSlot===start) btn.classList.add('selected');
+      btn.onclick = () => {
+        selSlot = start;
+        document.querySelectorAll('.slot-btn').forEach(b=>b.classList.remove('selected'));
+        btn.classList.add('selected');
+      };
+    }
+    sg.appendChild(btn);
+  });
+}
+
+// =======================================
+// RESUMEN
+// =======================================
+function buildSummary(n,a,t,e) {
+  const dateStr = selDate.toLocaleDateString('es-VE',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
+  const timeStr = minToStr(selSlot);
+  const isSpecial = selSlot===8*60;
+  const srvName = selService.name+(selPedi?' + Pedicure Semipermanente':'');
+  const priceBase = selService.price+(selPedi?' + $15':'');
+
+  document.getElementById('summary-card').innerHTML=`
+    <div class="sum-row"><span class="sum-label">👤 Nombre</span><span class="sum-value">${n} ${a}</span></div>
+    <div class="sum-row"><span class="sum-label">📞 Teléfono</span><span class="sum-value">${t}</span></div>
+    <div class="sum-row"><span class="sum-label">📧 Correo</span><span class="sum-value">${e}</span></div>
+    <div class="sum-row"><span class="sum-label">💅 Servicio</span><span class="sum-value">${srvName}</span></div>
+    <div class="sum-row"><span class="sum-label">📅 Fecha</span><span class="sum-value">${dateStr}</span></div>
+    <div class="sum-row"><span class="sum-label">🕐 Hora</span><span class="sum-value">${timeStr}</span></div>
+    <div class="sum-row sum-total"><span class="sum-label">💰 Precio base</span><span class="sum-value">${priceBase}</span></div>
+  `;
+  document.getElementById('special-note-box').style.display = isSpecial?'block':'none';
+}
+
+function confirm_booking() {
+  const n=document.getElementById('f-nombre').value.trim();
+  const a=document.getElementById('f-apellido').value.trim();
+  const dateStr = selDate.toLocaleDateString('es-VE',{weekday:'long',day:'numeric',month:'long'});
+  const timeStr = minToStr(selSlot);
+  const srvName = selService.name+(selPedi?' + Pedicure Semipermanente':'');
+
+  const msg = encodeURIComponent(
+    `Hola Luizandra! 💅 Soy ${n} ${a}. Acabo de reservar una cita para el *${dateStr}* a las *${timeStr}*.\n\nServicio: *${srvName}*\n\nQuisiera consultarte el precio con mi diseño 🌸`
+  );
+  document.getElementById('confirm-wa').href=`https://wa.me/${NEGOCIO.wa}?text=${msg}`;
+  document.getElementById('success-msg').textContent=
+    `Tu cita para el ${dateStr} a las ${timeStr} ha sido registrada, ${n}. Confirma tu cupo por WhatsApp y te esperamos! 💜`;
+
+  document.getElementById('form-view').style.display='none';
+  document.getElementById('success-view').style.display='';
+}
+
+// =======================================
+// SCROLL REVEAL
+// =======================================
+const observer = new IntersectionObserver(entries=>{
+  entries.forEach(e=>{ if(e.isIntersecting) e.target.classList.add('visible'); });
+},{threshold:.12});
+document.querySelectorAll('.reveal').forEach(el=>observer.observe(el));
+</script>
+</body>
+</html>
