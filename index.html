@@ -512,14 +512,6 @@ footer {
   <div class="services-grid">
 
     <div class="srv-card reveal">
-      <span class="srv-icon">💅</span>
-      <div class="srv-name">Manicura Simple</div>
-      <div class="srv-dur">⏱ Solo limpieza</div>
-      <div class="srv-desc">Limpieza y cuidado básico de cutículas y uñas naturales.</div>
-      <div class="srv-price">$10 <small>desde</small></div>
-    </div>
-
-    <div class="srv-card reveal">
       <span class="srv-icon">✨</span>
       <div class="srv-name">Manicura Tradicional</div>
       <div class="srv-dur">⏱ 90 min</div>
@@ -616,34 +608,34 @@ footer {
 
   <div class="schedule-grid reveal">
     <div class="sch-card">
-      <div class="sch-time">9:00 AM</div>
-      <div class="sch-label">Inicio de atención regular</div>
-      <div class="sch-tag">Lunes a Sábado</div>
+      <div class="sch-time">9am – 12pm</div>
+      <div class="sch-label">Bloque de la mañana</div>
+      <div class="sch-tag">Lun – Sáb</div>
     </div>
     <div class="sch-card">
-      <div class="sch-time">8:00 AM</div>
-      <div class="sch-label">Horario especial disponible</div>
-      <div class="sch-tag special">Con aprobación previa</div>
-    </div>
-    <div class="sch-card">
-      <div class="sch-time">11am – 1pm</div>
-      <div class="sch-label">Pausa de trabajo</div>
+      <div class="sch-time">12pm – 2pm</div>
+      <div class="sch-label">Descanso — sin citas</div>
       <div class="sch-tag pause">No disponible</div>
     </div>
     <div class="sch-card">
-      <div class="sch-time">6:00 PM</div>
-      <div class="sch-label">Cierre de atención</div>
-      <div class="sch-tag">Última cita</div>
+      <div class="sch-time">2pm – 9pm</div>
+      <div class="sch-label">Bloque de la tarde y noche</div>
+      <div class="sch-tag">Lun – Sáb</div>
+    </div>
+    <div class="sch-card">
+      <div class="sch-time">9:00 PM</div>
+      <div class="sch-label">Última cita posible del día</div>
+      <div class="sch-tag">Cierre</div>
     </div>
     <div class="sch-card">
       <div class="sch-time">Domingos</div>
-      <div class="sch-label">Sin atención este día</div>
+      <div class="sch-label">Sin atención</div>
       <div class="sch-tag closed">Cerrado</div>
     </div>
     <div class="sch-card">
-      <div class="sch-time">Máx. 3</div>
-      <div class="sch-label">Clientas por día para garantizar calidad</div>
-      <div class="sch-tag">Cupos limitados</div>
+      <div class="sch-time">15 min</div>
+      <div class="sch-label">Gap entre citas para garantizar calidad</div>
+      <div class="sch-tag">Siempre</div>
     </div>
   </div>
 </section>
@@ -654,7 +646,13 @@ footer {
   <h2 class="sec-title reveal">Agenda <em>ahora mismo</em></h2>
   <div class="sec-line reveal"></div>
   <p class="sec-desc reveal">Reserva tu espacio en minutos. Recibirás confirmación por WhatsApp y recordatorios antes de tu cita.</p>
-  <button class="btn-primary reveal" onclick="openModal()" style="font-size:1.05rem;padding:16px 42px;">💅 Reservar mi cita</button>
+  <div style="display:flex;gap:14px;flex-wrap:wrap;justify-content:center;align-items:center;" class="reveal">
+    <button class="btn-primary" onclick="openModal()" style="font-size:1.05rem;padding:16px 42px;">💅 Reservar mi cita</button>
+    <a href="https://wa.me/584143441103?text=Hola%20Luizandra!%20Quisiera%20agendar%20una%20cita%20en%20un%20horario%20personalizado.%20Podrias%20ayudarme?" target="_blank" class="btn-outline" style="display:inline-flex;align-items:center;gap:8px;padding:15px 28px;font-size:.95rem;font-weight:600;">
+      🕐 Horario personalizado
+    </a>
+  </div>
+  <p class="reveal" style="margin-top:16px;font-size:.82rem;color:#9B85B0;">¿Necesitas un horario especial? Escríbenos por WhatsApp y lo coordinamos.</p>
 </section>
 
 <!-- ═══════ FOOTER ═══════ -->
@@ -723,14 +721,6 @@ footer {
       <div class="step-pane active" id="pane1">
         <div class="pane-title">¿Qué servicio deseas?</div>
         <div class="srv-list" id="srv-list-main">
-          <label class="srv-opt" onclick="selectService(this,'Manicura Simple','$10','~60 min',60)">
-            <input type="radio" name="srv_main" value="Manicura Simple"/>
-            <div class="srv-opt-info">
-              <div class="srv-opt-name">💅 Manicura Simple</div>
-              <div class="srv-opt-meta">~60 min</div>
-            </div>
-            <div class="srv-opt-price">$10</div>
-          </label>
           <label class="srv-opt" onclick="selectService(this,'Manicura Tradicional','$14','90 min',90)">
             <input type="radio" name="srv_main" value="Manicura Tradicional"/>
             <div class="srv-opt-info">
@@ -872,7 +862,7 @@ footer {
 // =======================================
 
 // -- Google Calendar (Apps Script API) --
-const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbz9p4aoysebel0Vg6ESnlrifDbEhpKBT8N3XsuDp5I9yy9WSyMSt1VIyrSausR1gdns/exec';
+const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzxAyMDmDM4WtoIN-1Fvr_LLFBzrz-inzA4tc1xt42WSRtvhgtN5HCBrm40OR4BzuBz/exec';
 
 // Cache: evita consultar la misma fecha dos veces
 const _cache = {};
@@ -897,26 +887,24 @@ function jsonpFetch(url) {
   });
 }
 
-// Consulta disponibilidad del dia completo en Google Calendar
+// Consulta disponibilidad en Google Calendar via Apps Script
 async function obtenerDisponibilidad(fechaStr) {
   if(_cache[fechaStr] !== undefined) return _cache[fechaStr];
   try {
     var data = await jsonpFetch(APPS_SCRIPT_URL + '?date=' + fechaStr);
     _cache[fechaStr] = {
-      ocupados:   Array.isArray(data.ocupados) ? data.ocupados : [],
-      diaCopleto: data.diaCopleto || false,
-      citasHoy:   data.citasHoy  || 0
+      ocupados: Array.isArray(data.ocupados) ? data.ocupados : []
     };
   } catch(err) {
-    console.warn('Sin acceso al calendario, mostrando todos los horarios.', err);
-    _cache[fechaStr] = { ocupados: [], diaCopleto: false, citasHoy: 0 };
+    console.warn('Sin acceso al calendario. Mostrando todos los horarios.', err);
+    _cache[fechaStr] = { ocupados: [] };
   }
   return _cache[fechaStr];
 }
 
-// Verifica si un slot (start->end en minutos) choca con algún evento ocupado
+// Verifica si un slot choca con eventos existentes (incluye gap de 15 min post-cita)
 function slotChoca(start, end, ocupados) {
-  return ocupados.some(o => start < o.fin && end > o.inicio);
+  return ocupados.some(o => start < (o.fin + GAP) && end > o.inicio);
 }
 
 const NEGOCIO = {
@@ -928,13 +916,17 @@ const NEGOCIO = {
 };
 
 // Horarios base (minutos desde medianoche)
-const INICIO    = 8*60;   // 8am (especial)
-const INICIO_N  = 9*60;   // 9am normal
-const FIN       = 18*60;  // 6pm
-const PAUSA_I   = 11*60;  // 11am
-const PAUSA_F   = 13*60;  // 1pm
+// Bloques horarios
+const FIN_MANANA  = 12*60;  // 12pm - fin del bloque de manana
+const INI_TARDE   = 14*60;  // 2pm  - inicio del bloque de tarde
+const FIN_DIA     = 21*60;  // 9pm  - fin del dia
+const GAP         = 15;     // 15 min de gap entre citas
 
-const BASE_SLOTS = [8*60, 9*60, 10*60, 13*60, 14*60, 15*60, 16*60, 17*60];
+// Slots disponibles: cada hora dentro de cada bloque
+const BASE_SLOTS = [
+  9*60, 10*60, 11*60,                          // manana: 9, 10, 11am
+  14*60, 15*60, 16*60, 17*60, 18*60, 19*60, 20*60  // tarde: 2,3,4,5,6,7,8pm
+];
 
 // =======================================
 // ESTADO
@@ -1107,30 +1099,34 @@ async function renderSlots() {
 
   container.innerHTML='<div class="slot-loading">Consultando disponibilidad...</div>';
 
-  const totalDur  = (selService ? selService.minutes : 60) + (selPedi ? 60 : 0);
-  // Usar bloque minimo 2h para MOSTRAR y para VERIFICAR solapamiento
-  const bloqueCal = Math.max(totalDur, 120);
-  const fecha     = fechaStr(selDate);
-
-  const dispon  = await obtenerDisponibilidad(fecha);
+  const totalDur = (selService ? selService.minutes : 90) + (selPedi ? 60 : 0);
+  const fecha    = fechaStr(selDate);
+  const dispon   = await obtenerDisponibilidad(fecha);
   const ocupados = dispon.ocupados;
 
-  // Si el dia ya tiene 3 citas, mostrar mensaje de dia completo
-  if(dispon.diaCopleto) {
-    container.innerHTML='<p class="no-date-msg">Este dia esta completo (3/3 citas). Por favor elige otra fecha.</p>';
+  // Filtrar: solo slots donde el servicio cabe en el bloque horario
+  function slotCabeEnBloque(start) {
+    const end = start + totalDur;
+    if (start < INI_TARDE) {
+      return end <= FIN_MANANA;  // manana: debe terminar a las 12pm o antes
+    } else {
+      return end <= FIN_DIA;     // tarde/noche: debe terminar a las 9pm o antes
+    }
+  }
+
+  const slotsValidos = BASE_SLOTS.filter(start => slotCabeEnBloque(start));
+
+  if (slotsValidos.length === 0) {
+    container.innerHTML='<p class="no-date-msg">Este servicio no tiene horarios disponibles. Intenta con otra fecha.</p>';
     return;
   }
 
-  const slots = BASE_SLOTS.map(start => {
-    const end = start + bloqueCal;  // usar bloque minimo 2h
-    let libre = true;
-    if(end > FIN)                              libre = false;  // termina despues de las 6pm
-    else if(start < PAUSA_F && end > PAUSA_I)  libre = false;  // cruza la pausa 11am-1pm
-    else if(slotChoca(start, end, ocupados))    libre = false;  // ocupado en Google Calendar
-    return { start, libre };
-  });
+  const slots = slotsValidos.map(start => ({
+    start,
+    libre: !slotChoca(start, start + totalDur, ocupados)
+  }));
 
-  if(!slots.some(s => s.libre)) {
+  if (!slots.some(s => s.libre)) {
     container.innerHTML='<p class="no-date-msg">No hay horarios disponibles para este dia. Elige otra fecha.</p>';
     return;
   }
@@ -1139,20 +1135,14 @@ async function renderSlots() {
   const sg = container.querySelector('.slots-grid');
 
   slots.forEach(({start, libre}) => {
-    const end = start + bloqueCal;
-    // No mostrar slots que exceden las 6pm o cruzan la pausa
-    const excluido = end > FIN || (start < PAUSA_F && end > PAUSA_I);
-    if(excluido) return;
-
     const btn = document.createElement('button');
-    btn.className = 'slot-btn' + (start===8*60 ? ' special-slot' : '') + (!libre ? ' busy' : '');
-    btn.textContent = minToStr(start) + (start===8*60 ? ' (especial)' : '');
-
-    if(libre) {
-      if(selSlot===start) btn.classList.add('selected');
+    btn.className = 'slot-btn' + (!libre ? ' busy' : '');
+    btn.textContent = minToStr(start);
+    if (libre) {
+      if (selSlot === start) btn.classList.add('selected');
       btn.onclick = () => {
         selSlot = start;
-        document.querySelectorAll('.slot-btn').forEach(b=>b.classList.remove('selected'));
+        document.querySelectorAll('.slot-btn').forEach(b => b.classList.remove('selected'));
         btn.classList.add('selected');
       };
     }
@@ -1197,8 +1187,6 @@ async function confirm_booking() {
   const timeStr = minToStr(selSlot);
   const srvName = selService.name + (selPedi?' + Pedicure Semipermanente':'');
   const totalDur = selService.minutes + (selPedi ? 60 : 0);
-  // Bloque minimo 2h para bloquear el horario siguiente automaticamente
-  const bloqueCal = Math.max(totalDur, 120);
 
   // Crear evento en Google Calendar via Apps Script
   try {
@@ -1207,7 +1195,7 @@ async function confirm_booking() {
       '?action=reservar' +
       '&date='     + encodeURIComponent(dateISO) +
       '&tiempo='   + selSlot +
-      '&duracion=' + bloqueCal +
+      '&duracion=' + totalDur +
       '&nombre='   + encodeURIComponent(n) +
       '&apellido=' + encodeURIComponent(a) +
       '&servicio=' + encodeURIComponent(srvName) +
