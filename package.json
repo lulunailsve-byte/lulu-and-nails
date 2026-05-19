@@ -1,0 +1,9 @@
+{
+  "name": "lulu-and-nails",
+  "version": "1.0.0",
+  "description": "Sistema de reservas Lulu & Nails",
+  "private": true,
+  "dependencies": {
+    "googleapis": "^144.0.0"
+  }
+}
