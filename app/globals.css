@@ -1,0 +1,90 @@
+@import "tailwindcss";
+
+/* ════════════════════════════════════════════════════════
+   Lulu & Nails — Design tokens (Tailwind v4 @theme)
+   ════════════════════════════════════════════════════════ */
+@theme {
+  /* Violet (primario) */
+  --color-violet-50:  #F7F2FF;
+  --color-violet-100: #EBE0FF;
+  --color-violet-200: #D7C2FF;
+  --color-violet-300: #B79AF7;
+  --color-violet-400: #9572EE;
+  --color-violet-500: #7B5CFF;
+  --color-violet-600: #6347D9;
+  --color-violet-700: #4A33A6;
+  --color-violet-900: #1F1235;
+
+  /* Pink (acento) */
+  --color-pink-50:  #FFF1F7;
+  --color-pink-100: #FFDDEA;
+  --color-pink-200: #FFC2D9;
+  --color-pink-300: #FFA0C2;
+  --color-pink-400: #FF8FB8;
+  --color-pink-500: #F26AA0;
+  --color-pink-600: #D14785;
+
+  /* Ink (texto) */
+  --color-ink-900: #1F1235;
+  --color-ink-700: #3C2A5C;
+  --color-ink-500: #6B5B85;
+  --color-ink-400: #9388A8;
+  --color-ink-300: #C3B9D6;
+
+  /* Verde (referidos) */
+  --color-green-50:  #EEFBF3;
+  --color-green-100: #D7F2E2;
+  --color-green-200: #B5E6C8;
+  --color-green-400: #7DC9A0;
+  --color-green-500: #5FB088;
+  --color-green-700: #2F7A55;
+
+  /* Surfaces */
+  --color-cream:      #FFFAF5;
+  --color-ivory:      #FCF8F2;
+  --color-warm-white: #FEFCFA;
+
+  --color-success: #4CC38A;
+  --color-warning: #F5A623;
+
+  /* Fonts (CSS vars, las inyecta next/font) */
+  --font-display: var(--font-bricolage), system-ui, sans-serif;
+  --font-body:    var(--font-jakarta),   system-ui, sans-serif;
+  --font-script:  var(--font-caveat),    cursive;
+
+  /* Radii */
+  --radius-sm:   12px;
+  --radius-md:   20px;
+  --radius-lg:   28px;
+  --radius-xl:   36px;
+  --radius-pill: 9999px;
+}
+
+/* ════════════════════════════════════════════════════════
+   Base
+   ════════════════════════════════════════════════════════ */
+html, body {
+  background: var(--color-warm-white);
+  color: var(--color-ink-900);
+  font-family: var(--font-body);
+  -webkit-font-smoothing: antialiased;
+  letter-spacing: -0.005em;
+}
+
+body { margin: 0; }
+
+/* Hide scrollbar (iOS-like) */
+.no-scrollbar::-webkit-scrollbar { display: none; }
+.no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+/* Display / script helpers */
+.font-display { font-family: var(--font-display); letter-spacing: -0.025em; }
+.font-script  { font-family: var(--font-script); }
+
+/* Soft fade-in animations */
+@keyframes fade-up { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: none; } }
+.fade-up { animation: fade-up .6s ease both; }
+
+/* Hide details summary marker */
+details > summary { list-style: none; cursor: pointer; }
+details > summary::-webkit-details-marker { display: none; }
