@@ -11,6 +11,9 @@ export const dynamic = "force-dynamic";
 
 const pad = (n: number) => String(n).padStart(2, "0");
 
+const TURNSTILE_VERIFY_URL =
+  "https://challenges.cloudflare.com/turnstile/v0/siteverify";
+
 type BookBody = {
   date?: string;            // YYYY-MM-DD
   tiempo?: number;          // minutos desde medianoche
@@ -22,7 +25,48 @@ type BookBody = {
   correo?: string;
   // Honeypot: campo oculto que solo bots completan
   website?: string;
+  // Token de Cloudflare Turnstile (anti-bot)
+  turnstileToken?: string;
 };
+
+type TurnstileVerifyResp = {
+  success: boolean;
+  "error-codes"?: string[];
+  hostname?: string;
+  action?: string;
+};
+
+// Verifica un token de Cloudflare Turnstile contra el endpoint de siteverify.
+// Si TURNSTILE_SECRET_KEY no está seteado (entorno dev sin Turnstile), permite el paso
+// y solo loguea un warning. En producción debe estar siempre seteado.
+async function verifyTurnstile(token: string, remoteip?: string): Promise<{ ok: boolean; reason?: string }> {
+  const secret = process.env.TURNSTILE_SECRET_KEY;
+  if (!secret) {
+    console.warn("TURNSTILE_SECRET_KEY no está seteado — saltando verificación. NO HACER EN PROD.");
+    return { ok: true };
+  }
+  if (!token) {
+    return { ok: false, reason: "missing-token" };
+  }
+  try {
+    const form = new URLSearchParams();
+    form.append("secret", secret);
+    form.append("response", token);
+    if (remoteip) form.append("remoteip", remoteip);
+
+    const res = await fetch(TURNSTILE_VERIFY_URL, {
+      method: "POST",
+      headers: { "Content-Type": "application/x-www-form-urlencoded" },
+      body: form.toString(),
+    });
+    const data = (await res.json()) as TurnstileVerifyResp;
+    if (data.success) return { ok: true };
+    return { ok: false, reason: (data["error-codes"] ?? []).join(",") || "verify-failed" };
+  } catch (err) {
+    console.error("turnstile verify error:", err);
+    return { ok: false, reason: "verify-error" };
+  }
+}
 
 // Formato amigable de fecha en es-VE para mensajes al cliente.
 function fmtFechaEs(d: Date): string {
@@ -53,6 +97,22 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ ok: true, mensaje: "ok" });
   }
 
+  // 2. Cloudflare Turnstile: verifica que el request venga de un humano real.
+  // El header X-Forwarded-For lo pone Vercel con la IP del cliente.
+  const remoteip = req.headers.get("x-forwarded-for")?.split(",")[0]?.trim();
+  const turnstile = await verifyTurnstile(body.turnstileToken ?? "", remoteip);
+  if (!turnstile.ok) {
+    return NextResponse.json(
+      {
+        ok: false,
+        error: "Verificación anti-bot fallida. Refrescá la página e intentá de nuevo.",
+        codigo: "TURNSTILE_FAILED",
+        reason: turnstile.reason,
+      },
+      { status: 400 },
+    );
+  }
+
   const {
     date,
     tiempo,
@@ -60,7 +120,7 @@ export async function POST(req: NextRequest) {
     servicio = "",
   } = body || {};
 
-  // 2. Validar campos del cliente
+  // 3. Validar campos del cliente
   const formValidation = validateBookingForm({
     nombre: body.nombre ?? "",
     apellido: body.apellido ?? "",
@@ -76,7 +136,7 @@ export async function POST(req: NextRequest) {
   const { nombre, apellido, correo, telefonoNormalizado, telefonoOriginal } =
     formValidation.clean;
 
-  // 3. Validar fecha/tiempo/duración
+  // 4. Validar fecha/tiempo/duración
   if (!date || tiempo === undefined || tiempo === null || !duracion) {
     return NextResponse.json(
       { ok: false, error: "Faltan datos de la cita" },
@@ -98,14 +158,14 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ ok: false, error: "Duración inválida" }, { status: 400 });
   }
 
-  // 4. Validar largo de servicio
+  // 5. Validar largo de servicio
   const servicioLimpio = String(servicio).trim().slice(0, 200);
   if (!servicioLimpio) {
     return NextResponse.json({ ok: false, error: "Falta el servicio" }, { status: 400 });
   }
 
   try {
-    // 5. Chequear regla de 28 días entre citas del mismo cliente
+    // 6. Chequear regla de 28 días entre citas del mismo cliente
     const conflict = await findConflictingBooking({
       correoLower: correo,
       telefonoNormalizado,
@@ -128,7 +188,7 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // 6. Crear evento
+    // 7. Crear evento
     const calendar = getCalendarClient();
     const calendarId = getCalendarId();
 

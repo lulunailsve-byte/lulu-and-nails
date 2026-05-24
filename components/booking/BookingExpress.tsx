@@ -16,6 +16,7 @@ import {
 } from "@/lib/schedule";
 import { BRAND, waLink } from "@/lib/brand";
 import { validateBookingForm } from "@/lib/validation";
+import { TurnstileWidget } from "./TurnstileWidget";
 
 type Step = "form" | "contact" | "submitting" | "success" | "error";
 
@@ -56,6 +57,8 @@ export function BookingExpress() {
   const [correo, setCorreo] = useState("");
   // Honeypot: campo oculto que solo bots completan
   const [website, setWebsite] = useState("");
+  // Token de Cloudflare Turnstile (anti-bot). Lo seta el widget al completar el challenge.
+  const [turnstileToken, setTurnstileToken] = useState("");
 
   const service: Service = SERVICES.find((s) => s.id === serviceId) ?? SERVICES[0]!;
   const totalDuration = service.duration + (pedi ? PEDICURE.duration : 0);
@@ -106,6 +109,11 @@ export function BookingExpress() {
       setStep("error");
       return;
     }
+    if (!turnstileToken) {
+      setErrorMsg("Por favor completá la verificación anti-bot.");
+      setStep("error");
+      return;
+    }
 
     setStep("submitting");
     setErrorMsg("");
@@ -123,10 +131,15 @@ export function BookingExpress() {
           telefono,
           correo,
           website, // honeypot — debe ir vacío
+          turnstileToken,
         }),
       });
       const data = await res.json();
       if (!res.ok || !data.ok) {
+        // Si el server rechaza el token (expirado, reutilizado), pedirle al widget que reintente.
+        if (data?.codigo === "TURNSTILE_FAILED") {
+          setTurnstileToken("");
+        }
         throw new Error(data?.error ?? "No se pudo crear la cita");
       }
       setStep("success");
@@ -144,6 +157,7 @@ export function BookingExpress() {
       setTelefono("");
       setCorreo("");
       setWebsite("");
+      setTurnstileToken("");
       setSlot(null);
       // Forzar refetch — el ocupados está stale después de reservar
       setRefreshTick((t) => t + 1);
@@ -329,11 +343,13 @@ export function BookingExpress() {
           telefono={telefono}
           correo={correo}
           website={website}
+          turnstileToken={turnstileToken}
           setNombre={setNombre}
           setApellido={setApellido}
           setTelefono={setTelefono}
           setCorreo={setCorreo}
           setWebsite={setWebsite}
+          setTurnstileToken={setTurnstileToken}
           onClose={() => setStep("form")}
           onSubmit={submitBooking}
           onRetry={() => {
@@ -434,11 +450,13 @@ function ContactSheet(props: {
   telefono: string;
   correo: string;
   website: string;
+  turnstileToken: string;
   setNombre: (v: string) => void;
   setApellido: (v: string) => void;
   setTelefono: (v: string) => void;
   setCorreo: (v: string) => void;
   setWebsite: (v: string) => void;
+  setTurnstileToken: (v: string) => void;
   onClose: () => void;
   onSubmit: () => void;
   onRetry: () => void;
@@ -452,7 +470,8 @@ function ContactSheet(props: {
     props.nombre.trim() &&
     props.apellido.trim() &&
     props.telefono.trim() &&
-    /\S+@\S+\.\S+/.test(props.correo);
+    /\S+@\S+\.\S+/.test(props.correo) &&
+    props.turnstileToken.length > 0;
 
   return (
     <div className="fixed inset-0 z-50 flex items-end justify-center bg-ink-900/50 p-3 backdrop-blur-sm">
@@ -505,6 +524,9 @@ function ContactSheet(props: {
               />
             </label>
           </div>
+
+          {/* Cloudflare Turnstile — anti-bot invisible (la mayoría de veces). */}
+          <TurnstileWidget onToken={props.setTurnstileToken} />
 
           <p className="mt-3 text-[11px] leading-relaxed text-ink-500">
             📩 Recibirás recordatorios por correo: 1 día antes, 4h y 1h antes de tu cita.
