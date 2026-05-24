@@ -45,6 +45,8 @@ export function BookingExpress() {
   const [loadingSlots, setLoadingSlots] = useState(false);
   const [step, setStep] = useState<Step>("form");
   const [errorMsg, setErrorMsg] = useState<string>("");
+  // Bumpear para forzar refetch de disponibilidad (ej. después de reservar)
+  const [refreshTick, setRefreshTick] = useState(0);
 
   // Contact data
   const [nombre, setNombre] = useState("");
@@ -56,12 +58,14 @@ export function BookingExpress() {
   const totalDuration = service.duration + (pedi ? PEDICURE.duration : 0);
   const totalPrice = service.price + (pedi ? PEDICURE.price : 0);
 
-  // Fetch availability when date changes
+  // Fetch availability when date changes o cuando se bumpea refreshTick
+  // (ej. después de confirmar una reserva, para no mostrar el slot recién tomado como libre).
+  // Se manda `cache: "no-store"` para evitar cache del navegador/CDN.
   useEffect(() => {
     let cancelled = false;
     setLoadingSlots(true);
     setSlot(null);
-    fetch(`/api/availability?date=${fechaStr(date)}`)
+    fetch(`/api/availability?date=${fechaStr(date)}`, { cache: "no-store" })
       .then((r) => r.json())
       .then((data) => {
         if (cancelled) return;
@@ -76,7 +80,7 @@ export function BookingExpress() {
     return () => {
       cancelled = true;
     };
-  }, [date]);
+  }, [date, refreshTick]);
 
   const slotsInfo = useMemo(
     () => calcularSlots(totalDuration, ocupados),
@@ -126,6 +130,8 @@ export function BookingExpress() {
       setTelefono("");
       setCorreo("");
       setSlot(null);
+      // Forzar refetch — el ocupados está stale después de reservar
+      setRefreshTick((t) => t + 1);
     }} />;
   }
 
