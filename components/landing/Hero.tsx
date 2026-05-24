@@ -36,7 +36,7 @@ export function Hero() {
         </div>
 
         <p
-          className="fade-up mt-2 font-script text-3xl text-violet-500"
+          className="fade-up mt-0 font-script text-3xl text-violet-500"
           style={{ animationDelay: ".1s" }}
         >
           {BRAND.tagline}
