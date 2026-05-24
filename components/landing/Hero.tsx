@@ -20,23 +20,30 @@ export function Hero() {
           {BRAND.name} — {BRAND.tagline}
         </h1>
 
-        {/* Logo horizontal (incluye "Renace tu look" en el lockup) */}
+        {/* Logo horizontal — solo el lockup "Lulu & nails", tagline va abajo */}
         <div
           className="fade-up mx-auto mt-6 w-72 sm:w-80"
           style={{ animationDelay: ".05s" }}
         >
           <Image
             src="/logo-horizontal.png"
-            alt={`${BRAND.name} — ${BRAND.tagline}`}
+            alt={BRAND.name}
             width={4052}
-            height={1521}
+            height={1323}
             priority
             className="h-auto w-full"
           />
         </div>
 
         <p
-          className="fade-up mt-3 text-sm italic text-ink-500"
+          className="fade-up mt-2 font-script text-3xl text-violet-500"
+          style={{ animationDelay: ".1s" }}
+        >
+          {BRAND.tagline}
+        </p>
+
+        <p
+          className="fade-up mt-1 text-sm italic text-ink-500"
           style={{ animationDelay: ".15s" }}
         >
           por {BRAND.owner}
