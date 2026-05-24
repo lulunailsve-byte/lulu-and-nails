@@ -15,6 +15,7 @@ import {
   type BusyRange,
 } from "@/lib/schedule";
 import { BRAND, waLink } from "@/lib/brand";
+import { validateBookingForm } from "@/lib/validation";
 
 type Step = "form" | "contact" | "submitting" | "success" | "error";
 
@@ -53,6 +54,8 @@ export function BookingExpress() {
   const [apellido, setApellido] = useState("");
   const [telefono, setTelefono] = useState("");
   const [correo, setCorreo] = useState("");
+  // Honeypot: campo oculto que solo bots completan
+  const [website, setWebsite] = useState("");
 
   const service: Service = SERVICES.find((s) => s.id === serviceId) ?? SERVICES[0]!;
   const totalDuration = service.duration + (pedi ? PEDICURE.duration : 0);
@@ -96,6 +99,14 @@ export function BookingExpress() {
   }
 
   async function submitBooking() {
+    // Validación client-side (mismos helpers que server). Evita roundtrip si está mal.
+    const clientCheck = validateBookingForm({ nombre, apellido, telefono, correo });
+    if (!clientCheck.ok) {
+      setErrorMsg(clientCheck.mensaje);
+      setStep("error");
+      return;
+    }
+
     setStep("submitting");
     setErrorMsg("");
     try {
@@ -111,10 +122,13 @@ export function BookingExpress() {
           servicio: service.name + (pedi ? ` + ${PEDICURE.name}` : ""),
           telefono,
           correo,
+          website, // honeypot — debe ir vacío
         }),
       });
       const data = await res.json();
-      if (!res.ok || !data.ok) throw new Error(data?.error ?? "No se pudo crear la cita");
+      if (!res.ok || !data.ok) {
+        throw new Error(data?.error ?? "No se pudo crear la cita");
+      }
       setStep("success");
     } catch (err) {
       setErrorMsg(err instanceof Error ? err.message : "Error desconocido");
@@ -129,6 +143,7 @@ export function BookingExpress() {
       setApellido("");
       setTelefono("");
       setCorreo("");
+      setWebsite("");
       setSlot(null);
       // Forzar refetch — el ocupados está stale después de reservar
       setRefreshTick((t) => t + 1);
@@ -313,12 +328,18 @@ export function BookingExpress() {
           apellido={apellido}
           telefono={telefono}
           correo={correo}
+          website={website}
           setNombre={setNombre}
           setApellido={setApellido}
           setTelefono={setTelefono}
           setCorreo={setCorreo}
+          setWebsite={setWebsite}
           onClose={() => setStep("form")}
           onSubmit={submitBooking}
+          onRetry={() => {
+            setStep("contact");
+            setErrorMsg("");
+          }}
         />
       )}
     </section>
@@ -412,12 +433,15 @@ function ContactSheet(props: {
   apellido: string;
   telefono: string;
   correo: string;
+  website: string;
   setNombre: (v: string) => void;
   setApellido: (v: string) => void;
   setTelefono: (v: string) => void;
   setCorreo: (v: string) => void;
+  setWebsite: (v: string) => void;
   onClose: () => void;
   onSubmit: () => void;
+  onRetry: () => void;
 }) {
   const dateStr = props.date.toLocaleDateString("es-VE", {
     weekday: "long",
@@ -461,11 +485,25 @@ function ContactSheet(props: {
 
           <div className="space-y-3">
             <div className="grid grid-cols-2 gap-3">
-              <Field label="Nombre" value={props.nombre} onChange={props.setNombre} placeholder="Tu nombre" disabled={props.submitting} />
-              <Field label="Apellido" value={props.apellido} onChange={props.setApellido} placeholder="Tu apellido" disabled={props.submitting} />
+              <Field label="Nombre" value={props.nombre} onChange={props.setNombre} placeholder="Tu nombre" disabled={props.submitting} maxLength={60} autoComplete="given-name" />
+              <Field label="Apellido" value={props.apellido} onChange={props.setApellido} placeholder="Tu apellido" disabled={props.submitting} maxLength={60} autoComplete="family-name" />
             </div>
-            <Field label="WhatsApp" type="tel" value={props.telefono} onChange={props.setTelefono} placeholder="+58 4XX XXXXXXX" disabled={props.submitting} />
-            <Field label="Correo" type="email" value={props.correo} onChange={props.setCorreo} placeholder="tu@correo.com" disabled={props.submitting} />
+            <Field label="WhatsApp" type="tel" value={props.telefono} onChange={props.setTelefono} placeholder="+58 4XX XXXXXXX" disabled={props.submitting} maxLength={20} autoComplete="tel" inputMode="tel" />
+            <Field label="Correo" type="email" value={props.correo} onChange={props.setCorreo} placeholder="tu@correo.com" disabled={props.submitting} maxLength={120} autoComplete="email" inputMode="email" />
+          </div>
+
+          {/* Honeypot — campo invisible que solo bots completan. */}
+          <div aria-hidden="true" style={{ position: "absolute", left: "-9999px", width: 1, height: 1, overflow: "hidden" }}>
+            <label>
+              Si ves este campo, dejalo vacío
+              <input
+                type="text"
+                tabIndex={-1}
+                autoComplete="off"
+                value={props.website}
+                onChange={(e) => props.setWebsite(e.target.value)}
+              />
+            </label>
           </div>
 
           <p className="mt-3 text-[11px] leading-relaxed text-ink-500">
@@ -474,8 +512,22 @@ function ContactSheet(props: {
           </p>
 
           {props.errorMsg && (
-            <div className="mt-3 rounded-xl border border-red-200 bg-red-50 p-3 text-xs text-red-700">
+            <div className="mt-3 rounded-xl border border-red-200 bg-red-50 p-3 text-xs leading-relaxed text-red-700">
               {props.errorMsg}
+              <div className="mt-2 flex gap-2">
+                <button
+                  onClick={props.onRetry}
+                  className="rounded-full bg-red-100 px-3 py-1 text-[11px] font-bold text-red-700 hover:bg-red-200"
+                >
+                  Reintentar
+                </button>
+                <button
+                  onClick={props.onClose}
+                  className="rounded-full bg-white px-3 py-1 text-[11px] font-bold text-ink-700 ring-1 ring-ink-200 hover:bg-ink-50"
+                >
+                  Cambiar fecha
+                </button>
+              </div>
             </div>
           )}
 
@@ -509,6 +561,9 @@ function Field({
   placeholder,
   type = "text",
   disabled,
+  maxLength,
+  autoComplete,
+  inputMode,
 }: {
   label: string;
   value: string;
@@ -516,6 +571,9 @@ function Field({
   placeholder?: string;
   type?: string;
   disabled?: boolean;
+  maxLength?: number;
+  autoComplete?: string;
+  inputMode?: "text" | "tel" | "email" | "url" | "numeric";
 }) {
   return (
     <label className="block">
@@ -528,6 +586,9 @@ function Field({
         onChange={(e) => onChange(e.target.value)}
         placeholder={placeholder}
         disabled={disabled}
+        maxLength={maxLength}
+        autoComplete={autoComplete}
+        inputMode={inputMode}
         className="w-full rounded-xl border-2 border-violet-100 bg-warm-white px-3.5 py-2.5 text-sm outline-none transition focus:border-violet-400 focus:bg-white disabled:opacity-50"
       />
     </label>
