@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { Sparkles, ArrowDown } from "lucide-react";
 import { BRAND } from "@/lib/brand";
 
@@ -14,22 +15,28 @@ export function Hero() {
           Estudio de uñas profesional
         </div>
 
-        <h1
-          className="fade-up mt-5 font-display text-6xl font-semibold leading-[1.05] tracking-tight text-ink-900"
-          style={{ animationDelay: ".05s" }}
-        >
-          {BRAND.name}
+        {/* H1 oculto para SEO/a11y — la imagen del logo lo reemplaza visualmente */}
+        <h1 className="sr-only">
+          {BRAND.name} — {BRAND.tagline}
         </h1>
 
-        <p
-          className="fade-up mt-2 font-script text-3xl text-violet-500"
-          style={{ animationDelay: ".1s" }}
+        {/* Logo horizontal (incluye "Renace tu look" en el lockup) */}
+        <div
+          className="fade-up mx-auto mt-6 w-72 sm:w-80"
+          style={{ animationDelay: ".05s" }}
         >
-          {BRAND.tagline}
-        </p>
+          <Image
+            src="/logo-horizontal.png"
+            alt={`${BRAND.name} — ${BRAND.tagline}`}
+            width={4052}
+            height={1521}
+            priority
+            className="h-auto w-full"
+          />
+        </div>
 
         <p
-          className="fade-up mt-1 text-sm italic text-ink-500"
+          className="fade-up mt-3 text-sm italic text-ink-500"
           style={{ animationDelay: ".15s" }}
         >
           por {BRAND.owner}
