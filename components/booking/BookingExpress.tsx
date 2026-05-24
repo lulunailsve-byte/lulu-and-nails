@@ -121,7 +121,7 @@ export function BookingExpress() {
       return;
     }
     if (!turnstileToken) {
-      setErrorMsg("Por favor completá la verificación anti-bot.");
+      setErrorMsg("Por favor completa la verificación anti-bot.");
       setStep("error");
       return;
     }
@@ -448,7 +448,7 @@ function SlotsGrid({
       {renderBlock("🌙 Tarde", EVENING_SLOTS)}
       {!hayAlgo && (
         <p className="text-center text-sm text-ink-500">
-          No hay horarios disponibles para {duracionTotal} min este día. Probá otro.
+          No hay horarios disponibles para {duracionTotal} min este día. Prueba otro.
         </p>
       )}
     </div>
@@ -597,7 +597,7 @@ function ContactSheet(props: {
             ) : inCooldown ? (
               <>
                 <Loader2 className="h-4 w-4 animate-spin" />
-                Esperá {props.cooldownLeft}s…
+                Espera {props.cooldownLeft}s…
               </>
             ) : (
               <>
@@ -695,7 +695,7 @@ function SuccessView({
         </div>
         <h3 className="mt-5 font-script text-4xl text-violet-700">¡Reservado!</h3>
         <p className="mx-auto mt-2 max-w-sm text-sm leading-relaxed text-ink-500">
-          Tu cita para el {dateStr} a las {timeStr} fue registrada, {name}. Confirmá por WhatsApp y te esperamos.
+          Tu cita para el {dateStr} a las {timeStr} fue registrada, {name}. Confirma por WhatsApp y te esperamos.
         </p>
         <a
           href={waLink(waText)}

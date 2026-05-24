@@ -74,10 +74,10 @@ export function validateBookingForm(data: BookingFormData): ValidationResult {
   const telefonoOriginal = data.telefono.trim();
 
   if (!isValidName(nombre)) {
-    return { ok: false, campo: "nombre", mensaje: "Ingresá un nombre válido (mín 2 letras)" };
+    return { ok: false, campo: "nombre", mensaje: "Ingresa un nombre válido (mínimo 2 letras)" };
   }
   if (!isValidName(apellido)) {
-    return { ok: false, campo: "apellido", mensaje: "Ingresá un apellido válido (mín 2 letras)" };
+    return { ok: false, campo: "apellido", mensaje: "Ingresa un apellido válido (mínimo 2 letras)" };
   }
   if (!isValidEmail(correo)) {
     return { ok: false, campo: "correo", mensaje: "Correo inválido. Ej: tu@correo.com" };

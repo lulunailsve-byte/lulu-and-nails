@@ -83,35 +83,35 @@ function turnstileFriendly(reason?: string): {
   ) {
     return {
       mensaje:
-        "¡Relax, princesa! 💜 Hiciste muchos intentos seguidos. Esperá un momento y volvé a probar.",
+        "¡Tranquilo! 💜 Has hecho muchos intentos seguidos. Espera un momento y vuelve a intentar.",
       cooldownSeconds: 60,
     };
   }
   if (codes.includes("missing-input-response")) {
     return {
       mensaje:
-        "Falta completar la verificación anti-bot. Esperá a que termine el check y volvé a darle.",
+        "Falta completar la verificación anti-bot. Espera a que termine y vuelve a darle clic.",
       cooldownSeconds: 5,
     };
   }
   if (codes.includes("invalid-input-response")) {
     return {
       mensaje:
-        "La verificación expiró o no es válida. Refrescá la página y volvé a empezar.",
+        "La verificación expiró o no es válida. Refresca la página y vuelve a empezar.",
       cooldownSeconds: 10,
     };
   }
   if (codes.includes("internal-error") || codes.includes("verify-error")) {
     return {
       mensaje:
-        "Cloudflare está teniendo un problemita. Intentá de nuevo en un minuto.",
+        "Cloudflare está teniendo un problema. Intenta de nuevo en un minuto.",
       cooldownSeconds: 60,
     };
   }
   // Default: catch-all amigable
   return {
     mensaje:
-      "No pudimos confirmar que sos humano. Refrescá la página e intentá otra vez.",
+      "No pudimos confirmar que eres humano. Refresca la página e intenta otra vez.",
     cooldownSeconds: 30,
   };
 }
