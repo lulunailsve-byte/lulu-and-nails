@@ -214,7 +214,7 @@ export function BookingExpress() {
                     <span className="text-lg">{s.emoji}</span>
                     <span className="text-xs font-bold leading-tight">{s.name}</span>
                     <span className={"text-[10px] font-semibold " + (isSel ? "opacity-70" : "text-ink-500")}>
-                      {s.duration}m · ${s.price}
+                      {s.duration}m · desde ${s.price}
                     </span>
                   </button>
                 );
@@ -276,7 +276,7 @@ export function BookingExpress() {
 
           {/* 4 · Extras */}
           <div>
-            <SectionLabel n={4} title="Extras" />
+            <SectionLabel n={4} title="Extras" hint="opcional" />
             <button
               onClick={() => setPedi((v) => !v)}
               className={
