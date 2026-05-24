@@ -59,10 +59,21 @@ export function BookingExpress() {
   const [website, setWebsite] = useState("");
   // Token de Cloudflare Turnstile (anti-bot). Lo seta el widget al completar el challenge.
   const [turnstileToken, setTurnstileToken] = useState("");
+  // Cooldown en segundos cuando Turnstile pide esperar (rate-limit, token reutilizado, etc.).
+  const [cooldownLeft, setCooldownLeft] = useState(0);
 
   const service: Service = SERVICES.find((s) => s.id === serviceId) ?? SERVICES[0]!;
   const totalDuration = service.duration + (pedi ? PEDICURE.duration : 0);
   const totalPrice = service.price + (pedi ? PEDICURE.price : 0);
+
+  // Tick del cooldown — cuando es >0, baja 1 por segundo hasta llegar a 0.
+  useEffect(() => {
+    if (cooldownLeft <= 0) return;
+    const id = setInterval(() => {
+      setCooldownLeft((s) => (s <= 1 ? 0 : s - 1));
+    }, 1000);
+    return () => clearInterval(id);
+  }, [cooldownLeft]);
 
   // Fetch availability when date changes o cuando se bumpea refreshTick
   // (ej. después de confirmar una reserva, para no mostrar el slot recién tomado como libre).
@@ -114,6 +125,8 @@ export function BookingExpress() {
       setStep("error");
       return;
     }
+    // Si estamos en cooldown, no permitir submit.
+    if (cooldownLeft > 0) return;
 
     setStep("submitting");
     setErrorMsg("");
@@ -136,9 +149,14 @@ export function BookingExpress() {
       });
       const data = await res.json();
       if (!res.ok || !data.ok) {
-        // Si el server rechaza el token (expirado, reutilizado), pedirle al widget que reintente.
+        // Si el server rechaza el token (expirado, reutilizado, rate-limit),
+        // limpiar el token (el widget va a refrescarse) y arrancar el cooldown
+        // que el server sugiere — UI deshabilita el botón ese tiempo.
         if (data?.codigo === "TURNSTILE_FAILED") {
           setTurnstileToken("");
+          if (typeof data.cooldownSeconds === "number") {
+            setCooldownLeft(data.cooldownSeconds);
+          }
         }
         throw new Error(data?.error ?? "No se pudo crear la cita");
       }
@@ -332,6 +350,7 @@ export function BookingExpress() {
         <ContactSheet
           submitting={step === "submitting"}
           errorMsg={step === "error" ? errorMsg : ""}
+          cooldownLeft={cooldownLeft}
           service={service}
           pedi={pedi}
           date={date}
@@ -439,6 +458,7 @@ function SlotsGrid({
 function ContactSheet(props: {
   submitting: boolean;
   errorMsg: string;
+  cooldownLeft: number;
   service: Service;
   pedi: boolean;
   date: Date;
@@ -466,12 +486,14 @@ function ContactSheet(props: {
     day: "numeric",
     month: "long",
   });
+  const inCooldown = props.cooldownLeft > 0;
   const ok =
     props.nombre.trim() &&
     props.apellido.trim() &&
     props.telefono.trim() &&
     /\S+@\S+\.\S+/.test(props.correo) &&
-    props.turnstileToken.length > 0;
+    props.turnstileToken.length > 0 &&
+    !inCooldown;
 
   return (
     <div className="fixed inset-0 z-50 flex items-end justify-center bg-ink-900/50 p-3 backdrop-blur-sm">
@@ -534,22 +556,31 @@ function ContactSheet(props: {
           </p>
 
           {props.errorMsg && (
-            <div className="mt-3 rounded-xl border border-red-200 bg-red-50 p-3 text-xs leading-relaxed text-red-700">
+            <div
+              className={
+                "mt-3 rounded-xl border p-3 text-xs leading-relaxed " +
+                (inCooldown
+                  ? "border-amber-200 bg-amber-50 text-amber-800"
+                  : "border-red-200 bg-red-50 text-red-700")
+              }
+            >
               {props.errorMsg}
-              <div className="mt-2 flex gap-2">
-                <button
-                  onClick={props.onRetry}
-                  className="rounded-full bg-red-100 px-3 py-1 text-[11px] font-bold text-red-700 hover:bg-red-200"
-                >
-                  Reintentar
-                </button>
-                <button
-                  onClick={props.onClose}
-                  className="rounded-full bg-white px-3 py-1 text-[11px] font-bold text-ink-700 ring-1 ring-ink-200 hover:bg-ink-50"
-                >
-                  Cambiar fecha
-                </button>
-              </div>
+              {!inCooldown && (
+                <div className="mt-2 flex gap-2">
+                  <button
+                    onClick={props.onRetry}
+                    className="rounded-full bg-red-100 px-3 py-1 text-[11px] font-bold text-red-700 hover:bg-red-200"
+                  >
+                    Reintentar
+                  </button>
+                  <button
+                    onClick={props.onClose}
+                    className="rounded-full bg-white px-3 py-1 text-[11px] font-bold text-ink-700 ring-1 ring-ink-200 hover:bg-ink-50"
+                  >
+                    Cambiar fecha
+                  </button>
+                </div>
+              )}
             </div>
           )}
 
@@ -562,6 +593,11 @@ function ContactSheet(props: {
               <>
                 <Loader2 className="h-4 w-4 animate-spin" />
                 Guardando…
+              </>
+            ) : inCooldown ? (
+              <>
+                <Loader2 className="h-4 w-4 animate-spin" />
+                Esperá {props.cooldownLeft}s…
               </>
             ) : (
               <>

@@ -46,7 +46,7 @@ async function verifyTurnstile(token: string, remoteip?: string): Promise<{ ok: 
     return { ok: true };
   }
   if (!token) {
-    return { ok: false, reason: "missing-token" };
+    return { ok: false, reason: "missing-input-response" };
   }
   try {
     const form = new URLSearchParams();
@@ -66,6 +66,54 @@ async function verifyTurnstile(token: string, remoteip?: string): Promise<{ ok: 
     console.error("turnstile verify error:", err);
     return { ok: false, reason: "verify-error" };
   }
+}
+
+// Mapea los códigos de error de Cloudflare Turnstile a mensajes amigables en español.
+// Refs: https://developers.cloudflare.com/turnstile/get-started/server-side-validation/#error-codes
+function turnstileFriendly(reason?: string): {
+  mensaje: string;
+  cooldownSeconds: number;  // sugerencia al cliente: cuánto esperar antes de reintentar
+} {
+  const codes = (reason ?? "").split(",").map((c) => c.trim()).filter(Boolean);
+
+  // "Hey, relax" — el caso clásico: token reutilizado, expirado o muchos intentos seguidos.
+  if (
+    codes.includes("timeout-or-duplicate") ||
+    codes.includes("rate-limit")
+  ) {
+    return {
+      mensaje:
+        "¡Relax, princesa! 💜 Hiciste muchos intentos seguidos. Esperá un momento y volvé a probar.",
+      cooldownSeconds: 60,
+    };
+  }
+  if (codes.includes("missing-input-response")) {
+    return {
+      mensaje:
+        "Falta completar la verificación anti-bot. Esperá a que termine el check y volvé a darle.",
+      cooldownSeconds: 5,
+    };
+  }
+  if (codes.includes("invalid-input-response")) {
+    return {
+      mensaje:
+        "La verificación expiró o no es válida. Refrescá la página y volvé a empezar.",
+      cooldownSeconds: 10,
+    };
+  }
+  if (codes.includes("internal-error") || codes.includes("verify-error")) {
+    return {
+      mensaje:
+        "Cloudflare está teniendo un problemita. Intentá de nuevo en un minuto.",
+      cooldownSeconds: 60,
+    };
+  }
+  // Default: catch-all amigable
+  return {
+    mensaje:
+      "No pudimos confirmar que sos humano. Refrescá la página e intentá otra vez.",
+    cooldownSeconds: 30,
+  };
 }
 
 // Formato amigable de fecha en es-VE para mensajes al cliente.
@@ -102,14 +150,16 @@ export async function POST(req: NextRequest) {
   const remoteip = req.headers.get("x-forwarded-for")?.split(",")[0]?.trim();
   const turnstile = await verifyTurnstile(body.turnstileToken ?? "", remoteip);
   if (!turnstile.ok) {
+    const friendly = turnstileFriendly(turnstile.reason);
     return NextResponse.json(
       {
         ok: false,
-        error: "Verificación anti-bot fallida. Refrescá la página e intentá de nuevo.",
+        error: friendly.mensaje,
         codigo: "TURNSTILE_FAILED",
+        cooldownSeconds: friendly.cooldownSeconds,
         reason: turnstile.reason,
       },
-      { status: 400 },
+      { status: 429 },  // 429 Too Many Requests — semántica correcta para rate
     );
   }
 
