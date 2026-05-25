@@ -10,7 +10,7 @@ export function ScheduleSection() {
   ];
 
   return (
-    <section id="horarios" className="bg-gradient-to-br from-violet-50 to-pink-50 px-5 py-14">
+    <section id="horarios" className="px-5 py-14">
       <div className="mx-auto max-w-md">
         <div className="mb-2 text-center text-[11px] font-semibold uppercase tracking-[.2em] text-violet-500">
           Disponibilidad

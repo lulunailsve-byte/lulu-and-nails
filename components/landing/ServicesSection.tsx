@@ -3,7 +3,7 @@ import { SERVICES, PEDICURE, RETIROS, RETIROS_NOTA } from "@/lib/services";
 
 export function ServicesSection() {
   return (
-    <section id="servicios" className="bg-warm-white px-5 py-16">
+    <section id="servicios" className="px-5 py-16">
       <div className="mx-auto max-w-md">
         <div className="mb-2 text-center text-[11px] font-semibold uppercase tracking-[.2em] text-violet-500">
           Nuestros servicios

@@ -4,7 +4,7 @@ import { BRAND } from "@/lib/brand";
 
 export function Hero() {
   return (
-    <section className="relative overflow-hidden bg-gradient-to-b from-violet-50 via-pink-50 to-warm-white pb-12 pt-16">
+    <section className="relative overflow-hidden pb-12 pt-16">
       {/* Orbes decorativos */}
       <div className="pointer-events-none absolute -right-32 -top-32 h-96 w-96 rounded-full bg-violet-300 opacity-30 blur-3xl" />
       <div className="pointer-events-none absolute -bottom-24 -left-24 h-80 w-80 rounded-full bg-pink-300 opacity-25 blur-3xl" />

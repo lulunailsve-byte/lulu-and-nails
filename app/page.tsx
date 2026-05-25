@@ -7,7 +7,7 @@ import { BookingExpress } from "@/components/booking/BookingExpress";
 
 export default function HomePage() {
   return (
-    <main className="bg-warm-white pb-10">
+    <main className="bg-gradient-to-b from-violet-50 via-pink-50 to-warm-white">
       <Hero />
       <BookingExpress />
       <ServicesSection />

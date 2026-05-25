@@ -184,7 +184,7 @@ export function BookingExpress() {
   }
 
   return (
-    <section id="reservar" className="bg-warm-white px-4 py-12">
+    <section id="reservar" className="px-4 py-12">
       <div className="mx-auto max-w-md">
         <div className="mb-2 text-center text-[11px] font-semibold uppercase tracking-[.2em] text-violet-500">
           Reserva express
