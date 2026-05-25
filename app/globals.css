@@ -77,6 +77,18 @@ body { margin: 0; }
 .no-scrollbar::-webkit-scrollbar { display: none; }
 .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
 
+/* Soft horizontal scrollbar — fina y violeta sutil, comunica
+   "hay más contenido aquí" sin ser intrusiva.
+   Firefox usa scrollbar-color (track transparente, thumb violet-200). */
+.scrollbar-soft { scrollbar-width: thin; scrollbar-color: #d7c2ff transparent; }
+.scrollbar-soft::-webkit-scrollbar { height: 6px; }
+.scrollbar-soft::-webkit-scrollbar-track { background: transparent; margin: 0 12px; }
+.scrollbar-soft::-webkit-scrollbar-thumb {
+  background: #d7c2ff;       /* violet-200 */
+  border-radius: 9999px;
+}
+.scrollbar-soft::-webkit-scrollbar-thumb:hover { background: #b79af7; /* violet-300 */ }
+
 /* Display / script helpers */
 .font-display { font-family: var(--font-display); letter-spacing: -0.025em; }
 .font-script  { font-family: var(--font-script); }

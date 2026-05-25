@@ -198,7 +198,10 @@ export function BookingExpress() {
           {/* 1 · Servicio */}
           <div>
             <SectionLabel n={1} title="Servicio" />
-            <div className="-mx-1 mt-3 flex gap-2 overflow-x-auto px-1 no-scrollbar">
+            {/* px-1 + pt-2 pb-4 le da respiro a la sombra de la chip seleccionada
+                (shadow-[0_8px_22px] necesita ~30px abajo para no clipar).
+                pb-4 + scrollbar height 6px + margin = visualmente ~24px de respiro. */}
+            <div className="-mx-1 mt-3 flex gap-2 overflow-x-auto px-1 pb-4 pt-2 scrollbar-soft">
               {SERVICES.map((s) => {
                 const isSel = s.id === serviceId;
                 return (
