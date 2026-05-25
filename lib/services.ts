@@ -34,7 +34,6 @@ export const SERVICES: Service[] = [
     price: 15,
     description:
       "Esmalte gel de larga duración que no se astilla. Brillo perfecto por semanas.",
-    popular: true,
     color: "violet",
   },
   {
@@ -57,6 +56,7 @@ export const SERVICES: Service[] = [
     price: 20,
     description:
       "Refuerzo de uñas naturales con polygel para mayor dureza y protección.",
+    popular: true,
     color: "violet",
   },
   {
