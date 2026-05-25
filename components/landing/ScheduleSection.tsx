@@ -12,19 +12,21 @@ export function ScheduleSection() {
   return (
     <section id="horarios" className="px-5 py-14">
       <div className="mx-auto max-w-md">
-        <div className="mb-2 text-center text-[11px] font-semibold uppercase tracking-[.2em] text-violet-500">
-          Disponibilidad
+        <div className="scroll-reveal">
+          <div className="mb-2 text-center text-[11px] font-semibold uppercase tracking-[.2em] text-violet-500">
+            Disponibilidad
+          </div>
+          <h2 className="text-center font-display text-3xl font-semibold leading-tight text-ink-900">
+            Nuestros <em className="font-normal italic text-violet-500">horarios</em>
+          </h2>
+          <div className="mx-auto mt-3 h-0.5 w-12 rounded-full bg-gradient-to-r from-violet-500 to-pink-400" />
         </div>
-        <h2 className="text-center font-display text-3xl font-semibold leading-tight text-ink-900">
-          Nuestros <em className="font-normal italic text-violet-500">horarios</em>
-        </h2>
-        <div className="mx-auto mt-3 h-0.5 w-12 rounded-full bg-gradient-to-r from-violet-500 to-pink-400" />
 
         <div className="mt-8 grid grid-cols-2 gap-3">
           {items.map((it) => (
             <div
               key={it.label}
-              className="rounded-2xl border border-white/80 bg-white/70 p-4 text-center backdrop-blur"
+              className="scroll-reveal rounded-2xl border border-white/80 bg-white/70 p-4 text-center backdrop-blur"
             >
               <div className="font-display text-lg font-semibold text-violet-700">
                 {it.time}

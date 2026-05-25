@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { Bricolage_Grotesque, Plus_Jakarta_Sans, Caveat } from "next/font/google";
 import "./globals.css";
 import { SmoothScroll } from "@/components/SmoothScroll";
+import { ScrollReveal } from "@/components/ScrollReveal";
 
 const bricolage = Bricolage_Grotesque({
   subsets: ["latin"],
@@ -58,6 +59,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           al hacer overscroll en el top. El gradient real va en <main> abajo. */}
       <body className="bg-violet-50">
         <SmoothScroll />
+        <ScrollReveal />
         {children}
       </body>
     </html>

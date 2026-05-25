@@ -273,7 +273,7 @@ export function BookingExpress() {
 
           {/* 3 · Hora */}
           <div>
-            <SectionLabel n={3} title="Hora" hint="descanso 12–2pm" />
+            <SectionLabel n={3} title="Hora" hint="escoge la hora" />
             {loadingSlots ? (
               <div className="mt-4 flex items-center justify-center gap-2 text-sm text-violet-700">
                 <Loader2 className="h-4 w-4 animate-spin" />

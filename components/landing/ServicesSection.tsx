@@ -5,23 +5,25 @@ export function ServicesSection() {
   return (
     <section id="servicios" className="px-5 py-16">
       <div className="mx-auto max-w-md">
-        <div className="mb-2 text-center text-[11px] font-semibold uppercase tracking-[.2em] text-violet-500">
-          Nuestros servicios
+        <div className="scroll-reveal">
+          <div className="mb-2 text-center text-[11px] font-semibold uppercase tracking-[.2em] text-violet-500">
+            Nuestros servicios
+          </div>
+          <h2 className="text-center font-display text-3xl font-semibold leading-tight text-ink-900">
+            Lo que hacemos <em className="font-normal italic text-violet-500">por ti</em>
+          </h2>
+          <div className="mx-auto mt-3 h-0.5 w-12 rounded-full bg-gradient-to-r from-violet-500 to-pink-400" />
+          <p className="mt-4 text-center text-sm leading-relaxed text-ink-500">
+            Cada servicio es un ritual de cuidado. Precios base en dólares —
+            el monto en bolívares se confirma el día de tu cita.
+          </p>
         </div>
-        <h2 className="text-center font-display text-3xl font-semibold leading-tight text-ink-900">
-          Lo que hacemos <em className="font-normal italic text-violet-500">por ti</em>
-        </h2>
-        <div className="mx-auto mt-3 h-0.5 w-12 rounded-full bg-gradient-to-r from-violet-500 to-pink-400" />
-        <p className="mt-4 text-center text-sm leading-relaxed text-ink-500">
-          Cada servicio es un ritual de cuidado. Precios base en dólares —
-          el monto en bolívares se confirma el día de tu cita.
-        </p>
 
         <div className="mt-8 grid grid-cols-1 gap-3">
           {SERVICES.map((s) => (
             <article
               key={s.id}
-              className="relative overflow-hidden rounded-2xl border border-violet-100 bg-white p-4 shadow-sm transition-transform hover:-translate-y-0.5"
+              className="scroll-reveal relative overflow-hidden rounded-2xl border border-violet-100 bg-white p-4 shadow-sm transition-transform hover:-translate-y-0.5"
             >
               {s.premium && (
                 <span className="absolute right-3 top-3 rounded-full bg-ink-900 px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wider text-white">
@@ -59,7 +61,7 @@ export function ServicesSection() {
           ))}
 
           {/* Pedicure */}
-          <article className="relative overflow-hidden rounded-2xl border border-pink-100 bg-pink-50/40 p-4 shadow-sm">
+          <article className="scroll-reveal relative overflow-hidden rounded-2xl border border-pink-100 bg-pink-50/40 p-4 shadow-sm">
             <div className="flex items-start gap-3">
               <span className="flex-shrink-0 overflow-hidden rounded-2xl">
                 <Image
@@ -86,7 +88,7 @@ export function ServicesSection() {
         </div>
 
         {/* Retiros / extras */}
-        <details className="mt-6 rounded-2xl border border-violet-100 bg-violet-50/40 p-4">
+        <details className="scroll-reveal mt-6 rounded-2xl border border-violet-100 bg-violet-50/40 p-4">
           <summary className="flex cursor-pointer items-center justify-between text-sm font-semibold text-violet-700">
             <span>Retiros y restauraciones</span>
             <span className="text-violet-500">+</span>
@@ -131,7 +133,7 @@ export function ServicesSection() {
           </ul>
         </details>
 
-        <p className="mt-6 rounded-2xl border border-violet-100 bg-gradient-to-br from-violet-50 to-pink-50 p-4 text-center text-xs leading-relaxed text-ink-700">
+        <p className="scroll-reveal mt-6 rounded-2xl border border-violet-100 bg-gradient-to-br from-violet-50 to-pink-50 p-4 text-center text-xs leading-relaxed text-ink-700">
           💱 <strong>El monto en bolívares</strong> se consulta el día del pago según la tasa.
           Los diseños y decoraciones especiales se cotizan aparte. 🎨
         </p>

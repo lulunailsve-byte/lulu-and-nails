@@ -89,6 +89,26 @@ body { margin: 0; }
 }
 .scrollbar-soft::-webkit-scrollbar-thumb:hover { background: #b79af7; /* violet-300 */ }
 
+/* Scroll-reveal: elementos arrancan invisibles, ScrollReveal.tsx les agrega
+   .visible vía IntersectionObserver cuando entran al viewport. */
+.scroll-reveal {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.7s ease-out, transform 0.7s ease-out;
+  will-change: opacity, transform;
+}
+.scroll-reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+@media (prefers-reduced-motion: reduce) {
+  .scroll-reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
+
 /* Display / script helpers */
 .font-display { font-family: var(--font-display); letter-spacing: -0.025em; }
 .font-script  { font-family: var(--font-script); }

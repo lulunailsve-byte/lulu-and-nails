@@ -10,7 +10,7 @@ export function FooterSection() {
   ];
 
   return (
-    <footer className="bg-ink-900 px-5 pb-7 pt-14 text-center text-white/70">
+    <footer className="scroll-reveal bg-ink-900 px-5 pb-7 pt-14 text-center text-white/70">
       {/* Logo horizontal invertido a blanco (el SVG/PNG original es negro).
           brightness(0) fuerza todo a negro absoluto, invert(1) lo flippea a
           blanco puro — método estándar para teñir logos monocromáticos. */}
