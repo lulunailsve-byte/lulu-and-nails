@@ -61,7 +61,7 @@ export function ServicesSection() {
           ))}
 
           {/* Pedicure */}
-          <article className="scroll-reveal relative overflow-hidden rounded-2xl border border-pink-100 bg-pink-50/40 p-4 shadow-sm">
+          <article className="scroll-reveal relative overflow-hidden rounded-2xl border border-pink-100 bg-white/80 p-4 shadow-sm backdrop-blur-sm">
             <div className="flex items-start gap-3">
               <span className="flex-shrink-0 overflow-hidden rounded-2xl">
                 <Image
