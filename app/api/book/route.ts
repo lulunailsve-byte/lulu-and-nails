@@ -183,7 +183,7 @@ export async function POST(req: NextRequest) {
       { status: 400 },
     );
   }
-  const { nombre, apellido, correo, telefonoNormalizado, telefonoOriginal } =
+  const { nombre, apellido, correo, telefonoNormalizado, telefonoOriginal, telefonoPais } =
     formValidation.clean;
 
   // 4. Validar fecha/tiempo/duración
@@ -258,8 +258,8 @@ export async function POST(req: NextRequest) {
         summary: `${nombre} ${apellido} · ${servicioLimpio}`,
         description: [
           `Servicio: ${servicioLimpio}`,
-          `Teléfono: ${telefonoOriginal}`,
-          `Teléfono (normalizado): ${telefonoNormalizado}`,
+          `Teléfono: ${telefonoOriginal} (${telefonoPais})`,
+          `WhatsApp: https://wa.me/${telefonoNormalizado}`,
           `Correo: ${correo}`,
         ].join("\n"),
         start: { dateTime: startISO, timeZone: "America/Caracas" },

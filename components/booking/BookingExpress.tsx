@@ -554,7 +554,7 @@ function ContactSheet(props: {
               <Field label="Nombre" value={props.nombre} onChange={props.setNombre} placeholder="Tu nombre" disabled={props.submitting} maxLength={60} autoComplete="given-name" />
               <Field label="Apellido" value={props.apellido} onChange={props.setApellido} placeholder="Tu apellido" disabled={props.submitting} maxLength={60} autoComplete="family-name" />
             </div>
-            <Field label="WhatsApp" type="tel" value={props.telefono} onChange={props.setTelefono} placeholder="+58 4XX XXXXXXX" disabled={props.submitting} maxLength={20} autoComplete="tel" inputMode="tel" />
+            <Field label="WhatsApp" type="tel" value={props.telefono} onChange={props.setTelefono} placeholder="04XX XXXXXXX" disabled={props.submitting} maxLength={20} autoComplete="tel" inputMode="tel" />
             <Field label="Correo" type="email" value={props.correo} onChange={props.setCorreo} placeholder="tu@correo.com" disabled={props.submitting} maxLength={120} autoComplete="email" inputMode="email" />
           </div>
 
