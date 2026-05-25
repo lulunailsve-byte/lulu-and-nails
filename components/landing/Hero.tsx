@@ -9,8 +9,11 @@ export function Hero() {
           Source es 16:9 pero el container es 4:5 (vertical) — con object-cover
           el video se centra y recorta los laterales, mostrando solo el centro
           de la acción. autoPlay + muted + playsInline es lo necesario para
-          que arranque solo en iOS/Android sin gesto del usuario. */}
-      <div className="relative aspect-[4/5] w-full overflow-hidden bg-violet-100">
+          que arranque solo en iOS/Android sin gesto del usuario.
+          max-w-md + mx-auto: en desktop el video queda contenido al mismo ancho
+          que el contenido (448px). En mobile no cambia nada porque max-w-md
+          ya es más ancho que el viewport. */}
+      <div className="relative mx-auto aspect-[4/5] w-full max-w-md overflow-hidden bg-violet-100">
         <video
           autoPlay
           muted
