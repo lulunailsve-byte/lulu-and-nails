@@ -23,10 +23,15 @@ const caveat = Caveat({
   display: "swap",
 });
 
-// Descripción usada en title bar, OG, Twitter, search results.
-// Construida para incluir keywords orgánicas sin sonar a spam.
+// Descripción optimizada (134 chars — dentro del óptimo 110-160 que validan
+// OG/Twitter/Google). Incluye categoría, ubicación, dueña, servicios y CTA.
 const SITE_DESCRIPTION =
-  "Estudio profesional de uñas en Venezuela por Luizandra Zerpa. Manicura semipermanente, polygel, esculpido, pedicura y diseños personalizados. Reserva tu cita online en menos de un minuto.";
+  "Estudio de uñas en Venezuela por Luizandra Zerpa. Manicura semipermanente, polygel, esculpido y pedicura. Reserva online en un minuto.";
+
+// Title más largo para redes sociales (56 chars — dentro del óptimo 50-60
+// que pide OG). El <title> de la página y la pestaña del browser usan el
+// título corto preferido por la dueña.
+const OG_TITLE = "Lulu & Nails — Estudio de uñas profesional en Venezuela";
 
 const SITE_URL = "https://www.luluandnails.com";
 
@@ -73,7 +78,7 @@ export const metadata: Metadata = {
     canonical: "/",
   },
   openGraph: {
-    title: "Lulu & Nails · Renace tu look",
+    title: OG_TITLE,
     description: SITE_DESCRIPTION,
     url: SITE_URL,
     siteName: BRAND.name,
@@ -84,14 +89,14 @@ export const metadata: Metadata = {
         url: "/og-image.jpg",
         width: 1200,
         height: 630,
-        alt: `${BRAND.name} — estudio de uñas profesional`,
+        alt: `${BRAND.name} — Renace tu look. Estudio de uñas profesional en Venezuela.`,
         type: "image/jpeg",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Lulu & Nails · Renace tu look",
+    title: OG_TITLE,
     description: SITE_DESCRIPTION,
     images: ["/og-image.jpg"],
   },
