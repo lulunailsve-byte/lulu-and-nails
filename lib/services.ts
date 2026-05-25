@@ -28,7 +28,7 @@ export const SERVICES: Service[] = [
   {
     id: "manicura-semipermanente",
     emoji: "💜",
-    icon: "/services-icons/nivelacion.svg",
+    icon: "/services-icons/semipermanente.svg",
     name: "Manicura Semipermanente",
     duration: 90,
     price: 15,
@@ -39,7 +39,7 @@ export const SERVICES: Service[] = [
   {
     id: "nivelacion",
     emoji: "🔮",
-    icon: "/services-icons/semipermanente.svg",
+    icon: "/services-icons/nivelacion.svg",
     name: "Nivelación",
     duration: 120,
     price: 18,
