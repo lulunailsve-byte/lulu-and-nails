@@ -32,8 +32,10 @@ export function Hero() {
       <div className="pointer-events-none absolute -right-32 top-[55%] h-96 w-96 rounded-full bg-violet-300 opacity-30 blur-3xl" />
       <div className="pointer-events-none absolute -bottom-24 -left-24 h-80 w-80 rounded-full bg-pink-300 opacity-25 blur-3xl" />
 
-      {/* Contenido del Hero — sube un poco para sentarse sobre el final del fade */}
-      <div className="relative mx-auto -mt-8 max-w-md px-5 text-center sm:-mt-12">
+      {/* Contenido del Hero — sube bastante para entrar en el fold inicial,
+          superponiendose sobre el final del fade del video.
+          Mobile: -mt-24 (96px). sm+: -mt-32 (128px). */}
+      <div className="relative mx-auto -mt-24 max-w-md px-5 text-center sm:-mt-32">
         <div className="fade-up inline-flex items-center gap-2 rounded-full bg-white/70 px-4 py-1.5 text-xs font-semibold text-violet-700 shadow-sm backdrop-blur">
           <Sparkles className="h-3.5 w-3.5" />
           Estudio de uñas profesional
