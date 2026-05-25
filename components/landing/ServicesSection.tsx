@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { SERVICES, PEDICURE, RETIROS } from "@/lib/services";
 
 export function ServicesSection() {
@@ -33,9 +34,15 @@ export function ServicesSection() {
                 </span>
               )}
               <div className="flex items-start gap-3">
-                <div className="grid h-12 w-12 flex-shrink-0 place-items-center rounded-2xl bg-violet-50 text-xl">
-                  {s.emoji}
-                </div>
+                <span className="flex-shrink-0 overflow-hidden rounded-2xl">
+                  <Image
+                    src={s.icon}
+                    alt=""
+                    width={206}
+                    height={206}
+                    className="h-12 w-12"
+                  />
+                </span>
                 <div className="min-w-0 flex-1">
                   <h3 className="font-display text-base font-semibold leading-tight text-ink-900">
                     {s.name}
@@ -54,9 +61,15 @@ export function ServicesSection() {
           {/* Pedicure */}
           <article className="relative overflow-hidden rounded-2xl border border-pink-100 bg-pink-50/40 p-4 shadow-sm">
             <div className="flex items-start gap-3">
-              <div className="grid h-12 w-12 flex-shrink-0 place-items-center rounded-2xl bg-pink-100 text-xl">
-                {PEDICURE.emoji}
-              </div>
+              <span className="flex-shrink-0 overflow-hidden rounded-2xl">
+                <Image
+                  src={PEDICURE.icon}
+                  alt=""
+                  width={206}
+                  height={206}
+                  className="h-12 w-12"
+                />
+              </span>
               <div className="min-w-0 flex-1">
                 <h3 className="font-display text-base font-semibold leading-tight text-ink-900">
                   {PEDICURE.name}

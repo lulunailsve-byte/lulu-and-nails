@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
+import Image from "next/image";
 import { ArrowRight, Calendar, Check, Loader2, Sparkles, X } from "lucide-react";
 import { SERVICES, PEDICURE, type Service } from "@/lib/services";
 import {
@@ -205,13 +206,26 @@ export function BookingExpress() {
                     key={s.id}
                     onClick={() => setServiceId(s.id)}
                     className={
-                      "flex min-w-[130px] flex-shrink-0 flex-col items-start gap-1 rounded-2xl p-3 text-left transition " +
+                      "flex min-w-[140px] flex-shrink-0 flex-col items-start gap-1.5 rounded-2xl p-3 text-left transition " +
                       (isSel
                         ? "bg-ink-900 text-white shadow-[0_8px_22px_rgba(31,18,53,.25)]"
                         : "bg-white text-ink-900 shadow-sm hover:bg-violet-50")
                     }
                   >
-                    <span className="text-lg">{s.emoji}</span>
+                    <span
+                      className={
+                        "overflow-hidden rounded-xl transition " +
+                        (isSel ? "ring-2 ring-white/40" : "")
+                      }
+                    >
+                      <Image
+                        src={s.icon}
+                        alt=""
+                        width={206}
+                        height={206}
+                        className="h-10 w-10"
+                      />
+                    </span>
                     <span className="text-xs font-bold leading-tight">{s.name}</span>
                     <span className={"text-[10px] font-semibold " + (isSel ? "opacity-70" : "text-ink-500")}>
                       {s.duration}m · desde ${s.price}
@@ -286,9 +300,15 @@ export function BookingExpress() {
                   : "border-2 border-transparent bg-white shadow-sm hover:bg-pink-50/40")
               }
             >
-              <div className="grid h-10 w-10 flex-shrink-0 place-items-center rounded-xl bg-pink-200 text-lg">
-                {PEDICURE.emoji}
-              </div>
+              <span className="overflow-hidden rounded-xl">
+                <Image
+                  src={PEDICURE.icon}
+                  alt=""
+                  width={206}
+                  height={206}
+                  className="h-10 w-10"
+                />
+              </span>
               <div className="flex-1">
                 <div className="text-sm font-bold">+ {PEDICURE.name}</div>
                 <div className="text-[11px] text-ink-500">

@@ -2,10 +2,11 @@
 
 export type Service = {
   id: string;
-  emoji: string;
+  emoji: string;          // fallback / accent (no es la visual principal)
+  icon: string;           // path absoluto al SVG en /public/services-icons/
   name: string;
-  duration: number;     // minutos
-  price: number;        // USD
+  duration: number;       // minutos
+  price: number;          // USD
   description: string;
   popular?: boolean;
   premium?: boolean;
@@ -16,6 +17,7 @@ export const SERVICES: Service[] = [
   {
     id: "manicura-tradicional",
     emoji: "✨",
+    icon: "/services-icons/tradicional.svg",
     name: "Manicura Tradicional",
     duration: 90,
     price: 14,
@@ -26,6 +28,7 @@ export const SERVICES: Service[] = [
   {
     id: "manicura-semipermanente",
     emoji: "💜",
+    icon: "/services-icons/semipermanente.svg",
     name: "Manicura Semipermanente",
     duration: 90,
     price: 15,
@@ -37,6 +40,7 @@ export const SERVICES: Service[] = [
   {
     id: "nivelacion",
     emoji: "🔮",
+    icon: "/services-icons/nivelacion.svg",
     name: "Nivelación",
     duration: 120,
     price: 18,
@@ -47,6 +51,7 @@ export const SERVICES: Service[] = [
   {
     id: "capping-polygel",
     emoji: "💎",
+    icon: "/services-icons/capping-polygel.svg",
     name: "Capping de Polygel",
     duration: 120,
     price: 20,
@@ -57,6 +62,7 @@ export const SERVICES: Service[] = [
   {
     id: "sistema-jelly",
     emoji: "🫧",
+    icon: "/services-icons/sistema-jelly.svg",
     name: "Sistema Jelly",
     duration: 120,
     price: 18,
@@ -67,6 +73,7 @@ export const SERVICES: Service[] = [
   {
     id: "esculpido-polygel",
     emoji: "👑",
+    icon: "/services-icons/esculpido-polygel.svg",
     name: "Esculpido en Polygel",
     duration: 160,
     price: 22,
@@ -81,6 +88,7 @@ export const SERVICES: Service[] = [
 export const PEDICURE = {
   id: "pedicure-semipermanente",
   emoji: "🦶",
+  icon: "/services-icons/pedicura.svg",
   name: "Pedicure Semipermanente",
   duration: 60,
   price: 15,
@@ -90,9 +98,30 @@ export const PEDICURE = {
 };
 
 export const RETIROS = [
-  { id: "retiro-semi", emoji: "🔄", name: "Retiro de Semipermanente", price: 3, description: "Retiro seguro de semipermanente colocado en otro lugar." },
-  { id: "retiro-polygel", emoji: "🧹", name: "Retiro de Polygel / Jelly", price: 6, description: "Retiro profesional y seguro de polygel o sistema jelly." },
-  { id: "restauracion", emoji: "🛠️", name: "Restauraciones", price: 1, description: "Reparación de uñas rotas o dañadas. Precio según el caso." },
+  {
+    id: "retiro-semi",
+    emoji: "🔄",
+    icon: "/services-icons/retiro-semi.svg",
+    name: "Retiro de Semipermanente",
+    price: 3,
+    description: "Retiro seguro de semipermanente colocado en otro lugar.",
+  },
+  {
+    id: "retiro-polygel",
+    emoji: "🧹",
+    icon: "/services-icons/retiro-polygel.svg",
+    name: "Retiro de Polygel / Jelly",
+    price: 6,
+    description: "Retiro profesional y seguro de polygel o sistema jelly.",
+  },
+  {
+    id: "restauracion",
+    emoji: "🛠️",
+    icon: "/services-icons/restauracion.svg",
+    name: "Restauraciones",
+    price: 1,
+    description: "Reparación de uñas rotas o dañadas. Precio según el caso.",
+  },
 ];
 
 export function findService(id: string): Service | undefined {
