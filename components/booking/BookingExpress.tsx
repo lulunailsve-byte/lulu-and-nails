@@ -186,15 +186,17 @@ export function BookingExpress() {
   return (
     <section id="reservar" className="px-4 py-12">
       <div className="mx-auto max-w-md">
-        <div className="mb-2 text-center text-[11px] font-semibold uppercase tracking-[.2em] text-violet-500">
-          Reserva express
+        <div className="scroll-reveal">
+          <div className="mb-2 text-center text-[11px] font-semibold uppercase tracking-[.2em] text-violet-500">
+            Reserva express
+          </div>
+          <h2 className="text-center font-display text-3xl font-semibold leading-tight text-ink-900">
+            Agenda en <em className="font-normal italic text-violet-500">un minuto</em>
+          </h2>
+          <div className="mx-auto mt-3 h-0.5 w-12 rounded-full bg-gradient-to-r from-violet-500 to-pink-400" />
         </div>
-        <h2 className="text-center font-display text-3xl font-semibold leading-tight text-ink-900">
-          Agenda en <em className="font-normal italic text-violet-500">un minuto</em>
-        </h2>
-        <div className="mx-auto mt-3 h-0.5 w-12 rounded-full bg-gradient-to-r from-violet-500 to-pink-400" />
 
-        <div className="mt-8 space-y-7 rounded-3xl border border-violet-100 bg-white p-5 shadow-[0_8px_28px_rgba(123,92,255,.08)]">
+        <div className="scroll-reveal mt-8 space-y-7 rounded-3xl border border-violet-100 bg-white p-5 shadow-[0_8px_28px_rgba(123,92,255,.08)]">
           {/* 1 · Servicio */}
           <div>
             <SectionLabel n={1} title="Servicio" />
