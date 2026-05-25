@@ -22,7 +22,7 @@ export const SERVICES: Service[] = [
     duration: 90,
     price: 14,
     description:
-      "Limpieza completa, forma, cutículas y esmalte tradicional de larga duración.",
+      "Esmaltado clásico sobre la uña natural. Incluye una limpieza profunda de cutículas (manicura) para un acabado limpio y prolijo.",
     color: "violet",
   },
   {
@@ -33,7 +33,7 @@ export const SERVICES: Service[] = [
     duration: 90,
     price: 15,
     description:
-      "Esmalte gel de larga duración que no se astilla. Brillo perfecto por semanas.",
+      "Esmaltado de alta durabilidad sobre uña natural, secado en cabina. Disfruta de un color impecable y con brillo por aproximadamente 28 días.",
     color: "violet",
   },
   {
@@ -44,7 +44,7 @@ export const SERVICES: Service[] = [
     duration: 120,
     price: 18,
     description:
-      "Rebalanceo profesional del crecimiento para mantener tus extensiones perfectas.",
+      "Corrección de imperfecciones en la uña natural mediante un recubrimiento flexible que aporta fuerza y uniformidad. Ideal para uñas cortas. Duración: ~28 días.",
     color: "pink",
   },
   {
@@ -55,7 +55,7 @@ export const SERVICES: Service[] = [
     duration: 120,
     price: 20,
     description:
-      "Refuerzo de uñas naturales con polygel para mayor dureza y protección.",
+      "Capa protectora de Polygel sobre la uña natural para aportarle resistencia extrema y evitar quiebres. Recomendado tanto para uñas cortas como largas. Duración: ~28 días.",
     popular: true,
     color: "violet",
   },
@@ -63,11 +63,11 @@ export const SERVICES: Service[] = [
     id: "sistema-jelly",
     emoji: "🫧",
     icon: "/services-icons/sistema-jelly.svg",
-    name: "Sistema Jelly",
+    name: "Sistema Soft Gel / Jelly",
     duration: 120,
     price: 18,
     description:
-      "Extensión con efecto transparente y textura suave. Naturalidad con elegancia.",
+      "Tips de gel flexible que se adaptan y se adhieren perfectamente a tu uña natural. El resultado es una extensión ligera, muy flexible y con un aspecto súper natural. Duración: ~28 días.",
     color: "pink",
   },
   {
@@ -78,7 +78,7 @@ export const SERVICES: Service[] = [
     duration: 160,
     price: 22,
     description:
-      "El servicio más completo. Extensiones esculpidas a mano con polygel premium.",
+      "Extensiones artesanales construidas desde cero con Polygel. El servicio ideal si buscas diseñar el largo y la forma de tus sueños, aumentando el crecimiento visual de tus uñas.",
     popular: true,
     premium: true,
     color: "violet",
@@ -89,38 +89,44 @@ export const PEDICURE = {
   id: "pedicure-semipermanente",
   emoji: "🦶",
   icon: "/services-icons/pedicura.svg",
-  name: "Pedicure Semipermanente",
+  name: "Pedicura",
   duration: 60,
   price: 15,
   description:
-    "Cuidado completo del pie con esmalte semipermanente de larga duración.",
+    "Limpieza y estética del pie que incluye exfoliación profunda e hidratación de la piel. Puedes elegir tu acabado entre esmaltado tradicional o semipermanente (por favor, especificar al agendar).",
   color: "pink" as const,
 };
+
+// Nota aplicable a TODOS los retiros: si el trabajo es de Lulu, el retiro va
+// incluido en el mantenimiento. Los precios aplican solo para trabajos
+// hechos en otro salón o cambios drásticos de sistema.
+export const RETIROS_NOTA =
+  "Los retiros de productos aplicados en nuestro salón suelen estar incluidos en tu mantenimiento. Los siguientes costos aplican para trabajos de otro salón o cambios drásticos de sistema.";
 
 export const RETIROS = [
   {
     id: "retiro-semi",
     emoji: "🔄",
     icon: "/services-icons/retiro-semi.svg",
-    name: "Retiro de Semipermanente",
+    name: "Retiro Semipermanente",
     price: 3,
-    description: "Retiro seguro de semipermanente colocado en otro lugar.",
+    description: "Remoción segura del esmalte (aplica si el servicio fue realizado en otro salón).",
   },
   {
     id: "retiro-polygel",
     emoji: "🧹",
     icon: "/services-icons/retiro-polygel.svg",
-    name: "Retiro de Polygel / Jelly",
+    name: "Retiro de Polygel o Sistema Jelly",
     price: 6,
-    description: "Retiro profesional y seguro de polygel o sistema jelly.",
+    description: "Remoción completa del sistema. Aplica si el trabajo es de otro salón o si deseas cambiar a un servicio diferente.",
   },
   {
     id: "restauracion",
     emoji: "🛠️",
     icon: "/services-icons/restauracion.svg",
-    name: "Restauraciones",
+    name: "Restauración de Uña",
     price: 1,
-    description: "Reparación de uñas rotas o dañadas. Precio según el caso.",
+    description: "Reparación individual de una uña rota o dañada para devolverle su estética y fuerza.",
   },
 ];
 

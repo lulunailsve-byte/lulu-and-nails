@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { SERVICES, PEDICURE, RETIROS } from "@/lib/services";
+import { SERVICES, PEDICURE, RETIROS, RETIROS_NOTA } from "@/lib/services";
 
 export function ServicesSection() {
   return (
@@ -87,18 +87,45 @@ export function ServicesSection() {
 
         {/* Retiros / extras */}
         <details className="mt-6 rounded-2xl border border-violet-100 bg-violet-50/40 p-4">
-          <summary className="flex items-center justify-between text-sm font-semibold text-violet-700">
+          <summary className="flex cursor-pointer items-center justify-between text-sm font-semibold text-violet-700">
             <span>Retiros y restauraciones</span>
             <span className="text-violet-500">+</span>
           </summary>
-          <ul className="mt-3 space-y-2 text-xs text-ink-700">
+
+          {/* Nota: aplica a todos los retiros */}
+          <div className="mt-3 rounded-xl border border-amber-200 bg-amber-50 p-3 text-[11px] leading-relaxed text-amber-800">
+            <span aria-hidden="true">⚠️ </span>
+            <strong>Nota:</strong> {RETIROS_NOTA}
+          </div>
+
+          <ul className="mt-3 space-y-2">
             {RETIROS.map((r) => (
-              <li key={r.id} className="flex items-baseline justify-between gap-3">
-                <span>
-                  <span className="mr-1">{r.emoji}</span>
-                  {r.name}
+              <li
+                key={r.id}
+                className="flex items-start gap-3 rounded-xl bg-white/70 p-3"
+              >
+                <span className="flex-shrink-0 overflow-hidden rounded-xl">
+                  <Image
+                    src={r.icon}
+                    alt=""
+                    width={206}
+                    height={206}
+                    className="h-10 w-10"
+                  />
                 </span>
-                <span className="font-semibold text-ink-900">desde ${r.price}</span>
+                <div className="min-w-0 flex-1">
+                  <div className="flex items-baseline justify-between gap-2">
+                    <span className="text-xs font-semibold text-ink-900">
+                      {r.name}
+                    </span>
+                    <span className="whitespace-nowrap text-xs font-semibold text-violet-700">
+                      desde ${r.price}
+                    </span>
+                  </div>
+                  <p className="mt-1 text-[11px] leading-relaxed text-ink-500">
+                    {r.description}
+                  </p>
+                </div>
               </li>
             ))}
           </ul>
