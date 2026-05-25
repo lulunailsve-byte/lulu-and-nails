@@ -20,7 +20,7 @@ export function Hero() {
           className="h-full w-full object-cover"
           aria-hidden="true"
         >
-          <source src="/videos/header.mp4" type="video/mp4" />
+          <source src="/videos/header.webm" type="video/webm" />
         </video>
         {/* Fade inferior: gradiente que arranca transparente y llega a violet-50
             (el color del top del gradient global de la página). Hace que el
