@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { BRAND, waLink } from "@/lib/brand";
 
 export function FooterSection() {
@@ -10,9 +11,21 @@ export function FooterSection() {
 
   return (
     <footer className="bg-ink-900 px-5 pb-7 pt-14 text-center text-white/70">
-      <div className="font-script text-4xl text-violet-200">{BRAND.name}</div>
-      <div className="mt-1 font-display text-xs uppercase tracking-[.25em] text-violet-300">
-        · {BRAND.tagline} ·
+      {/* Logo horizontal invertido a blanco (el SVG/PNG original es negro).
+          brightness(0) fuerza todo a negro absoluto, invert(1) lo flippea a
+          blanco puro — método estándar para teñir logos monocromáticos. */}
+      <div className="mx-auto w-44 sm:w-48">
+        <Image
+          src="/logo-horizontal.png"
+          alt={BRAND.name}
+          width={4052}
+          height={1323}
+          className="h-auto w-full"
+          style={{ filter: "brightness(0) invert(1)" }}
+        />
+      </div>
+      <div className="mt-0 font-script text-2xl text-violet-300">
+        {BRAND.tagline}
       </div>
       <div className="mt-7 flex flex-wrap justify-center gap-x-5 gap-y-2 text-xs">
         {links.map((l) => (
