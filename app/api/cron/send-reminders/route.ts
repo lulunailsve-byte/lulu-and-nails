@@ -4,9 +4,10 @@ import { sendWhatsAppMessage } from "@/lib/whatsapp";
 import {
   decodeSent,
   encodeSent,
+  formatFecha,
   formatHora,
   message2h,
-  messageDia,
+  message24h,
   pendingReminders,
   type ReminderKind,
 } from "@/lib/reminders";
@@ -78,12 +79,13 @@ export async function GET(req: NextRequest) {
       if (pending.length === 0) continue;
 
       const hora = formatHora(apptStart);
+      const fecha = formatFecha(apptStart);
       const updatedSent = new Set(sentSet);
 
       for (const kind of pending) {
         const text =
-          kind === "dia"
-            ? messageDia({ nombre, hora, servicio })
+          kind === "24h"
+            ? message24h({ nombre, fecha, hora, servicio })
             : message2h({ nombre, hora, servicio });
 
         const result = await sendWhatsAppMessage(phone, text);

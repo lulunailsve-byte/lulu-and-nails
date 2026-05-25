@@ -1,6 +1,6 @@
 // Plantillas y lógica de scheduling de recordatorios WhatsApp.
 
-export type ReminderKind = "dia" | "2h";
+export type ReminderKind = "24h" | "2h";
 
 // Formato de hora "h:MM AM/PM" en español-VE.
 export function formatHora(date: Date): string {
@@ -12,17 +12,29 @@ export function formatHora(date: Date): string {
   });
 }
 
-export function messageDia({
+// Formato de fecha "jueves 28 de mayo" en español-VE.
+export function formatFecha(date: Date): string {
+  return date.toLocaleDateString("es-VE", {
+    weekday: "long",
+    day: "numeric",
+    month: "long",
+    timeZone: "America/Caracas",
+  });
+}
+
+export function message24h({
   nombre,
+  fecha,
   hora,
   servicio,
 }: {
   nombre: string;
+  fecha: string;
   hora: string;
   servicio: string;
 }): string {
   return (
-    `Hola ${nombre}! 💜 Te recordamos tu cita en Lulu & Nails: *hoy a las ${hora}*.\n\n` +
+    `Hola ${nombre}! 💜 Te recordamos tu cita en Lulu & Nails: *${fecha} a las ${hora}*.\n\n` +
     `Servicio: ${servicio}\n\n` +
     `¡Te esperamos!`
   );
@@ -44,49 +56,14 @@ export function message2h({
   );
 }
 
-// Convierte un Date a un objeto plano con hora/día en zona Caracas.
-// Sirve para chequear "estamos en el mismo día?" sin depender de la TZ del server.
-export function caracasParts(d: Date): {
-  year: number;
-  month: number;
-  day: number;
-  hour: number;
-  minute: number;
-} {
-  const fmt = new Intl.DateTimeFormat("en-US", {
-    timeZone: "America/Caracas",
-    year: "numeric",
-    month: "2-digit",
-    day: "2-digit",
-    hour: "2-digit",
-    minute: "2-digit",
-    hour12: false,
-  });
-  const parts = Object.fromEntries(
-    fmt.formatToParts(d).map((p) => [p.type, p.value]),
-  );
-  return {
-    year: parseInt(parts.year!, 10),
-    month: parseInt(parts.month!, 10),
-    day: parseInt(parts.day!, 10),
-    hour: parseInt(parts.hour!, 10),
-    minute: parseInt(parts.minute!, 10),
-  };
-}
-
-export function sameDayCaracas(a: Date, b: Date): boolean {
-  const pa = caracasParts(a);
-  const pb = caracasParts(b);
-  return pa.year === pb.year && pa.month === pb.month && pa.day === pb.day;
-}
-
 // Decide qué recordatorios están pendientes para una cita dada, según la hora
 // actual y los que ya fueron marcados como enviados.
 //
 // Política:
-//   - "dia"  → fires cuando estamos en el mismo día Caracas, hora ≥ 9 y faltan
-//             más de 150 min para la cita (>2.5h, evita choque con "2h").
-//   - "2h"   → fires cuando minutesUntil ≤ 120 y > 0.
+//   - "24h" → fires cuando minutesUntil ≤ 1440 (24h) AND > 120 (más de 2h).
+//             El AND > 120 evita que dispare al mismo tiempo que "2h" para
+//             reservas hechas con menos de 24h de anticipación.
+//   - "2h"  → fires cuando minutesUntil ≤ 120 (2h) AND > 0.
 //   - Ambos: skip si ya fueron enviados (sentSet).
 export function pendingReminders({
   now,
@@ -102,20 +79,11 @@ export function pendingReminders({
 
   const pending: ReminderKind[] = [];
 
-  // "dia"
-  if (!sentSet.has("dia")) {
-    const sameDay = sameDayCaracas(now, apptStart);
-    const nowHour = caracasParts(now).hour;
-    if (sameDay && nowHour >= 9 && minutesUntil > 150) {
-      pending.push("dia");
-    }
+  if (!sentSet.has("24h") && minutesUntil <= 1440 && minutesUntil > 120) {
+    pending.push("24h");
   }
-
-  // "2h"
-  if (!sentSet.has("2h")) {
-    if (minutesUntil <= 120) {
-      pending.push("2h");
-    }
+  if (!sentSet.has("2h") && minutesUntil <= 120) {
+    pending.push("2h");
   }
 
   return pending;
@@ -128,7 +96,7 @@ export function encodeSent(set: Set<ReminderKind>): string {
 
 export function decodeSent(str: string | undefined | null): Set<ReminderKind> {
   if (!str) return new Set();
-  const valid: ReminderKind[] = ["dia", "2h"];
+  const valid: ReminderKind[] = ["24h", "2h"];
   const parts = str.split(",").map((s) => s.trim()) as ReminderKind[];
   return new Set(parts.filter((p) => valid.includes(p)));
 }
