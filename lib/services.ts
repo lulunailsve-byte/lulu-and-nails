@@ -37,6 +37,17 @@ export const SERVICES: Service[] = [
     color: "violet",
   },
   {
+    id: "retiro-servicio",
+    emoji: "🧹",
+    icon: "/services-icons/retiro-polygel.svg",
+    name: "Retiro de Servicio",
+    duration: 30,
+    price: 3,
+    description:
+      "Remoción profesional de tu sistema actual (semipermanente, polygel o sistema jelly). Ideal si vienes de otro salón o quieres cambiar de servicio.",
+    color: "pink",
+  },
+  {
     id: "nivelacion",
     emoji: "🔮",
     icon: "/services-icons/nivelacion.svg",
