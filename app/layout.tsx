@@ -71,7 +71,11 @@ export const metadata: Metadata = {
   category: "beauty",
   appleWebApp: {
     capable: true,
-    statusBarStyle: "default",
+    // black-translucent: en iOS PWA el contenido va EDGE-TO-EDGE detrás del
+    // status bar (con iconos blancos sobre el contenido). En globals.css hay
+    // un gradient negro suave que solo aparece en display:standalone para que
+    // los iconos sigan siendo legibles sobre el video del Hero.
+    statusBarStyle: "black-translucent",
     title: BRAND.name,
   },
   formatDetection: { telephone: false },

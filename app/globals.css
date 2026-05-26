@@ -89,6 +89,31 @@ body { margin: 0; }
 }
 .scrollbar-soft::-webkit-scrollbar-thumb:hover { background: #b79af7; /* violet-300 */ }
 
+/* Edge-to-edge en PWA: cuando la app corre como instalada (display:standalone)
+   y en iOS con black-translucent, el contenido va detrás del status bar.
+   Agregamos un gradient negro sutil arriba para que los iconos blancos del
+   status bar (hora, batería, señal) queden legibles sobre el video del Hero.
+   En navegador normal NO aplica — solo en PWA. */
+@media (display-mode: standalone) {
+  body::before {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    /* Cubre el safe-area (notch / Dynamic Island) + 8px de fade extra */
+    height: calc(env(safe-area-inset-top, 0px) + 8px);
+    background: linear-gradient(
+      to bottom,
+      rgba(0, 0, 0, 0.45),
+      rgba(0, 0, 0, 0.15) 65%,
+      transparent
+    );
+    pointer-events: none;
+    z-index: 9999;
+  }
+}
+
 /* Scroll-reveal: elementos arrancan invisibles, ScrollReveal.tsx les agrega
    .visible vía IntersectionObserver cuando entran al viewport. */
 .scroll-reveal {
