@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import Image from "next/image";
-import { ArrowRight, Calendar, Check, Loader2, Sparkles, X } from "lucide-react";
+import { ArrowRight, Calendar, Check, ChevronsRight, Loader2, Sparkles, X } from "lucide-react";
 import { SERVICES, PEDICURE, type Service } from "@/lib/services";
 import {
   BASE_SLOTS,
@@ -199,7 +199,15 @@ export function BookingExpress() {
         <div className="scroll-reveal mt-8 space-y-7 rounded-3xl border border-violet-100 bg-white p-5 shadow-[0_8px_28px_rgba(123,92,255,.08)]">
           {/* 1 · Servicio */}
           <div>
-            <SectionLabel n={1} title="Servicio" />
+            <SectionLabel
+              n={1}
+              title="Servicio"
+              hint={
+                <span className="inline-flex items-center gap-1">
+                  Desliza <ChevronsRight className="h-3 w-3" />
+                </span>
+              }
+            />
             {/* px-1 + pt-2 pb-4 le da respiro a la sombra de la chip seleccionada
                 (shadow-[0_8px_22px] necesita ~30px abajo para no clipar).
                 pb-4 + scrollbar height 6px + margin = visualmente ~24px de respiro. */}
@@ -275,7 +283,7 @@ export function BookingExpress() {
 
           {/* 3 · Hora */}
           <div>
-            <SectionLabel n={3} title="Hora" hint="escoge la hora" />
+            <SectionLabel n={3} title="Hora" hint="Escoge la hora" />
             {loadingSlots ? (
               <div className="mt-4 flex items-center justify-center gap-2 text-sm text-violet-700">
                 <Loader2 className="h-4 w-4 animate-spin" />
@@ -295,7 +303,7 @@ export function BookingExpress() {
 
           {/* 4 · Extras */}
           <div>
-            <SectionLabel n={4} title="Extras" hint="opcional" />
+            <SectionLabel n={4} title="Extras" hint="Opcional" />
             <button
               onClick={() => setPedi((v) => !v)}
               className={
@@ -408,7 +416,16 @@ export function BookingExpress() {
 
 // ─── Sub-components ─────────────────────────────────────────────
 
-function SectionLabel({ n, title, hint }: { n: number; title: string; hint?: string }) {
+function SectionLabel({
+  n,
+  title,
+  hint,
+}: {
+  n: number;
+  title: string;
+  // ReactNode para soportar JSX (ej. texto + icono en el hint del Step 1).
+  hint?: React.ReactNode;
+}) {
   return (
     <div className="flex items-baseline justify-between">
       <span className="text-[11px] font-bold uppercase tracking-[.06em] text-ink-400">
