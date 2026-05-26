@@ -4,6 +4,7 @@ import "./globals.css";
 import { SmoothScroll } from "@/components/SmoothScroll";
 import { ScrollReveal } from "@/components/ScrollReveal";
 import { BRAND, waLink } from "@/lib/brand";
+import { SERVICES, PEDICURE } from "@/lib/services";
 
 const bricolage = Bricolage_Grotesque({
   subsets: ["latin"],
@@ -167,14 +168,21 @@ const structuredData = {
   hasOfferCatalog: {
     "@type": "OfferCatalog",
     name: "Servicios de uñas",
+    // Itera SERVICES + PEDICURE para que el catálogo SEO siempre refleje
+    // el catálogo real del sitio (única fuente de verdad: lib/services.ts).
     itemListElement: [
-      { "@type": "Offer", itemOffered: { "@type": "Service", name: "Manicura Tradicional" }, price: "14", priceCurrency: "USD" },
-      { "@type": "Offer", itemOffered: { "@type": "Service", name: "Manicura Semipermanente" }, price: "15", priceCurrency: "USD" },
-      { "@type": "Offer", itemOffered: { "@type": "Service", name: "Nivelación" }, price: "18", priceCurrency: "USD" },
-      { "@type": "Offer", itemOffered: { "@type": "Service", name: "Capping de Polygel" }, price: "20", priceCurrency: "USD" },
-      { "@type": "Offer", itemOffered: { "@type": "Service", name: "Sistema Soft Gel / Jelly" }, price: "18", priceCurrency: "USD" },
-      { "@type": "Offer", itemOffered: { "@type": "Service", name: "Esculpido en Polygel" }, price: "22", priceCurrency: "USD" },
-      { "@type": "Offer", itemOffered: { "@type": "Service", name: "Pedicura" }, price: "15", priceCurrency: "USD" },
+      ...SERVICES.map((s) => ({
+        "@type": "Offer",
+        itemOffered: { "@type": "Service", name: s.name },
+        price: String(s.price),
+        priceCurrency: "USD",
+      })),
+      {
+        "@type": "Offer",
+        itemOffered: { "@type": "Service", name: PEDICURE.name },
+        price: String(PEDICURE.price),
+        priceCurrency: "USD",
+      },
     ],
   },
 };
