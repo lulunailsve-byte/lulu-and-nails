@@ -2,11 +2,8 @@ export function ScheduleSection() {
   type Item = { time: string; label: string; tag: string; color?: "pink" | "ink" };
   const items: Item[] = [
     { time: "9am – 12pm", label: "Bloque mañana", tag: "Lun – Sáb" },
-    { time: "12pm – 2pm", label: "Descanso", tag: "No disponible", color: "pink" },
     { time: "2pm – 9pm", label: "Bloque tarde y noche", tag: "Lun – Sáb" },
-    { time: "9:00 PM", label: "Última cita posible", tag: "Cierre" },
-    { time: "Domingos", label: "Sin atención", tag: "Cerrado", color: "ink" },
-    { time: "15 min", label: "Gap entre citas (calidad)", tag: "Siempre" },
+    { time: "7:00 PM", label: "Última cita disponible", tag: "Cierre" },
   ];
 
   return (

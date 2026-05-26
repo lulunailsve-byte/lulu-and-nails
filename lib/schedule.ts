@@ -8,9 +8,11 @@ export const FIN_DIA    = 21 * 60;  // 9pm  — fin del día (última cita debe 
 export const GAP        = 15;       // 15min de gap entre citas (calidad)
 
 // Slots disponibles base: cada hora dentro de cada bloque.
-// Mañana: 9, 10, 11am. Tarde/Noche: 2, 3, 4, 5, 6, 7, 8pm.
+// Mañana: 9, 10, 11am. Tarde/Noche: 2, 3, 4, 5, 6, 7pm (última cita = 7pm).
+// El bloque opera hasta las 9pm (FIN_DIA) — un servicio que empiece a las 7pm
+// puede durar hasta 2h y aún cabe dentro.
 export const MORNING_SLOTS = [9 * 60, 10 * 60, 11 * 60];
-export const EVENING_SLOTS = [14 * 60, 15 * 60, 16 * 60, 17 * 60, 18 * 60, 19 * 60, 20 * 60];
+export const EVENING_SLOTS = [14 * 60, 15 * 60, 16 * 60, 17 * 60, 18 * 60, 19 * 60];
 export const BASE_SLOTS = [...MORNING_SLOTS, ...EVENING_SLOTS];
 
 export type BusyRange = { inicio: number; fin: number };
