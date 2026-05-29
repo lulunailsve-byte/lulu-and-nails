@@ -23,11 +23,15 @@ type Step = "form" | "contact" | "submitting" | "success" | "error";
 
 const DOW_SHORT = ["Do", "Lu", "Ma", "Mi", "Ju", "Vi", "Sá"];
 
-function next14Days(): Date[] {
+// Rango de días reservables hacia adelante. 35 días ≈ un mes completo de
+// margen para que el cliente pueda planificar con anticipación.
+const BOOKING_RANGE_DAYS = 35;
+
+function nextDays(): Date[] {
   const out: Date[] = [];
   const today = new Date();
   today.setHours(0, 0, 0, 0);
-  for (let i = 0; i < 14; i++) {
+  for (let i = 0; i < BOOKING_RANGE_DAYS; i++) {
     const d = new Date(today);
     d.setDate(today.getDate() + i);
     out.push(d);
@@ -36,7 +40,7 @@ function next14Days(): Date[] {
 }
 
 export function BookingExpress() {
-  const days = useMemo(next14Days, []);
+  const days = useMemo(nextDays, []);
   const [serviceId, setServiceId] = useState<string>(SERVICES[1]!.id); // semipermanente
   const [date, setDate] = useState<Date>(() => {
     const first = days.find((d) => !esDomingo(d));
@@ -252,7 +256,10 @@ export function BookingExpress() {
           {/* 2 · Día */}
           <div>
             <SectionLabel n={2} title="Día" hint={mesActual(days)} />
-            <div className="-mx-1 mt-3 flex gap-2 overflow-x-auto px-1 no-scrollbar">
+            {/* scrollbar-soft + pb-4 pt-2: misma barrita de desplazamiento que el
+                step 1 (servicios), para comunicar que la lista de días sigue
+                hacia la derecha (~35 días de rango). */}
+            <div className="-mx-1 mt-3 flex gap-2 overflow-x-auto px-1 pb-4 pt-2 scrollbar-soft">
               {days.map((d) => {
                 const closed = esDomingo(d);
                 const isSel = sameDay(d, date);
