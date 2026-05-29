@@ -223,7 +223,7 @@ export function BookingExpress() {
               title="Servicio"
               hint={
                 <span className="inline-flex items-center gap-1">
-                  Desliza <ChevronsRight className="h-3 w-3" />
+                  Escoge el servicio a realizar <ChevronsRight className="h-3 w-3 shrink-0" />
                 </span>
               }
             />
