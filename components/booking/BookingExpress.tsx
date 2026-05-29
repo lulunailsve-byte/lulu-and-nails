@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import Image from "next/image";
-import { ArrowRight, Calendar, Check, ChevronsRight, Loader2, Sparkles, X } from "lucide-react";
+import { ArrowRight, Calendar, Check, ChevronLeft, ChevronRight, ChevronsRight, Loader2, Sparkles, X } from "lucide-react";
 import { SERVICES, PEDICURE, type Service } from "@/lib/services";
 import {
   BASE_SLOTS,
@@ -23,29 +23,44 @@ type Step = "form" | "contact" | "submitting" | "success" | "error";
 
 const DOW_SHORT = ["Do", "Lu", "Ma", "Mi", "Ju", "Vi", "Sá"];
 
-// Rango de días reservables hacia adelante. 35 días ≈ un mes completo de
-// margen para que el cliente pueda planificar con anticipación.
-const BOOKING_RANGE_DAYS = 35;
+// El cliente puede reservar desde hoy hasta ~1 mes hacia adelante.
+const BOOKING_RANGE_MONTHS = 1;
 
-function nextDays(): Date[] {
-  const out: Date[] = [];
-  const today = new Date();
-  today.setHours(0, 0, 0, 0);
-  for (let i = 0; i < BOOKING_RANGE_DAYS; i++) {
-    const d = new Date(today);
-    d.setDate(today.getDate() + i);
-    out.push(d);
-  }
-  return out;
+// Primer día reservable: hoy, saltando domingos (cerrado).
+function firstBookableDay(): Date {
+  const d = new Date();
+  d.setHours(0, 0, 0, 0);
+  while (d.getDay() === 0) d.setDate(d.getDate() + 1);
+  return d;
+}
+
+// Suma n meses clampeando al último día si el mes destino es más corto
+// (ej. 31 ene + 1 mes → 28/29 feb, no marzo).
+function addMonths(date: Date, n: number): Date {
+  const d = new Date(date);
+  const day = d.getDate();
+  d.setDate(1);
+  d.setMonth(d.getMonth() + n);
+  const lastDay = new Date(d.getFullYear(), d.getMonth() + 1, 0).getDate();
+  d.setDate(Math.min(day, lastDay));
+  return d;
+}
+
+function firstOfMonth(date: Date): Date {
+  return new Date(date.getFullYear(), date.getMonth(), 1);
 }
 
 export function BookingExpress() {
-  const days = useMemo(nextDays, []);
+  // Rango reservable: [hoy, hoy + 1 mes].
+  const today = useMemo(() => {
+    const t = new Date();
+    t.setHours(0, 0, 0, 0);
+    return t;
+  }, []);
+  const maxBookable = useMemo(() => addMonths(today, BOOKING_RANGE_MONTHS), [today]);
+
   const [serviceId, setServiceId] = useState<string>(SERVICES[1]!.id); // semipermanente
-  const [date, setDate] = useState<Date>(() => {
-    const first = days.find((d) => !esDomingo(d));
-    return first ?? days[0]!;
-  });
+  const [date, setDate] = useState<Date>(firstBookableDay);
   const [slot, setSlot] = useState<number | null>(null);
   const [pedi, setPedi] = useState(false);
   const [ocupados, setOcupados] = useState<BusyRange[]>([]);
@@ -255,37 +270,13 @@ export function BookingExpress() {
 
           {/* 2 · Día */}
           <div>
-            <SectionLabel n={2} title="Día" hint={mesActual(days)} />
-            {/* scrollbar-soft + pb-4 pt-2: misma barrita de desplazamiento que el
-                step 1 (servicios), para comunicar que la lista de días sigue
-                hacia la derecha (~35 días de rango). */}
-            <div className="-mx-1 mt-3 flex gap-2 overflow-x-auto px-1 pb-4 pt-2 scrollbar-soft">
-              {days.map((d) => {
-                const closed = esDomingo(d);
-                const isSel = sameDay(d, date);
-                return (
-                  <button
-                    key={d.toISOString()}
-                    disabled={closed}
-                    onClick={() => !closed && setDate(d)}
-                    className={
-                      "flex min-w-[58px] flex-shrink-0 flex-col items-center gap-0.5 rounded-2xl px-2 py-2.5 transition " +
-                      (closed
-                        ? "bg-transparent text-ink-300"
-                        : isSel
-                          ? "bg-violet-500 text-white shadow-[0_4px_14px_rgba(123,92,255,.4)]"
-                          : "bg-violet-50 text-ink-900 hover:bg-violet-100")
-                    }
-                  >
-                    <span className={"text-[10px] font-semibold " + (isSel ? "opacity-85" : "opacity-60")}>
-                      {DOW_SHORT[d.getDay()]}
-                    </span>
-                    <span className="font-display text-lg leading-none">{d.getDate()}</span>
-                    {closed && <span className="text-[8px] uppercase tracking-wider">cerrado</span>}
-                  </button>
-                );
-              })}
-            </div>
+            <SectionLabel n={2} title="Día" hint="Domingos cerrado" />
+            <MonthCalendar
+              selected={date}
+              onSelect={setDate}
+              minDate={today}
+              maxDate={maxBookable}
+            />
           </div>
 
           {/* 3 · Hora */}
@@ -777,16 +768,108 @@ function sameDay(a: Date, b: Date) {
   );
 }
 
-function mesActual(days: Date[]): string {
-  const first = days[0]!;
-  const last = days[days.length - 1]!;
-  const fmt = (d: Date) =>
-    d.toLocaleDateString("es-VE", { month: "short" }).replace(".", "");
-  const m1 = fmt(first);
-  const m2 = fmt(last);
-  return m1 === m2 ? cap(m1) : `${cap(m1)} – ${cap(m2)}`;
-}
+// Calendario mensual (lunes → domingo) con navegación de mes acotada al
+// rango reservable [minDate, maxDate]. Domingos, días pasados y días fuera
+// de rango quedan deshabilitados. Tocar un día activo dispara onSelect, que
+// recarga la disponibilidad de horas (mismo flujo de antes).
+function MonthCalendar({
+  selected,
+  onSelect,
+  minDate,
+  maxDate,
+}: {
+  selected: Date;
+  onSelect: (d: Date) => void;
+  minDate: Date; // primer día reservable (hoy, medianoche)
+  maxDate: Date; // último día reservable (medianoche)
+}) {
+  const [view, setView] = useState<Date>(() => firstOfMonth(selected));
 
-function cap(s: string) {
-  return s.charAt(0).toUpperCase() + s.slice(1);
+  const minMonth = firstOfMonth(minDate);
+  const maxMonth = firstOfMonth(maxDate);
+  const canPrev = view > minMonth;
+  const canNext = view < maxMonth;
+
+  const year = view.getFullYear();
+  const month = view.getMonth();
+  const daysInMonth = new Date(year, month + 1, 0).getDate();
+  // Huecos iniciales con la semana empezando en lunes (Lu=0 … Do=6).
+  const leadingBlanks = (new Date(year, month, 1).getDay() + 6) % 7;
+
+  const cells: (Date | null)[] = [];
+  for (let i = 0; i < leadingBlanks; i++) cells.push(null);
+  for (let d = 1; d <= daysInMonth; d++) cells.push(new Date(year, month, d));
+
+  const monthName = view.toLocaleDateString("es-VE", { month: "long" });
+  const monthLabel = `${monthName.charAt(0).toUpperCase()}${monthName.slice(1)} ${year}`;
+
+  return (
+    <div className="mt-3 rounded-2xl border border-violet-100 bg-white p-3 shadow-sm">
+      {/* Header con navegación de mes */}
+      <div className="flex items-center justify-between">
+        <button
+          type="button"
+          disabled={!canPrev}
+          onClick={() => setView(addMonths(view, -1))}
+          aria-label="Mes anterior"
+          className="grid h-8 w-8 place-items-center rounded-full text-ink-700 transition hover:bg-violet-50 disabled:opacity-30 disabled:hover:bg-transparent"
+        >
+          <ChevronLeft className="h-4 w-4" />
+        </button>
+        <span className="font-display text-sm font-semibold text-ink-900">{monthLabel}</span>
+        <button
+          type="button"
+          disabled={!canNext}
+          onClick={() => setView(addMonths(view, 1))}
+          aria-label="Mes siguiente"
+          className="grid h-8 w-8 place-items-center rounded-full text-ink-700 transition hover:bg-violet-50 disabled:opacity-30 disabled:hover:bg-transparent"
+        >
+          <ChevronRight className="h-4 w-4" />
+        </button>
+      </div>
+
+      {/* Encabezado de días (lunes primero) */}
+      <div className="mt-3 grid grid-cols-7 gap-1 text-center">
+        {["Lu", "Ma", "Mi", "Ju", "Vi", "Sá", "Do"].map((w) => (
+          <span key={w} className="text-[10px] font-bold uppercase tracking-wide text-ink-400">
+            {w}
+          </span>
+        ))}
+      </div>
+
+      {/* Grid de días */}
+      <div className="mt-1 grid grid-cols-7 gap-1">
+        {cells.map((d, i) => {
+          if (!d) return <span key={`blank-${i}`} />;
+          const sunday = d.getDay() === 0;
+          const outOfRange = d < minDate || d > maxDate;
+          const disabled = sunday || outOfRange;
+          const isSel = sameDay(d, selected);
+          const isToday = sameDay(d, minDate);
+
+          let cls =
+            "grid aspect-square place-items-center rounded-xl text-sm font-semibold transition ";
+          if (disabled) cls += "text-ink-300 cursor-not-allowed";
+          else if (isSel)
+            cls += "bg-violet-500 text-white shadow-[0_4px_14px_rgba(123,92,255,.4)]";
+          else
+            cls +=
+              "bg-violet-50 text-ink-900 hover:bg-violet-100" +
+              (isToday ? " ring-1 ring-violet-300" : "");
+
+          return (
+            <button
+              key={d.toISOString()}
+              type="button"
+              disabled={disabled}
+              onClick={() => !disabled && onSelect(d)}
+              className={cls}
+            >
+              {d.getDate()}
+            </button>
+          );
+        })}
+      </div>
+    </div>
+  );
 }
