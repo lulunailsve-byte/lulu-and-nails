@@ -111,6 +111,17 @@ export async function GET(req: NextRequest) {
       }
     }
 
+    // Observabilidad: dejamos rastro en los runtime logs de Vercel para poder
+    // depurar sin tener que llamar el endpoint con el CRON_SECRET. (El cuerpo
+    // JSON solo lo ve quien dispara el cron; esto queda en los logs.)
+    console.log(
+      `[cron send-reminders] scanned=${events.length} ` +
+        `sent=${log.filter((l) => l.action === "sent").length} ` +
+        `failed=${log.filter((l) => l.action === "failed").length} ` +
+        `no-phone=${log.filter((l) => l.action === "no-phone").length} ` +
+        `log=${JSON.stringify(log)}`,
+    );
+
     return NextResponse.json({
       ok: true,
       scanned: events.length,
@@ -124,8 +135,17 @@ export async function GET(req: NextRequest) {
 }
 
 // Parsea las líneas que /api/book escribe en description del evento.
-// Orden importa: "Teléfono (normalizado):" antes que "Teléfono:" no aplica porque
-// los prefijos no chocan (Teléfono: tiene ":" en posición 9, el otro tiene espacio).
+//
+// Formato ACTUAL (lo que escribe /api/book hoy):
+//   Servicio: {servicio}
+//   Teléfono: {original} ({país})
+//   WhatsApp: https://wa.me/{normalizado}      ← el teléfono normalizado vive aquí
+//   Correo: {correo}
+//
+// El número normalizado (dígitos con código país, ej. "584143441103") es el que
+// Green API necesita para el chatId. Lo extraemos del link wa.me. Mantenemos
+// compatibilidad con el formato viejo ("Teléfono (normalizado):") por si quedan
+// eventos antiguos en el calendario.
 function parseEventDescription(desc: string): {
   servicio?: string;
   telefonoOriginal?: string;
@@ -143,9 +163,14 @@ function parseEventDescription(desc: string): {
     if (line.startsWith("Servicio:")) {
       result.servicio = line.slice("Servicio:".length).trim();
     } else if (line.startsWith("Teléfono (normalizado):")) {
+      // Formato viejo (eventos antiguos).
       result.telefonoNormalizado = line
         .slice("Teléfono (normalizado):".length)
         .trim();
+    } else if (line.startsWith("WhatsApp:")) {
+      // Formato actual: el normalizado está dentro del link wa.me/{digits}.
+      const m = line.match(/wa\.me\/(\d+)/);
+      if (m) result.telefonoNormalizado = m[1];
     } else if (line.startsWith("Teléfono:")) {
       result.telefonoOriginal = line.slice("Teléfono:".length).trim();
     } else if (line.startsWith("Correo:")) {
