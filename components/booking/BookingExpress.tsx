@@ -270,7 +270,7 @@ export function BookingExpress() {
 
           {/* 2 · Día */}
           <div>
-            <SectionLabel n={2} title="Día" hint="Domingos cerrado" />
+            <SectionLabel n={2} title="Día" hint="Escoge el día de tu preferencia" />
             <MonthCalendar
               selected={date}
               onSelect={setDate}
