@@ -4,6 +4,7 @@ import { ScheduleSection } from "@/components/landing/ScheduleSection";
 import { FooterSection } from "@/components/landing/FooterSection";
 import { WhatsAppFloat } from "@/components/WhatsAppFloat";
 import { BookingExpress } from "@/components/booking/BookingExpress";
+import { PressOnLauncher } from "@/components/pressonn/PressOnLauncher";
 
 export default function HomePage() {
   return (
@@ -14,6 +15,7 @@ export default function HomePage() {
       <ScheduleSection />
       <FooterSection />
       <WhatsAppFloat />
+      <PressOnLauncher />
     </main>
   );
 }

@@ -1,0 +1,63 @@
+"use client";
+
+import { useEffect, useState } from "react";
+import { Sparkles, X } from "lucide-react";
+import { PressOnForm } from "./PressOnForm";
+
+// Aviso pequeño y dismissible anclado al borde IZQUIERDO de la pantalla que
+// abre el formulario de kits Press-On. Entra con una animación suave a los
+// ~1.2s de cargar la página para llamar la atención sin ser intrusivo.
+export function PressOnLauncher() {
+  const [open, setOpen] = useState(false);
+  const [dismissed, setDismissed] = useState(false);
+  const [shown, setShown] = useState(false);
+
+  useEffect(() => {
+    const t = setTimeout(() => setShown(true), 1200);
+    return () => clearTimeout(t);
+  }, []);
+
+  return (
+    <>
+      {!dismissed && (
+        <div
+          className={
+            "fixed bottom-24 left-3 z-40 transition-all duration-500 ease-out sm:left-5 " +
+            (shown && !open ? "translate-x-0 opacity-100" : "-translate-x-[130%] opacity-0")
+          }
+        >
+          <div className="relative">
+            {/* Halo de pulso para atraer la mirada */}
+            <span className="pointer-events-none absolute -inset-1 -z-10 animate-pulse rounded-2xl bg-gradient-to-r from-violet-300/50 to-pink-300/50 blur-md" />
+
+            <button
+              onClick={() => setOpen(true)}
+              className="flex items-center gap-2.5 rounded-2xl border border-violet-100 bg-white/95 py-2.5 pl-2.5 pr-4 text-left shadow-[0_10px_30px_rgba(123,92,255,.25)] backdrop-blur transition hover:scale-[1.03]"
+            >
+              <span className="grid h-9 w-9 shrink-0 place-items-center rounded-xl bg-gradient-to-br from-violet-500 to-pink-400 text-white">
+                <Sparkles className="h-5 w-5" />
+              </span>
+              <span className="leading-tight">
+                <span className="block text-[9px] font-bold uppercase tracking-[.15em] text-pink-500">
+                  Nuevo ✨
+                </span>
+                <span className="block text-[13px] font-bold text-ink-900">Kits Press-On</span>
+                <span className="block text-[10px] text-ink-500">Pídelos a tu medida →</span>
+              </span>
+            </button>
+
+            <button
+              onClick={() => setDismissed(true)}
+              aria-label="Cerrar aviso"
+              className="absolute -right-2 -top-2 grid h-5 w-5 place-items-center rounded-full bg-ink-900 text-white shadow-md transition hover:scale-110"
+            >
+              <X className="h-3 w-3" />
+            </button>
+          </div>
+        </div>
+      )}
+
+      {open && <PressOnForm onClose={() => setOpen(false)} />}
+    </>
+  );
+}
