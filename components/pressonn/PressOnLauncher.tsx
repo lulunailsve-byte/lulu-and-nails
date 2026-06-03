@@ -4,17 +4,24 @@ import { useEffect, useState } from "react";
 import { Sparkles, X } from "lucide-react";
 import { PressOnForm } from "./PressOnForm";
 
-// Aviso pequeño y dismissible centrado en la pantalla que abre el formulario
-// de kits Press-On. Entra con una animación suave (fade + scale) a los ~1.2s
-// de cargar la página para llamar la atención.
+// Aviso pequeño y dismissible (centro vertical, borde izquierdo) que abre el
+// formulario de kits Press-On. Aparece SOLO cuando la sección "Reserva express"
+// (#reservar) está en pantalla, para no tapar el hero inicial. Entra con una
+// animación suave (fade + scale).
 export function PressOnLauncher() {
   const [open, setOpen] = useState(false);
   const [dismissed, setDismissed] = useState(false);
   const [shown, setShown] = useState(false);
 
   useEffect(() => {
-    const t = setTimeout(() => setShown(true), 1200);
-    return () => clearTimeout(t);
+    const el = document.getElementById("reservar");
+    if (!el) return;
+    const obs = new IntersectionObserver(
+      (entries) => setShown(!!entries[0]?.isIntersecting),
+      { threshold: 0.15 },
+    );
+    obs.observe(el);
+    return () => obs.disconnect();
   }, []);
 
   return (
