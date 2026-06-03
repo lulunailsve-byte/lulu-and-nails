@@ -20,11 +20,12 @@ type Pic = { file: File; url: string };
 // Las imágenes viven en public/press-on-gallery/. Si faltan, el header
 // muestra el gradiente de fondo (degradación elegante).
 const GALLERY = [
-  "/press-on-gallery/1.jpg",
-  "/press-on-gallery/2.jpg",
-  "/press-on-gallery/3.jpg",
-  "/press-on-gallery/4.jpg",
-  "/press-on-gallery/5.jpg",
+  "/press-on-gallery/1.jpeg",
+  "/press-on-gallery/2.jpeg",
+  "/press-on-gallery/3.jpeg",
+  "/press-on-gallery/4.jpeg",
+  "/press-on-gallery/5.jpeg",
+  "/press-on-gallery/6.jpeg",
 ];
 
 // Comprime/redimensiona una imagen en el cliente a JPEG (máx 1600px lado mayor)
