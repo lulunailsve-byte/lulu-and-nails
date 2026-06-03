@@ -120,7 +120,7 @@ export const metadata: Metadata = {
         url: "/og-image.jpg",
         width: 1200,
         height: 630,
-        alt: `${BRAND.name} — Renace tu look. Estudio de uñas profesional en Venezuela.`,
+        alt: `${BRAND.name} — Renace tu look. Uñas y kits press-on personalizados en Venezuela.`,
         type: "image/jpeg",
       },
     ],
