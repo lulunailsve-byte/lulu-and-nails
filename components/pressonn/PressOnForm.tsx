@@ -293,9 +293,34 @@ export function PressOnForm({ onClose }: { onClose: () => void }) {
               Medidas <span className="font-normal normal-case text-ink-400">(opcional)</span>
             </SectionTitle>
             <p className="-mt-1 mb-3 text-[11px] leading-relaxed text-ink-500">
-              Para que el kit te calce perfecto. Toma las fotos con buena luz, dedos
-              estirados y sin esmalte. También puedes enviarlas luego por WhatsApp.
+              Para que el kit te calce perfecto. También puedes enviarlas luego por WhatsApp.
             </p>
+
+            {/* Instrucciones: tapa de refresco como referencia de tamaño (obligatoria) */}
+            <div className="mb-3 rounded-2xl border border-violet-200 bg-violet-50/60 p-3">
+              <div className="flex gap-3">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src="/press-on-referencia.jpg"
+                  alt="Ejemplo: foto del dedo junto a una tapa de refresco como referencia de tamaño"
+                  loading="lazy"
+                  className="h-28 w-20 flex-shrink-0 rounded-xl border border-violet-100 object-cover"
+                />
+                <div className="min-w-0 text-[11px] leading-relaxed text-ink-600">
+                  <p className="font-bold text-violet-700">📏 Importante: incluye una tapa de refresco</p>
+                  <p className="mt-1">
+                    En cada foto coloca una <strong>tapa de plástico de refresco</strong> cerca de
+                    la mano. Nos sirve de referencia de tamaño y es <strong>obligatoria</strong>.
+                  </p>
+                  <ul className="mt-1.5 list-disc space-y-0.5 pl-4">
+                    <li>La tapa cerca de la mano, en la misma toma.</li>
+                    <li>Buena iluminación y superficie plana.</li>
+                    <li>Dedos estirados y sin esmalte si puedes.</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
             <div className="grid grid-cols-2 gap-2">
               {MEDIDAS.map((m) => (
                 <PhotoField
