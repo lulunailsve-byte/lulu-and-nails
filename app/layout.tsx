@@ -27,7 +27,7 @@ const caveat = Caveat({
 // Descripción optimizada (~152 chars — dentro del óptimo 110-160 que validan
 // OG/Twitter/Google). Incluye ubicación, dueña, servicios, kits press-on y CTA.
 const SITE_DESCRIPTION =
-  "Uñas en Venezuela por Luizandra Zerpa: manicura semipermanente, polygel, esculpido, pedicura y kits press-on personalizados a domicilio. Reserva online.";
+  "Uñas en Venezuela por Luizandra Zerpa: manicura semipermanente, polygel, esculpido, pedicura y kits press-on personalizados con envío nacional. Reserva online.";
 
 // Title más largo para redes sociales (~50 chars — dentro del óptimo 50-60
 // que pide OG). El <title> de la página y la pestaña del browser usan el
@@ -76,7 +76,6 @@ export const metadata: Metadata = {
     "uñas duraderas", "uñas que duran semanas",
     "uñas para eventos", "uñas para eventos importantes", "uñas para eventos personalizados",
     "uñas para fiestas", "uñas para bodas", "uñas para quinceañeras", "uñas para graduación",
-    "uñas a domicilio", "uñas a domicilio Venezuela",
     "uñas con envío", "uñas con envío nacional", "envío de uñas Venezuela",
     "comprar uñas press on", "comprar press on Venezuela",
     "soft gel press on", "uñas soft gel",

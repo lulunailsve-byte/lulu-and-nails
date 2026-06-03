@@ -35,7 +35,7 @@ const textSvg = `<svg width="${W}" height="${H}" xmlns="http://www.w3.org/2000/s
   <text x="68" y="212" class="h" font-size="86">Renace tu <tspan class="hv">look.</tspan></text>
   <text x="70" y="288" class="svc" font-size="23">Semipermanente · Polygel · Esculpido · Pedicura</text>
   <text x="70" y="362" class="hl" font-size="30">+ Kits Press-On personalizados</text>
-  <text x="70" y="396" class="sub" font-size="21">A tu medida · a domicilio · envío a toda Venezuela</text>
+  <text x="70" y="396" class="sub" font-size="21">A tu medida · listas para usar · envío a toda Venezuela</text>
   <rect x="70" y="442" width="476" height="64" rx="32" fill="#1F1235"/>
   <text x="308" y="483" class="cta" font-size="23" text-anchor="middle">Reserva en luluandnails.com</text>
 </svg>`;

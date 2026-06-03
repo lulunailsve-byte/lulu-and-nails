@@ -102,7 +102,7 @@ export function ServicesSection() {
                   Kits Press-On
                 </h3>
                 <p className="mt-0.5 text-[11px] font-semibold uppercase tracking-wider text-violet-500">
-                  A tu medida · a domicilio
+                  A tu medida · listas para usar
                 </p>
                 <p className="mt-1.5 text-xs leading-relaxed text-ink-500">
                   Uñas hechas a tu medida y diseño, listas para poner en casa en minutos.
