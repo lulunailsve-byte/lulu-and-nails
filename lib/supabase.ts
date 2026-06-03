@@ -10,10 +10,23 @@ import { createClient, type SupabaseClient } from "@supabase/supabase-js";
 let cached: SupabaseClient | null = null;
 
 export function getSupabaseAdmin(): SupabaseClient {
-  const url = process.env.SUPABASE_URL;
-  const key = process.env.SUPABASE_SERVICE_ROLE_KEY;
+  // Aceptamos algunos alias comunes para tolerar pequeñas variaciones de nombre
+  // al configurar las env vars (ej. el snippet de Supabase sugiere
+  // NEXT_PUBLIC_SUPABASE_URL). La KEY debe ser el service_role (secreto) — el
+  // anon no sirve porque la tabla tiene RLS.
+  const url = process.env.SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const key =
+    process.env.SUPABASE_SERVICE_ROLE_KEY ||
+    process.env.SUPABASE_SECRET_KEY ||
+    process.env.SUPABASE_SERVICE_KEY;
   if (!url || !key) {
-    throw new Error("Faltan SUPABASE_URL / SUPABASE_SERVICE_ROLE_KEY");
+    const faltan = [
+      url ? null : "SUPABASE_URL",
+      key ? null : "SUPABASE_SERVICE_ROLE_KEY",
+    ]
+      .filter(Boolean)
+      .join(" + ");
+    throw new Error(`Faltan variables de Supabase en el servidor: ${faltan}`);
   }
   if (cached) return cached;
   cached = createClient(url, key, {
