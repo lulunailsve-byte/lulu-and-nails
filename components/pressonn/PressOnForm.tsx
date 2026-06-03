@@ -6,7 +6,9 @@ import {
   FORMAS,
   LARGOS,
   ACABADOS,
+  AGENCIAS,
   MEDIDAS,
+  labelOf,
   type Option,
 } from "@/lib/press-on";
 import { waLink } from "@/lib/brand";
@@ -52,7 +54,7 @@ export function PressOnForm({ onClose }: { onClose: () => void }) {
   const [medidas, setMedidas] = useState<Record<string, Pic | null>>({});
   const [entrega, setEntrega] = useState("");
   const [agencia, setAgencia] = useState("");
-  const [puntoCagua, setPuntoCagua] = useState("");
+  const [direccionEnvio, setDireccionEnvio] = useState("");
   const [paraCuando, setParaCuando] = useState("");
   const [notas, setNotas] = useState("");
   // Honeypot
@@ -105,8 +107,9 @@ export function PressOnForm({ onClose }: { onClose: () => void }) {
     if (!nombre.trim() || !whatsapp.trim()) return setErr("Completa tu nombre y WhatsApp.");
     if (!ref) return setErr("Sube una foto de referencia del diseño que quieres.");
     if (!forma || !largo || !acabado) return setErr("Escoge forma, largo y acabado.");
-    if (!entrega) return setErr("Indica si eres de Cagua o necesitas envío.");
-    if (entrega === "envio" && !agencia.trim()) return setErr("Indica la agencia de envío.");
+    if (!entrega) return setErr("Indica si es entrega personal o envío.");
+    if (entrega === "envio" && !agencia) return setErr("Selecciona la agencia de envío.");
+    if (entrega === "envio" && !direccionEnvio.trim()) return setErr("Indica la dirección de la agencia de envío.");
     if (!turnstileToken) return setErr("Completa la verificación anti-bot.");
     if (inCooldown) return;
 
@@ -121,7 +124,7 @@ export function PressOnForm({ onClose }: { onClose: () => void }) {
       fd.set("acabado", acabado);
       fd.set("entrega", entrega);
       fd.set("agencia", agencia);
-      fd.set("puntoCagua", puntoCagua);
+      fd.set("direccionEnvio", direccionEnvio);
       fd.set("paraCuando", paraCuando);
       fd.set("notas", notas);
       fd.set("website", website);
@@ -228,28 +231,35 @@ export function PressOnForm({ onClose }: { onClose: () => void }) {
             {/* Entrega */}
             <SectionTitle>Entrega</SectionTitle>
             <div className="flex gap-2">
-              <RadioCard label="Soy de Cagua" active={entrega === "cagua"} onClick={() => setEntrega("cagua")} />
+              <RadioCard label="Entrega personal (Cagua, Turmero)" active={entrega === "cagua"} onClick={() => setEntrega("cagua")} />
               <RadioCard label="Necesito envío" active={entrega === "envio"} onClick={() => setEntrega("envio")} />
             </div>
             {entrega === "envio" && (
-              <div className="mt-3">
-                <TextField label="Agencia de envío" value={agencia} onChange={setAgencia} placeholder="Ej: Zoom, MRW, Tealca…" maxLength={120} disabled={submitting} />
-                <p className="mt-1 text-[11px] text-amber-700">El costo de envío no está incluido.</p>
+              <div className="mt-3 space-y-3">
+                <Field label="Agencia de envío">
+                  <ChipRow options={AGENCIAS} value={agencia} onChange={setAgencia} />
+                </Field>
+                {agencia && (
+                  <TextField
+                    label={`Dirección de la agencia ${labelOf(AGENCIAS, agencia)}`}
+                    value={direccionEnvio}
+                    onChange={setDireccionEnvio}
+                    placeholder="Ciudad, sucursal/oficina, punto de referencia…"
+                    maxLength={200}
+                    disabled={submitting}
+                  />
+                )}
+                <p className="rounded-xl border border-amber-200 bg-amber-50 px-3 py-2 text-[11px] font-semibold text-amber-800">
+                  📦 El envío es <strong>pago destino</strong> (lo pagas al recibir).
+                </p>
               </div>
             )}
-            <div className="mt-3">
-              <TextField
-                label="¿Tienes a alguien en Cagua que pueda recibir? (opcional)"
-                value={puntoCagua}
-                onChange={setPuntoCagua}
-                placeholder="Nombre de la persona o punto de encuentro"
-                maxLength={120}
-                disabled={submitting}
-              />
-            </div>
 
             {/* Fecha */}
-            <SectionTitle>¿Para cuándo? <span className="font-normal normal-case text-ink-400">(opcional)</span></SectionTitle>
+            <SectionTitle>¿Para cuándo la necesitas?</SectionTitle>
+            <p className="-mt-1 mb-2 text-[11px] leading-relaxed text-ink-500">
+              ⏱ El tiempo de realización es de <strong>1 a 2 días</strong>.
+            </p>
             <input
               type="date"
               value={paraCuando}

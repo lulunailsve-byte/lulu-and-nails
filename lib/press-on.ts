@@ -14,10 +14,10 @@ export const FORMAS: Option[] = [
 ];
 
 export const LARGOS: Option[] = [
-  { id: "cortas", label: "Cortas" },
-  { id: "medias", label: "Medias" },
-  { id: "largas", label: "Largas" },
-  { id: "como_la_foto_mas_corto", label: "Como la foto, más corto" },
+  { id: "cortas", label: "Cortas (Talla S)" },
+  { id: "medianas", label: "Medianas (Talla M)" },
+  { id: "largas", label: "Largas (Talla L)" },
+  { id: "extra_largas", label: "Extra largas (Talla XL)" },
 ];
 
 export const ACABADOS: Option[] = [
@@ -26,8 +26,14 @@ export const ACABADOS: Option[] = [
 ];
 
 export const ENTREGAS: Option[] = [
-  { id: "cagua", label: "Soy de Cagua" },
+  { id: "cagua", label: "Entrega personal (Cagua, Turmero)" },
   { id: "envio", label: "Necesito envío" },
+];
+
+// Agencias de envío disponibles. El envío es pago destino.
+export const AGENCIAS: Option[] = [
+  { id: "zoom", label: "Zoom" },
+  { id: "tealca", label: "Tealca" },
 ];
 
 // Estados del flujo de trabajo de una solicitud (para el panel admin).
@@ -64,6 +70,7 @@ export type PressOnRequest = {
   medida_izq_perfil_url: string | null;
   entrega: string;
   agencia: string | null;
+  direccion_envio: string | null;
   punto_cagua: string | null;
   para_cuando: string | null;
   estado: string;
@@ -73,10 +80,10 @@ export type PressOnRequest = {
 // Las 4 tomas de medidas de manos (opcionales). El `key` coincide con la
 // columna en la tabla (medida_<key>_url) y con el campo del FormData.
 export const MEDIDAS: { key: string; label: string }[] = [
-  { key: "der_frente", label: "Mano derecha — de frente" },
-  { key: "der_perfil", label: "Mano derecha — de perfil" },
-  { key: "izq_frente", label: "Mano izquierda — de frente" },
-  { key: "izq_perfil", label: "Mano izquierda — de perfil" },
+  { key: "der_frente", label: "Mano derecha · cuatro dedos" },
+  { key: "der_perfil", label: "Mano derecha · solo pulgar" },
+  { key: "izq_frente", label: "Mano izquierda · cuatro dedos" },
+  { key: "izq_perfil", label: "Mano izquierda · solo pulgar" },
 ];
 
 const ids = (opts: Option[]) => new Set(opts.map((o) => o.id));
@@ -84,6 +91,7 @@ const FORMA_IDS = ids(FORMAS);
 const LARGO_IDS = ids(LARGOS);
 const ACABADO_IDS = ids(ACABADOS);
 const ENTREGA_IDS = ids(ENTREGAS);
+const AGENCIA_IDS = ids(AGENCIAS);
 
 export function labelOf(opts: Option[], id: string): string {
   return opts.find((o) => o.id === id)?.label ?? id;
@@ -98,9 +106,9 @@ export type PressOnFields = {
   largo: string;
   acabado: string;
   entrega: string;
-  agencia: string;
-  puntoCagua: string;
-  paraCuando: string; // YYYY-MM-DD o ""
+  agencia: string;          // id de AGENCIAS si entrega = envio
+  direccionEnvio: string;   // dirección de la agencia si entrega = envio
+  paraCuando: string;       // YYYY-MM-DD o ""
   notas: string;
 };
 
@@ -114,7 +122,7 @@ export type PressOnClean = {
   acabado: string;
   entrega: string;
   agencia: string | null;
-  puntoCagua: string | null;
+  direccionEnvio: string | null;
   paraCuando: string | null;
   notas: string | null;
 };
@@ -153,16 +161,21 @@ export function validatePressOn(data: PressOnFields): PressOnValidation {
     return { ok: false, campo: "entrega", mensaje: "Indica si eres de Cagua o necesitas envío." };
   }
 
-  const agencia = sanitizeFreeText(data.agencia, 120);
-  if (data.entrega === "envio" && !agencia) {
-    return {
-      ok: false,
-      campo: "agencia",
-      mensaje: "Indica la agencia de envío (el costo de envío no está incluido).",
-    };
+  // Envío: agencia (dropdown) + dirección de la agencia, ambos obligatorios.
+  let agencia: string | null = null;
+  let direccionEnvio: string | null = null;
+  if (data.entrega === "envio") {
+    if (!AGENCIA_IDS.has(data.agencia)) {
+      return { ok: false, campo: "agencia", mensaje: "Selecciona la agencia de envío (Zoom o Tealca)." };
+    }
+    agencia = data.agencia;
+    direccionEnvio = sanitizeFreeText(data.direccionEnvio, 200);
+    if (!direccionEnvio) {
+      return { ok: false, campo: "direccionEnvio", mensaje: "Indica la dirección de la agencia de envío." };
+    }
   }
 
-  // Fecha deseada (opcional). Si viene, validar formato y que no sea pasada.
+  // Fecha deseada (opcional). Si viene, validar formato.
   let paraCuando: string | null = null;
   const fechaRaw = data.paraCuando.trim();
   if (fechaRaw) {
@@ -183,8 +196,8 @@ export function validatePressOn(data: PressOnFields): PressOnValidation {
       largo: data.largo,
       acabado: data.acabado,
       entrega: data.entrega,
-      agencia: data.entrega === "envio" ? agencia : null,
-      puntoCagua: sanitizeFreeText(data.puntoCagua, 120) || null,
+      agencia,
+      direccionEnvio,
       paraCuando,
       notas: sanitizeFreeText(data.notas, 400) || null,
     },

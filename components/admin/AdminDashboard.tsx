@@ -16,6 +16,7 @@ import {
   LARGOS,
   ACABADOS,
   ENTREGAS,
+  AGENCIAS,
   ESTADOS,
   MEDIDAS,
   labelOf,
@@ -457,8 +458,11 @@ function RequestCard({
         </InfoRow>
         <InfoRow label="Entrega">
           {labelOf(ENTREGAS, r.entrega)}
-          {r.entrega === "envio" && r.agencia ? ` · ${r.agencia}` : ""}
+          {r.entrega === "envio" && r.agencia ? ` · ${labelOf(AGENCIAS, r.agencia)} (pago destino)` : ""}
         </InfoRow>
+        {r.entrega === "envio" && r.direccion_envio && (
+          <InfoRow label="Dirección">{r.direccion_envio}</InfoRow>
+        )}
         {r.punto_cagua && <InfoRow label="Punto Cagua">{r.punto_cagua}</InfoRow>}
         <InfoRow label="Para">{fmtDateOnly(r.para_cuando)}</InfoRow>
         {r.notas && <InfoRow label="Notas">{r.notas}</InfoRow>}

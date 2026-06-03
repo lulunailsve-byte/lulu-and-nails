@@ -4,9 +4,9 @@ import { useEffect, useState } from "react";
 import { Sparkles, X } from "lucide-react";
 import { PressOnForm } from "./PressOnForm";
 
-// Aviso pequeño y dismissible anclado al borde IZQUIERDO de la pantalla que
-// abre el formulario de kits Press-On. Entra con una animación suave a los
-// ~1.2s de cargar la página para llamar la atención sin ser intrusivo.
+// Aviso pequeño y dismissible centrado en la pantalla que abre el formulario
+// de kits Press-On. Entra con una animación suave (fade + scale) a los ~1.2s
+// de cargar la página para llamar la atención.
 export function PressOnLauncher() {
   const [open, setOpen] = useState(false);
   const [dismissed, setDismissed] = useState(false);
@@ -20,13 +20,15 @@ export function PressOnLauncher() {
   return (
     <>
       {!dismissed && (
-        <div
-          className={
-            "fixed bottom-24 left-3 z-40 transition-all duration-500 ease-out sm:left-5 " +
-            (shown && !open ? "translate-x-0 opacity-100" : "-translate-x-[130%] opacity-0")
-          }
-        >
-          <div className="relative">
+        <div className="fixed left-1/2 top-1/2 z-40 -translate-x-1/2 -translate-y-1/2">
+          <div
+            className={
+              "relative transition-all duration-500 ease-out " +
+              (shown && !open
+                ? "scale-100 opacity-100"
+                : "pointer-events-none scale-90 opacity-0")
+            }
+          >
             {/* Halo de pulso para atraer la mirada */}
             <span className="pointer-events-none absolute -inset-1 -z-10 animate-pulse rounded-2xl bg-gradient-to-r from-violet-300/50 to-pink-300/50 blur-md" />
 

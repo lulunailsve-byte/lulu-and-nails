@@ -7,6 +7,7 @@ import {
   FORMAS,
   LARGOS,
   ACABADOS,
+  AGENCIAS,
   MEDIDAS,
   type PressOnFields,
   type PressOnClean,
@@ -84,7 +85,7 @@ export async function POST(req: NextRequest) {
     acabado: readText(fd, "acabado"),
     entrega: readText(fd, "entrega"),
     agencia: readText(fd, "agencia"),
-    puntoCagua: readText(fd, "puntoCagua"),
+    direccionEnvio: readText(fd, "direccionEnvio"),
     paraCuando: readText(fd, "paraCuando"),
     notas: readText(fd, "notas"),
   };
@@ -166,7 +167,7 @@ export async function POST(req: NextRequest) {
       medida_izq_perfil_url: urls.medida_izq_perfil_url ?? null,
       entrega: c.entrega,
       agencia: c.agencia,
-      punto_cagua: c.puntoCagua,
+      direccion_envio: c.direccionEnvio,
       para_cuando: c.paraCuando,
     });
     if (insErr) throw new Error(`DB insert: ${insErr.message}`);
@@ -188,20 +189,19 @@ export async function POST(req: NextRequest) {
 
 // Construye el mensaje de WhatsApp que recibe la dueña con el resumen + links.
 function buildOwnerMessage(c: PressOnClean, urls: Record<string, string>): string {
-  const entrega =
-    c.entrega === "envio"
-      ? `Envío (${c.agencia ?? "agencia por confirmar"}) — el envío no está incluido`
-      : "Retira en Cagua";
-
   const lines: string[] = [
     "🆕 *Nueva solicitud Press-On*",
     "",
     `👤 ${c.nombre}`,
     `📱 https://wa.me/${c.whatsappNormalizado} (${c.pais})`,
     `💅 Forma: ${labelOf(FORMAS, c.forma)} · Largo: ${labelOf(LARGOS, c.largo)} · Acabado: ${labelOf(ACABADOS, c.acabado)}`,
-    `📦 ${entrega}`,
   ];
-  if (c.puntoCagua) lines.push(`📍 Punto en Cagua: ${c.puntoCagua}`);
+  if (c.entrega === "envio") {
+    lines.push(`📦 Envío por ${labelOf(AGENCIAS, c.agencia ?? "")} — *pago destino*`);
+    if (c.direccionEnvio) lines.push(`   📍 Dirección agencia: ${c.direccionEnvio}`);
+  } else {
+    lines.push("📦 Entrega personal (Cagua, Turmero)");
+  }
   lines.push(`📅 Para: ${c.paraCuando ?? "sin fecha definida"}`);
   if (c.notas) lines.push(`📝 Notas: ${c.notas}`);
 
