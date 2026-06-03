@@ -24,15 +24,15 @@ const caveat = Caveat({
   display: "swap",
 });
 
-// Descripción optimizada (134 chars — dentro del óptimo 110-160 que validan
-// OG/Twitter/Google). Incluye categoría, ubicación, dueña, servicios y CTA.
+// Descripción optimizada (~152 chars — dentro del óptimo 110-160 que validan
+// OG/Twitter/Google). Incluye ubicación, dueña, servicios, kits press-on y CTA.
 const SITE_DESCRIPTION =
-  "Estudio de uñas en Venezuela por Luizandra Zerpa. Manicura semipermanente, polygel, esculpido y pedicura. Reserva online en un minuto.";
+  "Uñas en Venezuela por Luizandra Zerpa: manicura semipermanente, polygel, esculpido, pedicura y kits press-on personalizados a domicilio. Reserva online.";
 
-// Title más largo para redes sociales (56 chars — dentro del óptimo 50-60
+// Title más largo para redes sociales (~50 chars — dentro del óptimo 50-60
 // que pide OG). El <title> de la página y la pestaña del browser usan el
 // título corto preferido por la dueña.
-const OG_TITLE = "Lulu & Nails — Estudio de uñas profesional en Venezuela";
+const OG_TITLE = "Lulu & Nails — Uñas y kits press-on en Venezuela";
 
 const SITE_URL = "https://www.luluandnails.com";
 
@@ -57,6 +57,32 @@ export const metadata: Metadata = {
     "polygel", "capping polygel", "esculpido en polygel",
     "sistema jelly", "soft gel", "nivelación de uñas",
     "uñas de gel", "uñas acrílicas", "uñas postizas",
+    // Press-On (kits personalizados a domicilio)
+    "press on", "press-on", "presson", "preson",
+    "press on nails", "press on uñas", "uñas press", "uñas press on", "uñas presson",
+    "uñas postizas press on", "uñas de quita y pon",
+    "press on Venezuela", "press-on Venezuela", "presson Venezuela",
+    "press on uñas Venezuela", "nails press on Venezuela", "nails presson Venezuela",
+    "kit press on", "kit de uñas", "kit de uñas press on",
+    "kit press on personalizado", "kit press on Venezuela",
+    "uñas personalizadas", "uñas a tu medida", "uñas a la medida",
+    "diseño de uñas personalizado", "diseño de uñas a medida",
+    "uñas fáciles en casa", "uñas fáciles en casa Venezuela",
+    "uñas en casa", "uñas hechas en casa", "uñas para poner en casa",
+    "uñas do it yourself", "uñas DIY", "uñas reutilizables", "uñas adhesivas",
+    "uñas listas para usar", "uñas en minutos", "uñas express",
+    "manicura en casa", "manicura express",
+    "uñas que duren 15 días", "uñas en casa que duren 15 días",
+    "uñas duraderas", "uñas que duran semanas",
+    "uñas para eventos", "uñas para eventos importantes", "uñas para eventos personalizados",
+    "uñas para fiestas", "uñas para bodas", "uñas para quinceañeras", "uñas para graduación",
+    "uñas a domicilio", "uñas a domicilio Venezuela",
+    "uñas con envío", "uñas con envío nacional", "envío de uñas Venezuela",
+    "comprar uñas press on", "comprar press on Venezuela",
+    "soft gel press on", "uñas soft gel",
+    // Local (Aragua)
+    "uñas Cagua", "uñas Turmero", "uñas Maracay", "uñas Aragua",
+    "press on Cagua", "press on Turmero", "press on Maracay", "press on Aragua",
     // Intención de búsqueda
     "reservar manicura online", "agendar cita uñas", "agendar manicura",
     "cita uñas Venezuela", "manicura cerca de mí",
@@ -186,6 +212,15 @@ const structuredData = {
         itemOffered: { "@type": "Service", name: PEDICURE.name },
         price: String(PEDICURE.price),
         priceCurrency: "USD",
+      },
+      {
+        "@type": "Offer",
+        itemOffered: {
+          "@type": "Service",
+          name: "Kit Press-On personalizado",
+          description:
+            "Uñas press-on hechas a tu medida y diseño, listas para poner en casa. Duraderas, reutilizables y perfectas para eventos. Entrega personal en Cagua/Turmero o envío nacional.",
+        },
       },
     ],
   },
