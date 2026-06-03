@@ -30,6 +30,46 @@ export const ENTREGAS: Option[] = [
   { id: "envio", label: "Necesito envío" },
 ];
 
+// Estados del flujo de trabajo de una solicitud (para el panel admin).
+export const ESTADOS: Option[] = [
+  { id: "nueva", label: "Nueva" },
+  { id: "presupuestada", label: "Presupuestada" },
+  { id: "confirmada", label: "Confirmada" },
+  { id: "en_proceso", label: "En proceso" },
+  { id: "enviada", label: "Enviada" },
+  { id: "completada", label: "Completada" },
+  { id: "cancelada", label: "Cancelada" },
+];
+
+export function isValidEstado(id: string): boolean {
+  return ESTADOS.some((e) => e.id === id);
+}
+
+// Fila de la tabla press_on_requests (lo que devuelve Supabase).
+export type PressOnRequest = {
+  id: string;
+  created_at: string;
+  nombre: string;
+  whatsapp: string;
+  whatsapp_original: string | null;
+  pais: string | null;
+  forma: string;
+  largo: string;
+  acabado: string;
+  referencia_url: string | null;
+  notas: string | null;
+  medida_der_frente_url: string | null;
+  medida_der_perfil_url: string | null;
+  medida_izq_frente_url: string | null;
+  medida_izq_perfil_url: string | null;
+  entrega: string;
+  agencia: string | null;
+  punto_cagua: string | null;
+  para_cuando: string | null;
+  estado: string;
+  fuente: string;
+};
+
 // Las 4 tomas de medidas de manos (opcionales). El `key` coincide con la
 // columna en la tabla (medida_<key>_url) y con el campo del FormData.
 export const MEDIDAS: { key: string; label: string }[] = [
