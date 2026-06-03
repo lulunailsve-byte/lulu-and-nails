@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { Sparkles, X } from "lucide-react";
 import { PressOnForm } from "./PressOnForm";
+import { OPEN_PRESS_ON_EVENT } from "./pressOnModal";
 
 // Aviso pequeño y dismissible (centro vertical, borde izquierdo) que abre el
 // formulario de kits Press-On. Aparece SOLO cuando la sección "Reserva express"
@@ -22,6 +23,13 @@ export function PressOnLauncher() {
     );
     obs.observe(el);
     return () => obs.disconnect();
+  }, []);
+
+  // Abrir el modal cuando cualquier botón de la página dispara el evento.
+  useEffect(() => {
+    const handler = () => setOpen(true);
+    window.addEventListener(OPEN_PRESS_ON_EVENT, handler);
+    return () => window.removeEventListener(OPEN_PRESS_ON_EVENT, handler);
   }, []);
 
   return (

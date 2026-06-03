@@ -1,5 +1,7 @@
 import Image from "next/image";
+import { Sparkles } from "lucide-react";
 import { SERVICES, PEDICURE, RETIROS, RETIROS_NOTA } from "@/lib/services";
+import { PressOnCTAButton } from "@/components/pressonn/PressOnCTAButton";
 
 export function ServicesSection() {
   return (
@@ -82,6 +84,35 @@ export function ServicesSection() {
                 <p className="mt-1.5 text-xs leading-relaxed text-ink-500">
                   {PEDICURE.description}
                 </p>
+              </div>
+            </div>
+          </article>
+
+          {/* Kits Press-On (no se agenda por calendario — abre el formulario) */}
+          <article className="scroll-reveal relative overflow-hidden rounded-2xl border border-violet-200 bg-gradient-to-br from-violet-50 to-pink-50 p-4 shadow-sm">
+            <span className="absolute right-3 top-3 rounded-full bg-violet-500 px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wider text-white">
+              Nuevo
+            </span>
+            <div className="flex items-start gap-3">
+              <span className="grid h-12 w-12 flex-shrink-0 place-items-center rounded-2xl bg-gradient-to-br from-violet-500 to-pink-400 text-white">
+                <Sparkles className="h-6 w-6" />
+              </span>
+              <div className="min-w-0 flex-1">
+                <h3 className="font-display text-base font-semibold leading-tight text-ink-900">
+                  Kits Press-On
+                </h3>
+                <p className="mt-0.5 text-[11px] font-semibold uppercase tracking-wider text-violet-500">
+                  A tu medida · a domicilio
+                </p>
+                <p className="mt-1.5 text-xs leading-relaxed text-ink-500">
+                  Uñas hechas a tu medida y diseño, listas para poner en casa en minutos.
+                  Duran semanas, reutilizables y perfectas para eventos. Envío nacional o
+                  entrega en Cagua/Turmero.
+                </p>
+                <PressOnCTAButton className="mt-3 inline-flex items-center gap-1.5 rounded-full bg-violet-500 px-4 py-2 text-xs font-bold text-white shadow-[0_6px_18px_rgba(123,92,255,.3)] transition hover:scale-[1.03]">
+                  <Sparkles className="h-3.5 w-3.5" />
+                  Pídelas aquí
+                </PressOnCTAButton>
               </div>
             </div>
           </article>

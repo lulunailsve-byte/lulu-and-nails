@@ -1,5 +1,6 @@
 import { Hero } from "@/components/landing/Hero";
 import { ServicesSection } from "@/components/landing/ServicesSection";
+import { PressOnSection } from "@/components/landing/PressOnSection";
 import { ScheduleSection } from "@/components/landing/ScheduleSection";
 import { FooterSection } from "@/components/landing/FooterSection";
 import { WhatsAppFloat } from "@/components/WhatsAppFloat";
@@ -12,6 +13,7 @@ export default function HomePage() {
       <Hero />
       <BookingExpress />
       <ServicesSection />
+      <PressOnSection />
       <ScheduleSection />
       <FooterSection />
       <WhatsAppFloat />
