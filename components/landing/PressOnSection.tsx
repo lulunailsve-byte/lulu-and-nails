@@ -1,15 +1,6 @@
 import { Sparkles } from "lucide-react";
 import { PressOnCTAButton } from "@/components/pressonn/PressOnCTAButton";
-
-// Fotos de la galería (mismas del header del modal).
-const GALLERY = [
-  "/press-on-gallery/1.jpeg",
-  "/press-on-gallery/2.jpeg",
-  "/press-on-gallery/3.jpeg",
-  "/press-on-gallery/4.jpeg",
-  "/press-on-gallery/5.jpeg",
-  "/press-on-gallery/6.jpeg",
-];
+import { PRESS_ON_GALLERY as GALLERY } from "@/lib/press-on-gallery";
 
 const BENEFICIOS = [
   { emoji: "✨", text: "Hechas a tu medida y diseño" },
