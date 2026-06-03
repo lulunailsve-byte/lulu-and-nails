@@ -16,6 +16,17 @@ import { TurnstileWidget } from "@/components/booking/TurnstileWidget";
 
 type Pic = { file: File; url: string };
 
+// Galería de diseños que rota en el header del modal (slide automático).
+// Las imágenes viven en public/press-on-gallery/. Si faltan, el header
+// muestra el gradiente de fondo (degradación elegante).
+const GALLERY = [
+  "/press-on-gallery/1.jpg",
+  "/press-on-gallery/2.jpg",
+  "/press-on-gallery/3.jpg",
+  "/press-on-gallery/4.jpg",
+  "/press-on-gallery/5.jpg",
+];
+
 // Comprime/redimensiona una imagen en el cliente a JPEG (máx 1600px lado mayor)
 // para acelerar la subida y respetar el límite de 6MB del bucket. Si algo falla
 // (formato no decodificable, etc.) devuelve el archivo original.
@@ -65,6 +76,8 @@ export function PressOnForm({ onClose }: { onClose: () => void }) {
   const [submitting, setSubmitting] = useState(false);
   const [done, setDone] = useState(false);
   const [err, setErr] = useState("");
+  // Slide actual de la galería del header.
+  const [slide, setSlide] = useState(0);
 
   // Tick del cooldown de Turnstile.
   useEffect(() => {
@@ -72,6 +85,12 @@ export function PressOnForm({ onClose }: { onClose: () => void }) {
     const id = setInterval(() => setCooldownLeft((s) => (s <= 1 ? 0 : s - 1)), 1000);
     return () => clearInterval(id);
   }, [cooldownLeft]);
+
+  // Auto-avance de la galería del header cada 3s.
+  useEffect(() => {
+    const id = setInterval(() => setSlide((s) => (s + 1) % GALLERY.length), 3000);
+    return () => clearInterval(id);
+  }, []);
 
   // Limpiar object URLs al desmontar.
   useEffect(() => {
@@ -155,20 +174,55 @@ export function PressOnForm({ onClose }: { onClose: () => void }) {
   return (
     <div className="fixed inset-0 z-[60] flex items-end justify-center bg-ink-900/50 p-3 backdrop-blur-sm sm:items-center">
       <div className="flex max-h-[94vh] w-full max-w-md flex-col overflow-hidden rounded-3xl bg-warm-white shadow-2xl">
-        {/* Header */}
-        <div className="flex items-center justify-between bg-gradient-to-br from-violet-500 to-pink-400 px-5 py-4 text-white">
-          <div>
-            <div className="text-[10px] font-bold uppercase tracking-[.2em] opacity-90">Nuevo ✨</div>
-            <h3 className="font-display text-lg font-semibold">Kit Press-On a tu medida</h3>
+        {/* Header con galería de diseños (slide automático) */}
+        <div className="relative h-44 shrink-0 overflow-hidden bg-gradient-to-br from-violet-500 to-pink-400">
+          {GALLERY.map((src, i) => (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img
+              key={src}
+              src={src}
+              alt=""
+              onError={(e) => {
+                e.currentTarget.style.display = "none";
+              }}
+              className={
+                "absolute inset-0 h-full w-full object-cover transition-opacity duration-700 " +
+                (i === slide ? "opacity-100" : "opacity-0")
+              }
+            />
+          ))}
+          {/* Oscurecido arriba para legibilidad del texto */}
+          <div className="pointer-events-none absolute inset-x-0 top-0 h-24 bg-gradient-to-b from-ink-900/55 to-transparent" />
+          {/* Difuminado abajo hacia el formulario (como el header principal) */}
+          <div className="pointer-events-none absolute inset-x-0 bottom-0 h-20 bg-gradient-to-t from-warm-white via-warm-white/70 to-transparent" />
+
+          <div className="absolute inset-x-0 top-0 flex items-start justify-between px-5 py-4">
+            <div className="text-white" style={{ textShadow: "0 1px 8px rgba(0,0,0,.45)" }}>
+              <div className="text-[10px] font-bold uppercase tracking-[.2em] opacity-90">Nuevo ✨</div>
+              <h3 className="font-display text-lg font-semibold">Kit Press-On a tu medida</h3>
+            </div>
+            <button
+              onClick={onClose}
+              disabled={submitting}
+              aria-label="Cerrar"
+              className="grid h-8 w-8 shrink-0 place-items-center rounded-full bg-ink-900/40 text-white backdrop-blur transition hover:bg-ink-900/60"
+            >
+              <X className="h-4 w-4" />
+            </button>
           </div>
-          <button
-            onClick={onClose}
-            disabled={submitting}
-            aria-label="Cerrar"
-            className="grid h-8 w-8 place-items-center rounded-full bg-white/20 hover:bg-white/30"
-          >
-            <X className="h-4 w-4" />
-          </button>
+
+          {/* Puntitos indicadores */}
+          <div className="absolute inset-x-0 bottom-2.5 flex justify-center gap-1.5">
+            {GALLERY.map((_, i) => (
+              <span
+                key={i}
+                className={
+                  "h-1.5 rounded-full bg-white shadow transition-all " +
+                  (i === slide ? "w-4" : "w-1.5 opacity-60")
+                }
+              />
+            ))}
+          </div>
         </div>
 
         {done ? (
@@ -260,13 +314,26 @@ export function PressOnForm({ onClose }: { onClose: () => void }) {
             <p className="-mt-1 mb-2 text-[11px] leading-relaxed text-ink-500">
               ⏱ El tiempo de realización es de <strong>1 a 2 días</strong>.
             </p>
-            <input
-              type="date"
-              value={paraCuando}
-              onChange={(e) => setParaCuando(e.target.value)}
-              disabled={submitting}
-              className="w-full rounded-xl border-2 border-violet-100 bg-warm-white px-3.5 py-2.5 text-sm outline-none transition focus:border-violet-400 focus:bg-white disabled:opacity-50"
-            />
+            {/* Wrapper con placeholder propio: los <input type=date> no muestran
+                placeholder en móvil. Ocultamos el texto nativo cuando está vacío
+                (text-transparent) y mostramos nuestro propio rótulo encima. */}
+            <div className="relative">
+              <input
+                type="date"
+                value={paraCuando}
+                onChange={(e) => setParaCuando(e.target.value)}
+                disabled={submitting}
+                className={
+                  "w-full rounded-xl border-2 border-violet-100 bg-warm-white px-3.5 py-2.5 text-sm outline-none transition focus:border-violet-400 focus:bg-white disabled:opacity-50 " +
+                  (paraCuando ? "" : "text-transparent")
+                }
+              />
+              {!paraCuando && (
+                <span className="pointer-events-none absolute inset-y-0 left-3.5 flex items-center text-sm text-ink-400">
+                  Selecciona una fecha
+                </span>
+              )}
+            </div>
 
             {/* Notas */}
             <SectionTitle>Notas <span className="font-normal normal-case text-ink-400">(opcional)</span></SectionTitle>
@@ -476,47 +543,72 @@ function PhotoField({
   compact?: boolean;
   disabled?: boolean;
 }) {
+  const thumb = pic ? (
+    // eslint-disable-next-line @next/next/no-img-element
+    <img src={pic.url} alt="" className="h-full w-full object-cover" />
+  ) : (
+    <ImagePlus className="h-6 w-6" />
+  );
+
+  const status = pic ? (
+    <span className="inline-flex items-center gap-1 text-violet-600">
+      <Check className="h-3 w-3" /> Foto lista · cambiar
+    </span>
+  ) : (
+    hint ?? "Toca para subir"
+  );
+
+  const fileInput = (
+    <input
+      type="file"
+      accept="image/*"
+      className="hidden"
+      disabled={disabled}
+      onChange={(e) => {
+        const f = e.target.files?.[0];
+        if (f) onPick(f);
+        e.target.value = "";
+      }}
+    />
+  );
+
+  const wrap =
+    "cursor-pointer rounded-2xl border-2 border-dashed transition " +
+    (pic ? "border-violet-300 bg-violet-50/50" : "border-violet-200 bg-white hover:bg-violet-50/40") +
+    (disabled ? " pointer-events-none opacity-50" : "");
+
+  // Compacto (medidas): ícono ARRIBA y texto DEBAJO, centrado — así el texto
+  // tiene todo el ancho de la tarjeta y no se ve cortado en móvil.
+  if (compact) {
+    return (
+      <label className={wrap + " flex flex-col items-center gap-2 p-3 text-center"}>
+        <span className="grid h-16 w-16 place-items-center overflow-hidden rounded-xl bg-violet-100 text-violet-500">
+          {thumb}
+        </span>
+        <span>
+          <span className="block text-[11px] font-bold leading-tight text-ink-900">
+            {label} {required && <span className="text-pink-500">*</span>}
+          </span>
+          <span className="mt-0.5 block text-[10px] leading-tight text-ink-500">{status}</span>
+        </span>
+        {fileInput}
+      </label>
+    );
+  }
+
+  // Normal (referencia): ícono a la izquierda, texto a la derecha.
   return (
-    <label
-      className={
-        "mt-3 flex cursor-pointer items-center gap-3 rounded-2xl border-2 border-dashed p-3 transition " +
-        (pic ? "border-violet-300 bg-violet-50/50" : "border-violet-200 bg-white hover:bg-violet-50/40") +
-        (disabled ? " pointer-events-none opacity-50" : "")
-      }
-    >
+    <label className={wrap + " mt-3 flex items-center gap-3 p-3"}>
       <span className="grid h-14 w-14 shrink-0 place-items-center overflow-hidden rounded-xl bg-violet-100 text-violet-500">
-        {pic ? (
-          // eslint-disable-next-line @next/next/no-img-element
-          <img src={pic.url} alt="" className="h-full w-full object-cover" />
-        ) : (
-          <ImagePlus className="h-6 w-6" />
-        )}
+        {thumb}
       </span>
       <span className="min-w-0 flex-1">
-        <span className={"block font-bold text-ink-900 " + (compact ? "text-[11px] leading-tight" : "text-sm")}>
+        <span className="block text-sm font-bold text-ink-900">
           {label} {required && <span className="text-pink-500">*</span>}
         </span>
-        <span className="block text-[11px] text-ink-500">
-          {pic ? (
-            <span className="inline-flex items-center gap-1 text-violet-600">
-              <Check className="h-3 w-3" /> Foto lista · toca para cambiar
-            </span>
-          ) : (
-            hint ?? "Toca para subir"
-          )}
-        </span>
+        <span className="block text-[11px] text-ink-500">{status}</span>
       </span>
-      <input
-        type="file"
-        accept="image/*"
-        className="hidden"
-        disabled={disabled}
-        onChange={(e) => {
-          const f = e.target.files?.[0];
-          if (f) onPick(f);
-          e.target.value = "";
-        }}
-      />
+      {fileInput}
     </label>
   );
 }
