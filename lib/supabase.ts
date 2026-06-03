@@ -14,11 +14,12 @@ export function getSupabaseAdmin(): SupabaseClient {
   // al configurar las env vars (ej. el snippet de Supabase sugiere
   // NEXT_PUBLIC_SUPABASE_URL). La KEY debe ser el service_role (secreto) — el
   // anon no sirve porque la tabla tiene RLS.
-  const url = process.env.SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL;
-  const key =
+  const url = (process.env.SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL)?.trim();
+  const key = (
     process.env.SUPABASE_SERVICE_ROLE_KEY ||
     process.env.SUPABASE_SECRET_KEY ||
-    process.env.SUPABASE_SERVICE_KEY;
+    process.env.SUPABASE_SERVICE_KEY
+  )?.trim();
   if (!url || !key) {
     const faltan = [
       url ? null : "SUPABASE_URL",
@@ -27,6 +28,16 @@ export function getSupabaseAdmin(): SupabaseClient {
       .filter(Boolean)
       .join(" + ");
     throw new Error(`Faltan variables de Supabase en el servidor: ${faltan}`);
+  }
+  // Las claves/headers HTTP deben ser Latin1. Si la key trae un carácter fuera
+  // de rango (emoji, texto de más, comillas raras) el fetch revienta con un
+  // error críptico de ByteString. Lo detectamos temprano con un mensaje claro.
+  const nonLatin1 = /[^\x00-\xFF]/;
+  if (nonLatin1.test(key)) {
+    throw new Error(
+      "SUPABASE_SERVICE_ROLE_KEY tiene caracteres inválidos (parece incluir un emoji o texto de más). " +
+        "Vuelve a copiar SOLO la clave service_role (empieza con 'eyJ').",
+    );
   }
   if (cached) return cached;
   cached = createClient(url, key, {
