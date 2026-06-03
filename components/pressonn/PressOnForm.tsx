@@ -79,6 +79,9 @@ export function PressOnForm({ onClose }: { onClose: () => void }) {
   const [err, setErr] = useState("");
   // Slide actual de la galería del header.
   const [slide, setSlide] = useState(0);
+  // El header de galería se colapsa (a su tamaño original, sin fotos) al
+  // bajar en el formulario, y se expande de nuevo al volver al tope.
+  const [collapsed, setCollapsed] = useState(false);
 
   // Tick del cooldown de Turnstile.
   useEffect(() => {
@@ -175,8 +178,14 @@ export function PressOnForm({ onClose }: { onClose: () => void }) {
   return (
     <div className="fixed inset-0 z-[60] flex items-end justify-center bg-ink-900/50 p-3 backdrop-blur-sm sm:items-center">
       <div className="flex max-h-[94vh] w-full max-w-md flex-col overflow-hidden rounded-3xl bg-warm-white shadow-2xl">
-        {/* Header con galería de diseños (slide automático) */}
-        <div className="relative h-56 shrink-0 overflow-hidden bg-gradient-to-br from-violet-500 to-pink-400">
+        {/* Header con galería de diseños (slide automático). Se colapsa a su
+            tamaño original (barra con gradiente, sin fotos) al bajar en el form. */}
+        <div
+          className={
+            "relative shrink-0 overflow-hidden bg-gradient-to-br from-violet-500 to-pink-400 transition-[height] duration-300 ease-out " +
+            (collapsed ? "h-20" : "h-56")
+          }
+        >
           {GALLERY.map((src, i) => (
             // eslint-disable-next-line @next/next/no-img-element
             <img
@@ -187,15 +196,20 @@ export function PressOnForm({ onClose }: { onClose: () => void }) {
                 e.currentTarget.style.display = "none";
               }}
               className={
-                "absolute inset-0 h-full w-full object-cover transition-opacity duration-700 " +
-                (i === slide ? "opacity-100" : "opacity-0")
+                "absolute inset-0 h-full w-full object-cover transition-opacity duration-500 " +
+                (i === slide && !collapsed ? "opacity-100" : "opacity-0")
               }
             />
           ))}
           {/* Oscurecido arriba para legibilidad del texto */}
           <div className="pointer-events-none absolute inset-x-0 top-0 h-24 bg-gradient-to-b from-ink-900/55 to-transparent" />
-          {/* Difuminado abajo hacia el formulario (como el header principal) */}
-          <div className="pointer-events-none absolute inset-x-0 bottom-0 h-20 bg-gradient-to-t from-warm-white via-warm-white/70 to-transparent" />
+          {/* Difuminado abajo hacia el formulario (solo cuando se ven las fotos) */}
+          <div
+            className={
+              "pointer-events-none absolute inset-x-0 bottom-0 h-20 bg-gradient-to-t from-warm-white via-warm-white/70 to-transparent transition-opacity duration-300 " +
+              (collapsed ? "opacity-0" : "opacity-100")
+            }
+          />
 
           <div className="absolute inset-x-0 top-0 flex items-start justify-between px-5 py-4">
             <div className="text-white" style={{ textShadow: "0 1px 8px rgba(0,0,0,.45)" }}>
@@ -212,8 +226,13 @@ export function PressOnForm({ onClose }: { onClose: () => void }) {
             </button>
           </div>
 
-          {/* Puntitos indicadores */}
-          <div className="absolute inset-x-0 bottom-2.5 flex justify-center gap-1.5">
+          {/* Puntitos indicadores (se ocultan al colapsar) */}
+          <div
+            className={
+              "absolute inset-x-0 bottom-2.5 flex justify-center gap-1.5 transition-opacity duration-300 " +
+              (collapsed ? "opacity-0" : "opacity-100")
+            }
+          >
             {GALLERY.map((_, i) => (
               <span
                 key={i}
@@ -229,7 +248,14 @@ export function PressOnForm({ onClose }: { onClose: () => void }) {
         {done ? (
           <SuccessView nombre={nombre} onClose={onClose} />
         ) : (
-          <div className="overflow-y-auto px-5 py-5">
+          <div
+            onScroll={(e) => {
+              const y = e.currentTarget.scrollTop;
+              // Histéresis: colapsa al pasar 40px, expande al volver bajo 8px.
+              setCollapsed((c) => (c ? y > 8 : y > 40));
+            }}
+            className="overflow-y-auto px-5 py-5"
+          >
             <p className="text-sm leading-relaxed text-ink-500">
               Cuéntanos cómo las quieres y te preparamos un kit personalizado. Con esto
               armamos tu presupuesto y te escribimos por WhatsApp con los colores y el pago. 💜
