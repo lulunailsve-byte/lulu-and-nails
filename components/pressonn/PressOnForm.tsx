@@ -176,7 +176,7 @@ export function PressOnForm({ onClose }: { onClose: () => void }) {
     <div className="fixed inset-0 z-[60] flex items-end justify-center bg-ink-900/50 p-3 backdrop-blur-sm sm:items-center">
       <div className="flex max-h-[94vh] w-full max-w-md flex-col overflow-hidden rounded-3xl bg-warm-white shadow-2xl">
         {/* Header con galería de diseños (slide automático) */}
-        <div className="relative h-44 shrink-0 overflow-hidden bg-gradient-to-br from-violet-500 to-pink-400">
+        <div className="relative h-56 shrink-0 overflow-hidden bg-gradient-to-br from-violet-500 to-pink-400">
           {GALLERY.map((src, i) => (
             // eslint-disable-next-line @next/next/no-img-element
             <img
