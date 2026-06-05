@@ -1,43 +1,63 @@
 "use client";
 
 import { useEffect } from "react";
+import { usePathname } from "next/navigation";
 
 // Observa todos los elementos con className "scroll-reveal" y les agrega
-// "visible" cuando entran al viewport. Una sola vez por elemento (unobserve
-// después del primer trigger) para evitar trabajo redundante mientras se
-// scrollea pasando por encima y por debajo.
+// "visible" cuando entran al viewport (fade-in). Una vez por elemento.
 //
-// rootMargin "0px 0px -80px 0px": el elemento dispara cuando le faltan 80px
-// para entrar completamente al viewport — sensación de fade más natural,
-// llega "antes que el ojo".
+// IMPORTANTE: este componente vive en el layout (persiste entre navegaciones).
+// En el App Router, navegar client-side (o "volver atrás") re-monta el
+// contenido de la página con elementos .scroll-reveal NUEVOS. Por eso:
+//   1. El efecto se re-ejecuta en cada cambio de ruta (dep: pathname) y
+//      re-observa los elementos de la página recién montada.
+//   2. Un MutationObserver captura cualquier .scroll-reveal que se agregue
+//      al DOM después (failsafe contra contenido renderizado tarde).
+// Sin esto, al volver a la home las secciones se quedaban invisibles.
+//
+// rootMargin "0px 0px -80px 0px": dispara cuando faltan 80px para entrar al
+// viewport — el fade "llega antes que el ojo".
 export function ScrollReveal() {
-  useEffect(() => {
-    const elements = document.querySelectorAll<HTMLElement>(".scroll-reveal");
-    if (elements.length === 0) return;
+  const pathname = usePathname();
 
-    // Si el browser no soporta IntersectionObserver (muy raro hoy),
-    // mostrar todo de una para que no quede el contenido invisible.
+  useEffect(() => {
+    // Sin soporte de IntersectionObserver (muy raro): mostrar todo de una.
     if (typeof IntersectionObserver === "undefined") {
-      elements.forEach((el) => el.classList.add("visible"));
+      document
+        .querySelectorAll<HTMLElement>(".scroll-reveal")
+        .forEach((el) => el.classList.add("visible"));
       return;
     }
 
-    const observer = new IntersectionObserver(
+    const io = new IntersectionObserver(
       (entries) => {
         for (const entry of entries) {
           if (entry.isIntersecting) {
             entry.target.classList.add("visible");
-            observer.unobserve(entry.target);
+            io.unobserve(entry.target);
           }
         }
       },
       { threshold: 0.05, rootMargin: "0px 0px -80px 0px" },
     );
 
-    elements.forEach((el) => observer.observe(el));
+    const observeAll = () => {
+      document
+        .querySelectorAll<HTMLElement>(".scroll-reveal:not(.visible)")
+        .forEach((el) => io.observe(el));
+    };
 
-    return () => observer.disconnect();
-  }, []);
+    observeAll();
+
+    // Captura elementos .scroll-reveal agregados al DOM después de este efecto.
+    const mo = new MutationObserver(() => observeAll());
+    mo.observe(document.body, { childList: true, subtree: true });
+
+    return () => {
+      io.disconnect();
+      mo.disconnect();
+    };
+  }, [pathname]);
 
   return null;
 }
