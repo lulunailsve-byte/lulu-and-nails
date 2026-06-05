@@ -1,5 +1,5 @@
+import Link from "next/link";
 import { Sparkles } from "lucide-react";
-import { PressOnCTAButton } from "@/components/pressonn/PressOnCTAButton";
 import { PRESS_ON_GALLERY as GALLERY } from "@/lib/press-on-gallery";
 
 const BENEFICIOS = [
@@ -60,12 +60,15 @@ export function PressOnSection() {
           ))}
         </ul>
 
-        {/* CTA */}
+        {/* CTA → página /press-on */}
         <div className="scroll-reveal mt-6">
-          <PressOnCTAButton className="flex w-full items-center justify-center gap-2 rounded-full bg-violet-500 px-6 py-3.5 text-sm font-bold text-white shadow-[0_8px_22px_rgba(123,92,255,.35)] transition hover:scale-[1.01]">
+          <Link
+            href="/press-on"
+            className="flex w-full items-center justify-center gap-2 rounded-full bg-violet-500 px-6 py-3.5 text-sm font-bold text-white shadow-[0_8px_22px_rgba(123,92,255,.35)] transition hover:scale-[1.01]"
+          >
             <Sparkles className="h-4 w-4" />
             Pide tus press-on personalizadas
-          </PressOnCTAButton>
+          </Link>
           <p className="mt-2 text-center text-[11px] text-ink-400">
             Llena el formulario y te escribimos por WhatsApp con el presupuesto.
           </p>

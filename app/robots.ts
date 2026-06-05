@@ -8,7 +8,8 @@ export default function robots(): MetadataRoute.Robots {
       {
         userAgent: "*",
         allow: "/",
-        disallow: ["/api/"],
+        // /btw es el panel admin (privado). /api endpoints no se indexan.
+        disallow: ["/api/", "/btw"],
       },
     ],
     sitemap: "https://www.luluandnails.com/sitemap.xml",

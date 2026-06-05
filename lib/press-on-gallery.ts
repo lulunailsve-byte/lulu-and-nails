@@ -1,5 +1,5 @@
-// Fotos de la galería de diseños Press-On. Única fuente de verdad para los dos
-// slides: el header del modal (PressOnForm) y la sección web (PressOnSection).
+// Fotos de la galería de diseños Press-On. Única fuente de verdad para la
+// galería de la página /press-on y la sección press-on de la landing.
 // Los archivos viven en public/press-on-gallery/. Para actualizar la galería:
 // reemplaza/agrega los .jpeg en esa carpeta y ajusta esta lista.
 export const PRESS_ON_GALLERY = [

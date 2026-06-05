@@ -1,7 +1,7 @@
 import Image from "next/image";
+import Link from "next/link";
 import { Sparkles } from "lucide-react";
 import { SERVICES, PEDICURE, RETIROS, RETIROS_NOTA } from "@/lib/services";
-import { PressOnCTAButton } from "@/components/pressonn/PressOnCTAButton";
 
 export function ServicesSection() {
   return (
@@ -109,10 +109,13 @@ export function ServicesSection() {
                   Duran semanas, reutilizables y perfectas para eventos. Envío nacional o
                   entrega en Cagua/Turmero.
                 </p>
-                <PressOnCTAButton className="mt-3 inline-flex items-center gap-1.5 rounded-full bg-violet-500 px-4 py-2 text-xs font-bold text-white shadow-[0_6px_18px_rgba(123,92,255,.3)] transition hover:scale-[1.03]">
+                <Link
+                  href="/press-on"
+                  className="mt-3 inline-flex items-center gap-1.5 rounded-full bg-violet-500 px-4 py-2 text-xs font-bold text-white shadow-[0_6px_18px_rgba(123,92,255,.3)] transition hover:scale-[1.03]"
+                >
                   <Sparkles className="h-3.5 w-3.5" />
                   Pídelas aquí
-                </PressOnCTAButton>
+                </Link>
               </div>
             </div>
           </article>
