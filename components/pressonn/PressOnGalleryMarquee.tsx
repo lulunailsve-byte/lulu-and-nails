@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { createPortal } from "react-dom";
 import { ChevronLeft, ChevronRight, X } from "lucide-react";
 
 // Galería de diseños press-on: marquee horizontal infinito (lento, siempre
@@ -56,11 +57,13 @@ export function PressOnGalleryMarquee({ images }: { images: string[] }) {
         </div>
       </div>
 
-      {open && (
-        <div
-          className="fixed inset-0 z-[70] flex items-center justify-center bg-ink-900/90 p-4 backdrop-blur-sm"
-          onClick={() => setIdx(null)}
-        >
+      {open &&
+        typeof document !== "undefined" &&
+        createPortal(
+          <div
+            className="fixed inset-0 z-[70] flex items-center justify-center bg-ink-900/90 p-4 backdrop-blur-sm"
+            onClick={() => setIdx(null)}
+          >
           <button
             aria-label="Cerrar"
             onClick={() => setIdx(null)}
@@ -102,8 +105,9 @@ export function PressOnGalleryMarquee({ images }: { images: string[] }) {
           <div className="absolute bottom-5 left-1/2 -translate-x-1/2 rounded-full bg-white/15 px-3 py-1 text-xs font-semibold text-white backdrop-blur">
             {idx! + 1} / {images.length}
           </div>
-        </div>
-      )}
+          </div>,
+          document.body,
+        )}
     </>
   );
 }
