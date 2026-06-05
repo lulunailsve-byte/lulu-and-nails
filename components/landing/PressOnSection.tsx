@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { Sparkles } from "lucide-react";
 import { PRESS_ON_GALLERY as GALLERY } from "@/lib/press-on-gallery";
+import { PressOnGalleryMarquee } from "@/components/pressonn/PressOnGalleryMarquee";
 
 const BENEFICIOS = [
   { emoji: "✨", text: "Hechas a tu medida y diseño" },
@@ -31,18 +32,9 @@ export function PressOnSection() {
           </p>
         </div>
 
-        {/* Galería de diseños */}
-        <div className="scroll-reveal -mx-5 mt-6 flex gap-3 overflow-x-auto px-5 pb-2 scrollbar-soft">
-          {GALLERY.map((src, i) => (
-            // eslint-disable-next-line @next/next/no-img-element
-            <img
-              key={src}
-              src={src}
-              alt={`Diseño de uñas press-on de Lulu & Nails ${i + 1}`}
-              loading="lazy"
-              className="h-48 w-36 flex-shrink-0 rounded-2xl border border-violet-100 object-cover shadow-sm"
-            />
-          ))}
+        {/* Galería de diseños: slide infinito automático + lightbox al tocar */}
+        <div className="scroll-reveal">
+          <PressOnGalleryMarquee images={GALLERY} />
         </div>
 
         {/* Beneficios */}
