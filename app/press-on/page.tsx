@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { ArrowLeft, Check, Sparkles } from "lucide-react";
 import { PressOnFormCore } from "@/components/pressonn/PressOnFormCore";
+import { PressOnGalleryMarquee } from "@/components/pressonn/PressOnGalleryMarquee";
 import { Testimonials } from "@/components/pressonn/Testimonials";
 import { FooterSection } from "@/components/landing/FooterSection";
 import { WhatsAppFloat } from "@/components/WhatsAppFloat";
@@ -66,15 +67,8 @@ export default function PressOnPage() {
           <p className="mx-auto mt-4 max-w-sm text-sm leading-relaxed text-ink-500">{DESCRIPTION}</p>
         </div>
 
-        {/* Galería de diseños (strip horizontal) */}
-        <div className="-mx-5 mt-7 flex gap-3 overflow-x-auto px-5 pb-2 scrollbar-soft">
-          {PRESS_ON_GALLERY.map((src) => (
-            <div key={src} className="aspect-[3/4] w-40 flex-shrink-0 overflow-hidden rounded-2xl border border-violet-100 shadow-sm">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src={src} alt="Diseño de kit press-on de Lulu & Nails" loading="lazy" className="h-full w-full object-cover" />
-            </div>
-          ))}
-        </div>
+        {/* Galería de diseños: slide infinito automático + lightbox al tocar */}
+        <PressOnGalleryMarquee images={PRESS_ON_GALLERY} />
 
         {/* Beneficios */}
         <ul className="mx-auto mt-7 max-w-md space-y-2">

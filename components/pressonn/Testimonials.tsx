@@ -7,7 +7,28 @@ import { Star } from "lucide-react";
 //   - nombre contiene "ss"   → screenshot de WhatsApp (reseña)
 // Para actualizar: agrega/quita imágenes en esa carpeta (se incluyen en build).
 
-type Item = { src: string; type: "hand" | "ss" };
+type Item = { src: string; type: "hand" | "ss"; label: string };
+
+// Rótulos variados. El primero de cada lista es la frase "canónica" (aparece
+// una sola vez); los demás son variantes con el mismo sentido.
+const HAND_LABELS = [
+  "Resultados reales",
+  "Trabajo real",
+  "Hecho a mano",
+  "Diseño a tu medida",
+  "Calidad que dura",
+  "100% personalizado",
+];
+const SS_LABELS = [
+  "Lo que dicen mis clientas",
+  "Reseña real",
+  "Clientas felices",
+  "Lo que opinan de mí",
+  "Me encantó 💜",
+  "Súper recomendada",
+  "Quedaron divinas",
+  "Testimonio real",
+];
 
 function loadTestimonios(): Item[] {
   try {
@@ -20,11 +41,14 @@ function loadTestimonios(): Item[] {
         : lower.includes("ss")
           ? "ss"
           : "hand";
-      return { src: `/testimonials/${encodeURIComponent(f)}`, type };
+      return { src: `/testimonials/${encodeURIComponent(f)}`, type, label: "" };
     });
-    // Intercalar screenshots y manos para una mezcla visual más rica.
     const ss = items.filter((i) => i.type === "ss");
     const hands = items.filter((i) => i.type === "hand");
+    // Un rótulo distinto a cada uno (la frase canónica aparece una sola vez).
+    ss.forEach((it, i) => (it.label = SS_LABELS[i % SS_LABELS.length]!));
+    hands.forEach((it, i) => (it.label = HAND_LABELS[i % HAND_LABELS.length]!));
+    // Intercalar screenshots y manos para una mezcla visual más rica.
     const out: Item[] = [];
     const n = Math.max(ss.length, hands.length);
     for (let i = 0; i < n; i++) {
@@ -79,7 +103,7 @@ export function Testimonials() {
                   ))}
                 </div>
                 <div className="mt-1 text-[11px] font-bold text-violet-600">
-                  {it.type === "hand" ? "Resultados reales" : "Lo que dicen mis clientas"}
+                  {it.label}
                 </div>
               </figcaption>
             </figure>

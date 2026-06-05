@@ -145,3 +145,19 @@ body { margin: 0; }
 /* Hide details summary marker */
 details > summary { list-style: none; cursor: pointer; }
 details > summary::-webkit-details-marker { display: none; }
+
+/* Marquee infinito de la galería de press-on. El track tiene 2 copias de las
+   fotos; mover -50% deja la 2da copia donde estaba la 1ra → loop sin saltos.
+   Cada item lleva margin-right uniforme (no flex gap) para que el -50% sea
+   perfectamente continuo. */
+@keyframes presson-marquee {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+.presson-marquee {
+  animation: presson-marquee 55s linear infinite;
+  will-change: transform;
+}
+@media (prefers-reduced-motion: reduce) {
+  .presson-marquee { animation: none; }
+}
