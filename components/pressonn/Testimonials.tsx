@@ -79,7 +79,7 @@ export function Testimonials() {
           </h2>
           <div className="mx-auto mt-3 h-0.5 w-12 rounded-full bg-gradient-to-r from-violet-500 to-pink-400" />
           <p className="mt-4 text-sm leading-relaxed text-ink-500">
-            Resultados reales y reseñas de quienes ya estrenaron sus kits press-on. 💜
+            Fotos reales y reseñas de quienes ya estrenaron sus kits press-on. 💜
           </p>
         </div>
 
