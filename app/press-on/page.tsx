@@ -44,7 +44,7 @@ export default function PressOnPage() {
   return (
     <main className="bg-gradient-to-b from-violet-50 via-pink-50 to-warm-white">
       {/* Volver */}
-      <div className="px-5 pt-5">
+      <div className="px-5 pt-16">
         <div className="mx-auto max-w-md">
           <Link
             href="/"

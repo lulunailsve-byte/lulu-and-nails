@@ -1,0 +1,89 @@
+import { readdirSync } from "node:fs";
+import path from "node:path";
+
+// Lee y clasifica las fotos de public/about-us en build:
+//   foto#          → trabajo (uñas / ocasiones especiales)
+//   fotoclase#     → clases que da Luizandra
+//   fotocurso#     → cursos / masterclass que ha tomado
+//   ss#            → screenshots (testimonios)
+//   fotohistoria#  → trayectoria, con pie de foto embebido en el nombre
+// Para actualizar: agregar/quitar imágenes en esa carpeta.
+
+const DIR = "about-us";
+
+// Orden cronológico de la historia (armado leyendo los pies de foto, ya que
+// los números del archivo no van en orden narrativo).
+const HISTORIA_ORDER = [38, 20, 18, 19, 17, 16, 15, 13, 12, 14, 35, 31, 30, 52];
+
+export type StoryPhoto = { src: string; caption: string; num: number };
+
+export type AboutPhotos = {
+  trabajo: string[];
+  clases: string[];
+  cursos: string[];
+  screenshots: string[];
+  historia: StoryPhoto[];
+};
+
+const url = (file: string) => `/${DIR}/${encodeURIComponent(file)}`;
+const numOf = (f: string) => {
+  const m = f.match(/(\d+)/);
+  return m ? parseInt(m[1]!, 10) : 0;
+};
+
+export function loadAboutPhotos(): AboutPhotos {
+  let files: string[] = [];
+  try {
+    files = readdirSync(path.join(process.cwd(), "public", DIR)).filter((f) =>
+      /\.(jpe?g|png|webp)$/i.test(f),
+    );
+  } catch {
+    return { trabajo: [], clases: [], cursos: [], screenshots: [], historia: [] };
+  }
+
+  const trabajo: string[] = [];
+  const clases: string[] = [];
+  const cursos: string[] = [];
+  const screenshots: string[] = [];
+  const historiaRaw: StoryPhoto[] = [];
+
+  for (const f of files) {
+    const lower = f.toLowerCase();
+    if (lower.startsWith("fotohistoria")) {
+      const base = f.replace(/\.[^.]+$/, "");
+      const m = base.match(/^fotohistoria\s*(\d+)\s*(.*)$/i);
+      const num = m ? parseInt(m[1]!, 10) : 0;
+      let caption = (m?.[2] ?? "").trim();
+      caption = caption.replace(/\(emoji con ojos de coraz[oó]n\)/gi, "😍");
+      historiaRaw.push({ src: url(f), caption, num });
+    } else if (lower.startsWith("fotoclase")) {
+      clases.push(f);
+    } else if (lower.startsWith("fotocurso")) {
+      cursos.push(f);
+    } else if (lower.startsWith("foto")) {
+      trabajo.push(f);
+    } else if (lower.startsWith("ss")) {
+      screenshots.push(f);
+    }
+  }
+
+  const byNum = (a: string, b: string) => numOf(a) - numOf(b);
+  trabajo.sort(byNum);
+  clases.sort(byNum);
+  cursos.sort(byNum);
+  screenshots.sort(byNum);
+
+  const orderIndex = (n: number) => {
+    const i = HISTORIA_ORDER.indexOf(n);
+    return i === -1 ? 1000 + n : i;
+  };
+  historiaRaw.sort((a, b) => orderIndex(a.num) - orderIndex(b.num));
+
+  return {
+    trabajo: trabajo.map(url),
+    clases: clases.map(url),
+    cursos: cursos.map(url),
+    screenshots: screenshots.map(url),
+    historia: historiaRaw,
+  };
+}

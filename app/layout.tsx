@@ -3,6 +3,7 @@ import { Bricolage_Grotesque, Plus_Jakarta_Sans, Caveat } from "next/font/google
 import "./globals.css";
 import { SmoothScroll } from "@/components/SmoothScroll";
 import { ScrollReveal } from "@/components/ScrollReveal";
+import { SiteHeader } from "@/components/SiteHeader";
 import { BRAND, waLink } from "@/lib/brand";
 import { SERVICES, PEDICURE } from "@/lib/services";
 
@@ -236,6 +237,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body className="bg-violet-50">
         <SmoothScroll />
         <ScrollReveal />
+        <SiteHeader />
         {children}
         {/* JSON-LD structured data para SEO enriquecido en Google */}
         <script
