@@ -20,19 +20,21 @@ export function AboutTestimonials({ screenshots }: { screenshots: string[] }) {
 
   return (
     <section id="testimonios" className="relative isolate overflow-hidden px-4 py-16">
-      {/* Fondo */}
+      {/* Fondo. Se desvanece de transparente (arriba) a opaco con una máscara,
+          así arriba se asoma el fondo de la sección anterior y mezcla solo (sin
+          degradado blanco). Sin difuminado abajo: enseguida viene el footer. */}
       <div aria-hidden="true" className="pointer-events-none absolute inset-0 -z-10">
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
-          src="/about-us/fondo-testimonials.jpg"
+          src="/about-us/fondo-testimonials%202.jpg"
           alt=""
           loading="lazy"
           className="h-full w-full object-cover"
+          style={{
+            WebkitMaskImage: "linear-gradient(to bottom, transparent 0, #000 220px)",
+            maskImage: "linear-gradient(to bottom, transparent 0, #000 220px)",
+          }}
         />
-        {/* Degradado de entrada (arriba) para que el fondo aparezca difuminado */}
-        <div className="absolute inset-x-0 top-0 h-44 bg-gradient-to-b from-warm-white via-warm-white/80 to-transparent" />
-        {/* Salida suave hacia el footer */}
-        <div className="absolute inset-x-0 bottom-0 h-28 bg-gradient-to-t from-warm-white to-transparent" />
       </div>
 
       <div className="mx-auto max-w-md">

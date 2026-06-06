@@ -22,6 +22,10 @@
 .DS_Store
 *.pem
 
+# source/design files (no subir al repo — pesados)
+*.psd
+*.ai
+
 # debug
 npm-debug.log*
 yarn-debug.log*
