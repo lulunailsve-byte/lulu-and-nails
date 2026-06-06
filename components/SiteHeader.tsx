@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { Menu, X } from "lucide-react";
 
@@ -35,6 +36,8 @@ export function SiteHeader() {
   if (pathname?.startsWith("/btw")) return null;
 
   const solid = scrolled || open;
+  // Sobre el hero del home (video) el logo va en blanco; en el resto, negro.
+  const whiteLogo = pathname === "/" && !solid;
 
   return (
     <header
@@ -44,12 +47,18 @@ export function SiteHeader() {
       }
     >
       <div className="mx-auto flex max-w-md items-center justify-between px-4 py-2.5">
-        <Link
-          href="/"
-          className={"font-script text-2xl leading-none transition-colors " + (solid ? "text-violet-700" : "text-white")}
-          style={solid ? undefined : { textShadow: "0 1px 6px rgba(0,0,0,.4)" }}
-        >
-          Lulu &amp; Nails
+        <Link href="/" aria-label="Lulu & Nails — Inicio" className="block">
+          <Image
+            src="/logo-horizontal.png"
+            alt="Lulu & Nails"
+            width={4052}
+            height={1323}
+            priority
+            className={
+              "h-7 w-auto transition " +
+              (whiteLogo ? "invert drop-shadow-[0_1px_5px_rgba(0,0,0,.35)]" : "")
+            }
+          />
         </Link>
         <button
           onClick={() => setOpen((o) => !o)}

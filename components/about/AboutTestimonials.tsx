@@ -2,25 +2,37 @@ import { Star } from "lucide-react";
 
 const STARS = [0, 1, 2, 3, 4];
 
-// Testimonios (screenshots de WhatsApp): un fondo hecho con los mismos
-// screenshots pero difuminados, y encima los screenshots nítidos "flotando".
+// Variantes de tamaño/alineación para que las tarjetas queden desalineadas y de
+// distintos tamaños (efecto masonry orgánico), no en una cuadrícula pareja.
+const VARIANTS = [
+  "w-[97%] mr-auto",
+  "w-[80%] ml-auto rotate-1",
+  "w-full",
+  "w-[88%] mr-auto -rotate-1",
+  "w-[76%] ml-auto",
+  "w-[92%] mr-auto rotate-1",
+];
+
+// Testimonios (screenshots de WhatsApp) flotando sobre un fondo hecho por
+// Luizandra (collage difuminado). El fondo "entra" con un degradado arriba.
 export function AboutTestimonials({ screenshots }: { screenshots: string[] }) {
   if (screenshots.length === 0) return null;
 
-  // Collage de fondo: repetimos los screenshots para cubrir el alto.
-  const bg = [...screenshots, ...screenshots, ...screenshots].slice(0, 36);
-
   return (
-    <section id="testimonios" className="relative overflow-hidden px-5 py-16">
-      {/* Fondo difuminado */}
-      <div aria-hidden="true" className="pointer-events-none absolute inset-0 -z-10 overflow-hidden">
-        <div className="grid scale-110 grid-cols-3 gap-1 opacity-50 blur-2xl">
-          {bg.map((src, i) => (
-            // eslint-disable-next-line @next/next/no-img-element
-            <img key={i} src={src} alt="" className="aspect-[9/16] w-full object-cover" />
-          ))}
-        </div>
-        <div className="absolute inset-0 bg-gradient-to-b from-warm-white/80 via-pink-50/55 to-warm-white/85" />
+    <section id="testimonios" className="relative overflow-hidden px-4 py-16">
+      {/* Fondo */}
+      <div aria-hidden="true" className="pointer-events-none absolute inset-0 -z-10">
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src="/about-us/fondo-testimonials.jpg"
+          alt=""
+          loading="lazy"
+          className="h-full w-full object-cover"
+        />
+        {/* Degradado de entrada (arriba) para que el fondo aparezca difuminado */}
+        <div className="absolute inset-x-0 top-0 h-44 bg-gradient-to-b from-warm-white via-warm-white/80 to-transparent" />
+        {/* Salida suave hacia el footer */}
+        <div className="absolute inset-x-0 bottom-0 h-28 bg-gradient-to-t from-warm-white to-transparent" />
       </div>
 
       <div className="mx-auto max-w-md">
@@ -34,15 +46,23 @@ export function AboutTestimonials({ screenshots }: { screenshots: string[] }) {
           <div className="mx-auto mt-3 h-0.5 w-12 rounded-full bg-gradient-to-r from-violet-500 to-pink-400" />
         </div>
 
-        {/* Screenshots nítidos flotando */}
-        <div className="mt-8 columns-2 gap-3">
-          {screenshots.map((src) => (
+        {/* Masonry desalineado, distintos tamaños */}
+        <div className="mt-9 columns-2 gap-3">
+          {screenshots.map((src, i) => (
             <figure
               key={src}
-              className="mb-3 break-inside-avoid overflow-hidden rounded-2xl bg-white shadow-[0_12px_34px_rgba(31,18,53,.16)] ring-1 ring-white/70"
+              className={
+                "mb-4 break-inside-avoid overflow-hidden rounded-2xl bg-white shadow-[0_14px_38px_rgba(31,18,53,.30)] ring-1 ring-white/40 " +
+                VARIANTS[i % VARIANTS.length]
+              }
             >
               {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src={src} alt="Reseña de una clienta de Lulu & Nails" loading="lazy" className="w-full" />
+              <img
+                src={src}
+                alt="Reseña de una clienta de Lulu & Nails"
+                loading="lazy"
+                className="w-full"
+              />
               <figcaption className="flex items-center gap-0.5 px-3 py-2">
                 {STARS.map((s) => (
                   <Star key={s} className="h-3 w-3 fill-amber-400 text-amber-400" />
