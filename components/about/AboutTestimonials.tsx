@@ -19,7 +19,7 @@ export function AboutTestimonials({ screenshots }: { screenshots: string[] }) {
   if (screenshots.length === 0) return null;
 
   return (
-    <section id="testimonios" className="relative overflow-hidden px-4 py-16">
+    <section id="testimonios" className="relative isolate overflow-hidden px-4 py-16">
       {/* Fondo */}
       <div aria-hidden="true" className="pointer-events-none absolute inset-0 -z-10">
         {/* eslint-disable-next-line @next/next/no-img-element */}
