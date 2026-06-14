@@ -37,7 +37,7 @@ export function PressOnGalleryMarquee({
     if (reverse) el.scrollLeft = el.scrollWidth / 2;
     let raf = 0;
     let last = performance.now();
-    const pxPerSec = 26; // lento
+    const pxPerSec = 40; // lento pero visible
     const step = (now: number) => {
       const dt = Math.min(now - last, 50); // clamp por si la pestaña estuvo en background
       last = now;
@@ -69,6 +69,15 @@ export function PressOnGalleryMarquee({
     }, 1800);
   }
 
+  // Deslizar manualmente con las flechitas (sobre todo en desktop, donde no hay swipe).
+  function nudge(dir: number) {
+    const el = trackRef.current;
+    if (!el) return;
+    pauseScroll();
+    scheduleResume();
+    el.scrollBy({ left: dir * el.clientWidth * 0.8, behavior: "smooth" });
+  }
+
   const go = (delta: number) =>
     setIdx((i) => (i === null ? i : (i + delta + images.length) % images.length));
 
@@ -94,26 +103,27 @@ export function PressOnGalleryMarquee({
 
   return (
     <>
-      <div
-        ref={trackRef}
-        data-lenis-prevent
-        onPointerDown={() => {
-          pauseScroll();
-          downScrollRef.current = trackRef.current?.scrollLeft ?? 0;
-        }}
-        onPointerUp={scheduleResume}
-        onPointerCancel={scheduleResume}
-        onPointerLeave={scheduleResume}
-        onWheel={(e) => {
-          // Solo pausar con scroll horizontal; el vertical es scroll de página.
-          if (Math.abs(e.deltaX) > Math.abs(e.deltaY)) {
+      <div className="relative -mx-5 mt-7">
+        <div
+          ref={trackRef}
+          data-lenis-prevent
+          onPointerDown={() => {
             pauseScroll();
-            scheduleResume();
-          }
-        }}
-        className="no-scrollbar -mx-5 mt-7 overflow-x-auto"
-      >
-        <div className="flex w-max">
+            downScrollRef.current = trackRef.current?.scrollLeft ?? 0;
+          }}
+          onPointerUp={scheduleResume}
+          onPointerCancel={scheduleResume}
+          onPointerLeave={scheduleResume}
+          onWheel={(e) => {
+            // Solo pausar con scroll horizontal; el vertical es scroll de página.
+            if (Math.abs(e.deltaX) > Math.abs(e.deltaY)) {
+              pauseScroll();
+              scheduleResume();
+            }
+          }}
+          className="no-scrollbar overflow-x-auto"
+        >
+          <div className="flex w-max">
           {doubled.map((src, i) => (
             <button
               key={i}
@@ -137,7 +147,26 @@ export function PressOnGalleryMarquee({
               />
             </button>
           ))}
+          </div>
         </div>
+
+        {/* Flechitas para deslizar (sobre todo en desktop, sin swipe) */}
+        <button
+          type="button"
+          aria-label="Anterior"
+          onClick={() => nudge(-1)}
+          className="absolute left-2 top-1/2 hidden h-9 w-9 -translate-y-1/2 place-items-center rounded-full bg-white/85 text-ink-700 shadow-md backdrop-blur transition hover:bg-white sm:grid"
+        >
+          <ChevronLeft className="h-5 w-5" />
+        </button>
+        <button
+          type="button"
+          aria-label="Siguiente"
+          onClick={() => nudge(1)}
+          className="absolute right-2 top-1/2 hidden h-9 w-9 -translate-y-1/2 place-items-center rounded-full bg-white/85 text-ink-700 shadow-md backdrop-blur transition hover:bg-white sm:grid"
+        >
+          <ChevronRight className="h-5 w-5" />
+        </button>
       </div>
 
       {open &&
