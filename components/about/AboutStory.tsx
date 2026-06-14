@@ -21,8 +21,15 @@ function Card(it: StoryPhoto) {
 
 export function AboutStory({ items }: { items: StoryPhoto[] }) {
   if (items.length === 0) return null;
-  const col1 = items.filter((_, i) => i % 2 === 0);
-  const col2 = items.filter((_, i) => i % 2 === 1);
+  const col1: StoryPhoto[] = [];
+  const col2: StoryPhoto[] = [];
+  items.forEach((it, i) => (i % 2 === 0 ? col1 : col2).push(it));
+  // Si la izquierda queda con una de más (total impar), pásala a la derecha
+  // para balancear las columnas. Mantiene el orden cronológico al leer.
+  if (col1.length > col2.length) {
+    const last = col1.pop();
+    if (last) col2.push(last);
+  }
   return (
     <div className="mx-auto flex max-w-md items-start gap-3">
       <div className="flex w-1/2 flex-col gap-3">{col1.map(Card)}</div>
