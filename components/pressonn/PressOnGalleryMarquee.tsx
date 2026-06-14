@@ -28,24 +28,28 @@ export function PressOnGalleryMarquee({
     openRef.current = open;
   }, [open]);
 
-  // Auto-scroll continuo basado en scrollLeft (compatible con drag nativo).
+  // Auto-scroll continuo por TIEMPO (px/seg) — velocidad constante sin importar
+  // el FPS del monitor (en 120/144Hz no se acelera). Basado en scrollLeft, así
+  // se puede arrastrar con el dedo.
   useEffect(() => {
     const el = trackRef.current;
     if (!el) return;
     if (reverse) el.scrollLeft = el.scrollWidth / 2;
     let raf = 0;
-    const speed = 0.5; // px por frame (~30px/s) — lento
-    const step = () => {
-      if (!pausedRef.current && !openRef.current) {
+    let last = performance.now();
+    const pxPerSec = 26; // lento
+    const step = (now: number) => {
+      const dt = Math.min(now - last, 50); // clamp por si la pestaña estuvo en background
+      last = now;
+      if (!pausedRef.current && !openRef.current && el.scrollWidth > el.clientWidth + 4) {
         const half = el.scrollWidth / 2;
-        if (half > 0) {
-          if (reverse) {
-            el.scrollLeft -= speed;
-            if (el.scrollLeft <= 0) el.scrollLeft += half;
-          } else {
-            el.scrollLeft += speed;
-            if (el.scrollLeft >= half) el.scrollLeft -= half;
-          }
+        const move = (pxPerSec * dt) / 1000;
+        if (reverse) {
+          el.scrollLeft -= move;
+          if (el.scrollLeft <= 0) el.scrollLeft += half;
+        } else {
+          el.scrollLeft += move;
+          if (el.scrollLeft >= half) el.scrollLeft -= half;
         }
       }
       raf = requestAnimationFrame(step);
@@ -100,9 +104,12 @@ export function PressOnGalleryMarquee({
         onPointerUp={scheduleResume}
         onPointerCancel={scheduleResume}
         onPointerLeave={scheduleResume}
-        onWheel={() => {
-          pauseScroll();
-          scheduleResume();
+        onWheel={(e) => {
+          // Solo pausar con scroll horizontal; el vertical es scroll de página.
+          if (Math.abs(e.deltaX) > Math.abs(e.deltaY)) {
+            pauseScroll();
+            scheduleResume();
+          }
         }}
         className="no-scrollbar -mx-5 mt-7 overflow-x-auto"
       >
